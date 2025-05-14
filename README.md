@@ -4,23 +4,26 @@
 ![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)
 ![Tech](https://img.shields.io/badge/built%20with-Next.js%20%7C%20Prisma%20%7C%20TailwindCSS%20%7C%20ShadCN-informational?style=flat-square)
 
-**CodeVault** is a modern developer-first platform to **create, manage, and showcase code snippets**. With powerful features like portfolio building, real-time notifications, filtering, pagination, and role-based control — CodeVault simplifies the snippet management experience with performance and elegance.
+**CodeVault** is a modern, developer-first platform designed to **create, manage, and showcase code snippets** with precision and elegance.  
+It includes features like portfolio creation, real-time notifications, advanced filtering, pagination, and role-based access control.
 
-![CodeVault Banner](https://your-image-url/banner.png) <!-- Replace this with a real hosted image -->
+> Built using a full-stack modern tech stack to elevate your developer workflow.
+
+![CodeVault Banner](https://your-image-url/banner.png) <!-- Replace this with a real image -->
 
 ---
 
 ## 🌟 Features
 
-- 🧩 **CRUD for Snippets** – Create, update, delete snippets easily
-- 💼 **Portfolio Builder** – Visually showcase selected code snippets
-- 🔍 **Filter & Search** – By title, tag, framework, and language
-- 📄 **Pagination** – Efficient navigation for large snippet libraries
-- 📊 **Dashboard** – Real-time stats and user insights
-- 📬 **Access Request Notifications** – Request and manage snippet visibility
-- 🔐 **Public/Private Access** – Control snippet visibility
-- 🎨 **Syntax Highlighting** – Monaco editor with framework selection
-- 📋 **Clipboard Support** – Paste from clipboard and clear editor
+- 🧩 **CRUD Snippets** – Create, update, and delete code snippets
+- 💼 **Portfolio Builder** – Showcase selected snippets in a clean UI
+- 🔍 **Advanced Filtering & Search** – Search by title, tag, language, or framework
+- 📄 **Pagination** – Efficient browsing for large snippet libraries
+- 📊 **Dashboard** – Visual stats and snippet activity
+- 📬 **Access Request Notifications** – Real-time alerts via WebSocket
+- 🔐 **Public/Private Visibility** – Control who can access your code
+- 🎨 **Syntax Highlighting** – VS Code-like editor with Monaco
+- 📋 **Clipboard Support** – Paste from clipboard, clear code editor
 - 🛡️ **Role-Based Access Control** – Admin and Author roles
 
 ---
@@ -56,54 +59,54 @@
 /constants            # Enums, route lists, snippet filters
 /lib                  # Helper and utility functions
 /styles               # Global CSS & Tailwind configurations
-/types                # Global TypeScript types and interfaces
-/utils                # Utility logic (slugify, debounce, etc.)
+/types                # TypeScript types and interfaces
+/utils                # Utility functions (slugify, debounce, etc.)
 /prisma               # Prisma schema & migration files
 /public               # Static assets and images
 
+# 🚀 Getting Started
 
 
+Foobar is a Python library for dealing with word pluralization.
 
-🚀 Getting Started
-1. Clone the Repository
-bash
-Copy
-Edit
+## Installation
+
+
+```bash
 git clone https://github.com/suhelahmedprojectspace/codevault.git
 cd codevault
-2. Install Dependencies
-bash
-Copy
-Edit
+```
+
+## Install Dependencies
+
+```bash
 npm install
 # or
 yarn install
-3. Setup Environment Variables
-Create a .env file and add the following:
+```
+## Setup Environment Variables
 
-env
-Copy
-Edit
+#### Create a .env file in the root:
+
+```bash
 DATABASE_URL=your_database_url
 NEXTAUTH_SECRET=your_secret_here
-4. Run Database Migrations
-bash
-Copy
-Edit
+```
+
+## Run Database Migrations
+
+```bash
 npx prisma migrate dev --name init
-🤝 Contributing
-Contributions, feedback, and feature requests are welcome! Feel free to open issues or PRs.
+```
 
-📄 License
-This project is licensed under the MIT License.
+## 🤝 Contributing
 
-📬 Connect
-GitHub: @suhelahmedprojectspace
+```bash Contributions, suggestions, and feature requests are welcome! Feel free to open issues or submit a pull request.```
 
-Project updates coming soon...
 
-Built with ❤️ by Sahel — for developers who love clean code and beautiful UIs.
+## 📬 Connect
+###### GitHub: @suhelahmedprojectspace
 
-yaml
-Copy
-Edit
+### Built with ❤️ by Sahel — for developers who love clean code and beautiful UIs.
+
+
