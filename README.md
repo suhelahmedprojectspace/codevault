@@ -1,4 +1,7 @@
-# 🚀 CodeVault
+# 🚀 CodeVault 
+<p align="center">
+  <img src="public/favicon.ico" alt="CodeVault Logo" width="50" />
+</p>
 
 ![License](https://img.shields.io/github/license/suhelahmedprojectspace/codevault?style=flat-square)
 ![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)
@@ -9,9 +12,6 @@ It includes features like portfolio creation, real-time notifications, advanced 
 
 > Built using a full-stack modern tech stack to elevate your developer workflow.
 
-<p align="center">
-  <img src="public/favicon.ico" alt="CodeVault Logo" width="100" />
-</p>
 
 
 ---
