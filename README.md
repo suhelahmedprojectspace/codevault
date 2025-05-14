@@ -19,11 +19,13 @@ It includes features like portfolio creation, real-time notifications, advanced 
 ## 🌟 Features
 
 - 🧩 **CRUD Snippets** – Create, update, and delete code snippets
+- 🧩 **CRUD Blog** – Create, update, and delete content
+- 🧩 **Beautiful Blog UI – With Like and comment functionality Estimated reading time** 
 - 💼 **Portfolio Builder** – Showcase selected snippets in a clean UI
 - 🔍 **Advanced Filtering & Search** – Search by title, tag, language, or framework
 - 📄 **Pagination** – Efficient browsing for large snippet libraries
 - 📊 **Dashboard** – Visual stats and snippet activity
-- 📬 **Access Request Notifications** – Real-time alerts via WebSocket
+- 📬 **Access Request Notifications** – Real-time alerts via pooling
 - 🔐 **Public/Private Visibility** – Control who can access your code
 - 🎨 **Syntax Highlighting** – VS Code-like editor with Monaco
 - 📋 **Clipboard Support** – Paste from clipboard, clear code editor
