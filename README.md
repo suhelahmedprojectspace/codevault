@@ -41,15 +41,40 @@
 ## 📁 Project Structure & Folder Guide
 
 ```bash /app 
-# Next.js App Router /(auth)
-# Login/Register logic /dashboard
-# Snippet management UI /portfolio # Portfolio builder /api
-# API endpoints /snippet
-# CRUD APIs for snippets /components # Reusable UI components /snippet
- # Snippet cards, editors, etc. /dashboard
-# Stats, tables, pagination /notifications
-# Toasts, access requests /constants
-# Enums, route lists, snippet filters /lib
-# Helper functions /styles # Global CSS, Tailwind configs /types
-# TypeScript types/interfaces /utils # Utilities (slugify, debounce, etc.) /prisma
-# Prisma schema and migrations /public # Static files and images ``` 
+-Next.js App Router /(auth)
+-Login/Register logic /dashboard
+-Snippet management UI /portfolio # Portfolio builder /api
+-API endpoints /snippet
+-CRUD APIs for snippets /components # Reusable UI components /snippet
+-Snippet cards, editors, etc. /dashboard
+-Stats, tables, pagination /notifications
+-Toasts, access requests /constantsEnums, route lists, snippet filters /lib
+-Helper functions /styles # Global CSS, Tailwind configs /types
+-TypeScript types/interfaces /utils # Utilities (slugify, debounce, etc.) /prisma
+-Prisma schema and migrations /public # Static files and images ``` 
+
+
+> Add new features by creating a dedicated folder inside `/components` or `/app` and keep it modular.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/suhelahmedprojectspace/codevault.git
+cd codevault
+
+```npm install
+# or
+``yarn install
+
+#Setup environment variables
+
+``DATABASE_URL=your_database_url
+``NEXTAUTH_SECRET=your_secret_here
+
+ #Migrate the database
+
+```npx prisma migrate dev --name init
