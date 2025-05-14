@@ -40,3 +40,4 @@
 
 ## 📁 Project Structure & Folder Guide
 
+<pre lang="md"> <code> ## 📁 Project Structure ```bash /app # Next.js App Router /(auth) # Login/Register logic /dashboard # Snippet management UI /portfolio # Portfolio builder /api # API endpoints /snippet # CRUD APIs for snippets /components # Reusable UI components /snippet # Snippet cards, editors, etc. /dashboard # Stats, tables, pagination /notifications # Toasts, access requests /constants # Enums, route lists, snippet filters /lib # Helper functions /styles # Global CSS, Tailwind configs /types # TypeScript types/interfaces /utils # Utilities (slugify, debounce, etc.) /prisma # Prisma schema and migrations /public # Static files and images ``` </code> </pre>
