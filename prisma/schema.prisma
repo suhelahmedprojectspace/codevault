@@ -1,0 +1,251 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation("userSessions", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                String           @id @default(cuid())
+  username          String           @unique
+  email             String?          @unique
+  emailVerified     DateTime?
+  image             String?
+  password          String?
+  role              Role             @default(USER)
+  accounts          Account[]
+  blog              Blog[]
+  sessions          Session[]        @relation("userSessions")
+  snippetCollection Snippet[]
+  sendRequests      SnippetRequest[] @relation("UserSnippetRequests")
+  sendBlogRequest   BlogRequest[]           @relation("UserBlogRequests")
+  allowedBlog       Blog[]           @relation("BlogAllowedUsers")
+  allowedSnippets   Snippet[]        @relation("SnippetAllowedUsers")
+  sentNotification Notification[] @relation("Sender")
+  receivedNotifcations Notification[] @relation("Receiver")
+  porfolioid String?
+  portfolio Portfolio?
+  codeBuddyId String?
+  codeBuddy   User? @relation("CodeBuddies",fields: [codeBuddyId],references: [id])
+  buddyOf User[] @relation("CodeBuddies")
+  codeBuddyRequests CodeBuddyRequest[] @relation("UserRequests")
+  receivedCodeBuddyRequests CodeBuddyRequest[] @relation("UserReceiver") 
+  matchingPreferences Json? 
+  likes Like[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model CodeBuddyRequest{
+  id String @id @default(cuid())
+  requesterId String
+  requester User @relation("UserRequests",fields: [requesterId],references: [id])
+  receiverId String
+  reciever User @relation("UserReceiver",fields: [receiverId],references: [id])
+  status RequestStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime @default(now()) 
+  @@unique([requesterId, receiverId])
+  @@index([status])
+
+}
+
+// model BuddyQuestion{
+//   id String @id @default(cuid())
+//   questionid String
+//   question Question @relation(fields: [questionid],references: [id])
+//   userId String
+//   user User @relation(fields: [userId],references: [id])
+//   answer String
+//   importance Int @default(1)
+//   answeredAt  DateTime @default(now())
+//   @@unique([userId,questionid])
+
+// }
+
+// model Question{
+//   id String @id @default(cuid())
+//   text String
+//   category String
+//   options String[]
+//   userdId String
+//   createdAt DateTime @default(now())
+// }
+model techStack{
+  id Int @id @default(autoincrement())
+  name     String?
+  category String?
+  logo     String? 
+  // portfolios Portfolio[] 
+}
+model Portfolio{
+  id String @id @default(cuid())
+  title String
+  education String?
+  yearofexperience String?
+  passionate String?
+  location String?
+  summary String @db.VarChar(1000)
+  profile String?
+  projects Json?
+  name String
+  experiences Json?
+  stackid String?
+  techstack Json?
+  userid   String @unique
+  user User @relation(fields: [userid],references: [id])
+  links       SocialLink[]
+  achievements     String?
+  certifications   Json?
+  interests        String?
+  availability     String?
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  isPublished Boolean    @default(false)
+
+}
+model SocialLink {
+  id          String    @id @default(cuid())
+  platform    String    
+  url         String
+  logo     String? 
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
+  portfolioId String
+}
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// model Follower {
+//   id          String @id @default(cuid())
+//   followerId  String
+//   followingId String
+//   follower    User   @relation("Followers", fields: [followerId], references: [id])
+//   following   User   @relation("Following", fields: [followingId], references: [id])
+// }
+model BlogRequest{
+  id String @id @default(cuid())
+  blogId String
+  requesterId String
+  status RequestStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  requester User     @relation("UserBlogRequests",fields: [requesterId],references: [id])
+  blog Blog          @relation(fields: [blogId], references: [id])
+
+}
+model SnippetRequest {
+  id          String        @id @default(cuid())
+  snippetId   String
+  requesterId String
+  status      RequestStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  requester   User          @relation("UserSnippetRequests", fields: [requesterId], references: [id])
+  snippet     Snippet       @relation(fields: [snippetId], references: [id])
+}
+
+model Snippet {
+  id              String           @id @default(cuid())
+  authorid        String
+  title           String 
+  framework       String?
+  description     String
+  content         String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  visibility      Visibility       @default(private)
+  author          User             @relation(fields: [authorid], references: [id])
+  snippetRequests SnippetRequest[]
+  allowedUsers    User[]           @relation("SnippetAllowedUsers")
+  notifications Notification[]
+}
+
+model Like{
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields:[userId],references:[id])
+  blogId String
+  blog Blog @relation(fields:[blogId],references:[id])
+  createdAt DateTime @default(now())
+  @@unique([userId,blogId])
+}
+
+model Blog {
+  id           String     @id @default(cuid())
+  authorId     String
+  content      String
+  title        String
+  thumbnail    String?
+  createdAt    DateTime   @default(now())
+  updateAt     DateTime   @updatedAt
+  visibilty    Visibility @default(private)
+  author        User       @relation(fields: [authorId], references: [id])
+  blogRequests  BlogRequest[]
+  allowedUsers User[]     @relation("BlogAllowedUsers")
+  notifications Notification[]
+  likes     Like[]
+
+}
+
+model Notification{
+  id String @id @default(cuid())
+  senderId String
+  receiverId String
+  snippetId String?
+  blogId String?
+  type   String? 
+  isRead Boolean @default(false)
+  status RequestStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  sender User @relation("Sender",fields: [senderId],references: [id])
+  receiver User @relation("Receiver",fields: [receiverId],references: [id])
+  snippet Snippet? @relation(fields: [snippetId],references: [id])
+  blog Blog? @relation(fields: [blogId],references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Visibility {
+  public
+  private
+}
