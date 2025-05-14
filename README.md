@@ -9,7 +9,7 @@ It includes features like portfolio creation, real-time notifications, advanced 
 
 > Built using a full-stack modern tech stack to elevate your developer workflow.
 
-![CodeVault Banner](https://your-image-url/banner.png) <!-- Replace this with a real image -->
+(./public/favicon.ico) <!-- Replace this with a real image -->
 
 ---
 
