@@ -9,7 +9,10 @@ It includes features like portfolio creation, real-time notifications, advanced 
 
 > Built using a full-stack modern tech stack to elevate your developer workflow.
 
-(./public/favicon.ico) <!-- Replace this with a real image -->
+<p align="center">
+  <img src="public/favicon.ico" alt="CodeVault Logo" width="100" />
+</p>
+
 
 ---
 
