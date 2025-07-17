@@ -36,8 +36,63 @@ import { FiUpload, FiX, FiPlus, FiChevronRight, FiCheck } from 'react-icons/fi';
 import ProgressBar from '@/components/ProgressBar';
 import toast from 'react-hot-toast';
 import TechBadgeInput from '@/components/TechBadgeInput';
+import {z} from "zod"
 // import axiosInstance from '@/lib/axios';
 import { Skeleton } from "@/components/ui/skeleton";
+
+
+
+const portfolioSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Title is required"),
+  summary: z.string().min(1, "Summary is required"),
+  education: z.string().min(1, "Education is required"),
+  location: z.string().min(1, "Location is required"),
+  passionate: z.string().min(1, "Passion description is required"),
+  yearofexperience: z.string().min(1, "Years of experience is required"),
+  profile: z.string().optional(),
+  projects: z.array(
+    z.object({
+      title: z.string().min(1, "Project title is required"),
+      description: z.string().min(1, "Project description is required"),
+      link: z.string().url("Invalid URL").or(z.literal("")).optional(),
+      techTag: z.array(z.string()).optional()
+    })
+  ).min(1, "At least one project is required"),
+  experiences: z.array(
+    z.object({
+      company: z.string().min(1, "Company name is required"),
+      role: z.string().min(1, "Role is required"),
+      description: z.string().min(1, "Description is required"),
+      startDate: z.string().min(1, "Start date is required"),
+      endDate: z.string().optional(),
+      currentlyWorking: z.boolean(),
+      techTag: z.array(z.string()).optional()
+    })
+  ).min(1, "At least one experience is required"),
+  techstack: z.array(
+    z.object({
+      name: z.string(),
+      logo: z.string().optional()
+    })
+  ).min(1, "At least one technology is required"),
+  links: z.array(
+    z.object({
+      platform: z.string(),
+      url: z.string().url("Invalid URL")
+    })
+  ).min(1, "At least one social link is required"),
+  certifications: z.array(
+    z.object({
+      title: z.string().min(1, "Title is required"),
+      description: z.string().min(1, "Description is required"),
+      url: z.string().url("Invalid URL").or(z.literal("")).optional()
+    })
+  ).optional(),
+  achievements: z.string().optional(),
+  availability: z.string().optional()
+});
+
 interface Experience {
   id: string;
   company: string;
@@ -47,6 +102,7 @@ interface Experience {
   endDate: string;
   currentlyWorking: boolean;
   techTag?:string[];
+  error?:string;
 }
 
 interface Project {
@@ -104,6 +160,17 @@ const Page = () => {
   const dispatch = useDispatch();
   const [currentTab, setCurrentTab] = useState('basic');
   const [preview, setPreview] = useState<string | null>(null);
+  const[completedTabs,setCompletedTabs]=useState<Record<string,boolean>>({
+  basic: false,
+  experience: false,
+  project: false,
+  stack: false,
+  social: false,
+  'certification/courses': false,
+  availability: false,
+  preview: false,
+
+  })
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   
@@ -146,22 +213,81 @@ const Page = () => {
     {id:crypto.randomUUID(),title:'',description:'',url:''}
   ])
 
-  //need to work 
-  const completionPercentage = Math.floor(
-    (Object.values({
-      ...personalInfo,
-      experience: experience[0].company ? 1 : 0,
-      projects: projects[0].title ? 1 : 0,
-      techstack: selectedTags.length ? 1 : 0,
-      socialLinks: socialLinks.length ? 1 : 0,
-      achievements:achievements.length ? 1:0,
-    }).filter(Boolean).length / 11) * 100
-  );
+  
+  const calculateCompletionPercentage = () => {
+  const sections = {
+    basic: [
+      personalInfo.name,
+      personalInfo.title,
+      personalInfo.summary,
+      personalInfo.education,
+      personalInfo.location,
+      personalInfo.passionate,
+      personalInfo.yearofexperience
+    ],
+    experience: experience.map(exp => (
+      exp.company && exp.role && exp.description && exp.startDate
+    )),
+    projects: projects.map(proj => (
+      proj.title && proj.description
+    )),
+    techstack: selectedTags.length > 0,
+    socialLinks: socialLinks.length > 0,
+    certifications: certification.length > 0 ? 
+      certification.every(cert => cert.title && cert.description) : true
+  };
 
+  const totalFields = 
+    sections.basic.length +
+    (sections.experience.length > 0 ? 1 : 0) +
+    (sections.projects.length > 0 ? 1 : 0) +
+    1 + 
+    1 + 
+    1;  
+
+  const completedFields = 
+    sections.basic.filter(Boolean).length +
+    (sections.experience.length > 0 && sections.experience.every(Boolean) ? 1 : 0) +
+    (sections.projects.length > 0 && sections.projects.every(Boolean) ? 1 : 0) +
+    (sections.techstack ? 1 : 0) +
+    (sections.socialLinks ? 1 : 0) +
+    (sections.certifications ? 1 : 0);
+
+  return Math.floor((completedFields / totalFields) * 100);
+};
+
+const validateExperience = (experiences: Experience[]): Experience[] =>{
+  const updated=[...experiences];
+  for(let i=0;i<updated.length;i++){
+    const current=updated[i];
+    const prev=updated[i-1];
+    const start=new Date(current.startDate);
+    const end=current.currentlyWorking?null:new Date(current.endDate);
+
+    let error='';
+    if(!current.startDate){
+      error='Start date is required';
+    }else if(!current.currentlyWorking && !current.endDate){
+            error = 'End date is required.';
+    }
+    else if(!current.currentlyWorking && start.getTime()===end?.getTime()){
+      error = 'Start date and end date cannot be the same.';
+    }else if(!current.currentlyWorking && start > end!){
+       error = 'Start date must be before end date.';
+    }else if(i>0 && prev.endDate && new Date(prev.endDate)>start){
+      error = 'This experience should start after the previous one ends.';
+    }
+    updated[i]={...current,error}
+  }
+  return updated;
+
+}
+
+
+const completionPercentage = calculateCompletionPercentage();
   const handleExperienceChange = (id: string, field: keyof Experience, value: any) => {
-    setExperiences(prev => prev.map(exp => 
-      exp.id === id ? { ...exp, [field]: value } : exp
-    ));
+    const updated=experience.map(exp=>exp.id===id ?{...exp,[field]:value}:exp);
+    setExperiences(validateExperience(updated));
   };
 
   const handleCertificationChange=(id:string,field:keyof Certification,value:any)=>{
@@ -222,13 +348,54 @@ const Page = () => {
         setNewLink({ platform: '', username: '' });
       }
     }
-  };
-
+  }
   const removeSocialLink = (index: number) => {
     setSocialLinks(prev => prev.filter((_, i) => i !== index));
   };
-
+  
+const validateCurrentTab = () => {
+  //isValid=false;
+  switch (currentTab) {
+    case 'basic':
+      return (
+        personalInfo.name &&
+        personalInfo.title &&
+        personalInfo.summary &&
+        personalInfo.education &&
+        personalInfo.location &&
+        personalInfo.passionate &&
+        personalInfo.yearofexperience
+      );
+    case 'experience':
+      return experience.every(exp => 
+        exp.company && 
+        exp.role && 
+        exp.description && 
+        exp.startDate
+      );
+    case 'project':
+      return projects.every(proj => 
+        proj.title && 
+        proj.description
+      );
+    case 'stack':
+      return selectedTags.length > 0;
+    case 'social':
+      return socialLinks.length > 0;
+    case 'certification/courses':
+      return certification.every(cert => 
+        cert.title && 
+        cert.description
+      );
+    default:
+      return true;
+  }
+};
   const goToNextTab = () => {
+    if(!validateCurrentTab()){
+      toast.error('Please complete all required fields in this section');
+     return;
+    }
     dispatch(updateForm({
       ...personalInfo,
       profile: preview ?? undefined,
@@ -301,6 +468,27 @@ const Page = () => {
   const handleSubmit=async(e:React.MouseEvent)=>{
     e.preventDefault();
     try {
+      const portfolioData={
+        ...personalInfo,
+        profile:preview||'',
+        experiences:experience,
+        projects,
+        techstack:selectedTags,
+        links:socialLinks,
+        certification,
+        achievements,
+        availability
+      }
+       const validationResult=portfolioSchema.safeParse(portfolioData);
+       if(!validationResult.success){
+        const errors=validationResult.error.flatten().fieldErrors;
+        Object.entries(errors).forEach(([field,message])=>{
+          if(message){
+            toast.error(`${field}: ${message.join(', ')}`,{duration:5000});
+          }
+        });
+        return;
+       }
         const formData=new FormData();
         try {
           if(preview){
@@ -396,17 +584,26 @@ const Page = () => {
           <Tabs value={currentTab} onValueChange={setCurrentTab} className="relative">
             <div className="overflow-x-auto px-6 pt-4">
               <TabsList className="w-full flex bg-transparent p-0">
-                {tabOrder.map((tab, index) => (
-                  <div key={tab} className="flex items-center">
+                {tabOrder.map((tab, index) => {
+                   const isActive = currentTab === tab;
+                   const isDisabled=index>0 && !tabOrder.slice(0,index).every(prevtab=>completedTabs[prevtab])
+                  return(
+                    <div key={tab} className="flex items-center">
                     <TabsTrigger 
                       value={tab} 
-                      className="relative px-4 py-2 rounded-none border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                      disabled={isDisabled}
+                       className={cn(
+            "relative px-4 py-2 rounded-none border-b-2 transition-all duration-200",
+            isActive && "text-green-700 font-bold",
+            "data-[state=active]:bg-[#00B437] data-[state=active]:text-white",
+            isDisabled && "cursor-not-allowed opacity-50"
+          )}
                     >
                       {tab.charAt(0).toUpperCase() + tab.slice(1)}
                       {currentTab === tab && (
                         <motion.div
                           layoutId="activeTabIndicator"
-                          className="absolute bottom-[-2px] left-0 right-0 h-[2px] bg-primary"
+                          className="absolute bottom-[-2px] left-0 right-0 h-[2px]"
                           transition={{ type: "spring", stiffness: 500, damping: 30 }}
                         />
                       )}
@@ -415,12 +612,15 @@ const Page = () => {
                       <div className="h-6 w-px bg-border mx-1" />
                     )}
                   </div>
-                ))}
+                  )
+                }
+                  
+                )}
               </TabsList>
             </div>
 
             <LayoutGroup>
-              <TabsContent value={currentTab} className="mt-0">
+              <TabsContent value={currentTab} className="mt-0">     
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentTab}
@@ -511,12 +711,23 @@ const Page = () => {
                             </div>
 
                             <div className="space-y-2">
-                            <label className="block text-sm font-medium mb-1">  What drives your passion in tech or development?</label>
+                            <label className="block text-sm font-medium mb-1">  What drives your passion in tech or development?
+                                
+                            </label>
                             <Textarea 
-                              placeholder="e.g., I love solving real-world problems and building user-friendly apps..." 
-                             value={personalInfo.passionate}
+                            placeholder="e.g., I love solving real-world problems and building user-friendly apps..." 
+                            value={personalInfo.passionate}
                             onChange={(e) => setPersonalInfo({...personalInfo, passionate: e.target.value})}    
-                            rows={4} />
+                            rows={4}
+                             className={`${
+  personalInfo.passionate.trim().split(/\s+/).filter(Boolean).length > 20
+    ? 'border-red-500 border-2'
+    : ''
+}`}
+                            />
+                            {personalInfo.passionate.trim().split(/\s+/).filter(Boolean).length>20 && (
+    <p className="text-sm text-red-500">Maximum 20 allowed</p>
+  )}
                             </div>
                             <div className="space-y-2">
                             <label className="block text-sm font-medium mb-1">  Where are you from? (City, Country)</label>
@@ -527,13 +738,23 @@ const Page = () => {
                             </div>
                             
                             <div className="space-y-2">
-                              <label className="block text-sm font-medium">Short Summary</label>
+                              <label className="block text-sm font-medium">Short Summary
+                              </label>
                               <Textarea 
                                 placeholder="I'm a passionate full-stack developer with 2+ years of experience building scalable web apps using React, Node.js" 
                                 rows={4}
                                 value={personalInfo.summary}
                                 onChange={(e) => setPersonalInfo({...personalInfo, summary: e.target.value})}
+                              className={`${
+  personalInfo.summary.trim().split(/\s+/).filter(Boolean).length > 60
+    ? 'border-red-500'
+    : ''
+}`}
+                          
                               />
+                                {personalInfo.summary.trim().split(/\s+/).filter(Boolean).length>60 && (
+    <p className="text-sm text-red-500">Maximum 60 words allowed</p>
+  )}
                             </div>
                           </div>
                         </motion.div>
@@ -586,8 +807,12 @@ const Page = () => {
                                     type="date"
                                     value={exp.startDate}
                                     className="w-full"
+   
                                     onChange={(e) => handleExperienceChange(exp.id, 'startDate', e.target.value)}
                                   />
+                                  {exp.error && (
+  <p className="text-red-500 text-sm">{exp.error}</p>
+)}
                                 </div>
                                 <div className='flex items-center flex-row flex-wrap gap-4 '>
                                   <div className='flex flex-col'>  
@@ -599,6 +824,9 @@ const Page = () => {
                                       disabled={exp.currentlyWorking}
                                       className={cn('w-full',exp.currentlyWorking ? 'opacity-50' : '')}
                                     />
+                                    {exp.error && (
+  <p className="text-red-500 text-sm">{exp.error}</p>
+)}
                                   </div>
                                   <label>
                                       <input
@@ -618,8 +846,15 @@ const Page = () => {
                                     value={exp.description}
                                     onChange={(e) => handleExperienceChange(exp.id, 'description', e.target.value)}
                                     rows={3}
-                                   
-                                />
+                                   className={
+    exp.description.trim().split(/\s+/).filter(Boolean).length > 80
+      ? 'border-red-500'
+      : ''
+  }
+                               />
+                                {exp.description.trim().split(/\s+/).filter(Boolean).length>80 &&(
+                                   <p className="text-sm text-red-500">Maximum 80 words allowed</p>
+                                )}
                                 <TechBadgeInput tags={exp.techTag || []} 
                                 setTags={(newTags)=>handleExperienceChange(exp.id,'techTag',newTags)} />
                             </motion.div>
@@ -980,6 +1215,7 @@ const Page = () => {
                   type="button" 
                   onClick={goToNextTab}
                   className="ml-auto"
+                  disabled={!validateCurrentTab()}
                 >
                   {currentTab === 'availability' ? 'Review' : 'Next'}
                   <FiChevronRight className="ml-1 h-4 w-4" />

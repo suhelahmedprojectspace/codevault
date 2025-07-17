@@ -363,7 +363,7 @@ export default function PortfolioPage() {
               <div className="flex flex-col items-center p-6 bg-zinc-800/60 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all duration-300 h-full">
                 <div className="w-16 h-16 flex items-center justify-center mb-4">
                    {tech.logo ? (
-                                           <Image
+                                           <img
                                        width={64}
                                        height={64}
                                        src={tech.logo}

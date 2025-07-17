@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "@/components/Navbar";
 import { Providers } from "./Providers";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import MainWrapper from "./MainWrapper";
-import Footer from "@/components/Footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,16 +27,18 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full  custom-scrollbar:">
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
         <Providers>
           {/* <Navbar className="h-16" /> */}
+       
           <MainWrapper>
             <Toaster position="top-right" />
             {children}
           </MainWrapper>
+  
           {/* <Footer/> */}
         </Providers>
       </body>

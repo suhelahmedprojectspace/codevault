@@ -9,16 +9,21 @@ export async function GET() {
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
   }
 
-  const [snippetCount, blogCount] = await Promise.all([
+  const [snippetCount, blogCount,codeBuddyCount] = await Promise.all([
     prisma.notification.count({
       where: { receiverId: session.user.id, isRead: false, type: "SNIPPET" },
     }),
     prisma.notification.count({
       where: { receiverId: session.user.id, isRead: false, type: "BLOG" },
     }),
+    prisma.notification.count({
+      where:{  receiverId: session.user.id, 
+        isRead: false, 
+        type: "CONNECTION" }
+    })
   ]);
 
-  return NextResponse.json({ snippetCount, blogCount });
+  return NextResponse.json({ snippetCount, blogCount,codeBuddyCount });
 }
 
 export async function PUT() {

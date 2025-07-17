@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { Badge } from "./ui/badge";
-
+import OnlineStatus from "./OnlineStatus";
 interface NavbarProps {
   className?: string;
 }
@@ -30,14 +30,25 @@ const Navbar = ({ className }: NavbarProps) => {
   const pathname = usePathname();
   const [show, setShow] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [showprofile, setShowprofile] = useState(null);
+ const [hasPortfolio, setHasPortfolio] = useState<boolean | null>(null);
   const [dropDownVisible, setDropDownVisible] = useState(false);
   const [user, setUser] = useState<string | null>(null);
   const [showimage, setShowimag] = useState("");
+  const [hasMatchingPreferences, setHasMatchingPreferences] = useState<boolean | null>(null)
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const dropDownRef = useRef<HTMLDivElement>(null);
   const notifyRef = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
+
+   const fetchUserStatus = async () => {
+    try {
+      const res = await axios.get("/porfolio/check");
+      setHasPortfolio(res.data.hasPortfolio);
+      setHasMatchingPreferences(res.data.hasmatchingPreferences);
+    } catch (error) {
+      console.error("Error fetching user status:", error);
+    }
+  };
 
   const fetchUser = async () => {
     if (user) {
@@ -55,12 +66,16 @@ const Navbar = ({ className }: NavbarProps) => {
   useEffect(() => {
     if (status === "authenticated") {
       setUser(session?.user?.id);
+      fetchUserStatus();
     }
   }, [session, status]);
 
   useEffect(() => {
     fetchUser();
-    const interval = setInterval(fetchUser, 30_000);
+    const interval=setInterval(()=>{
+      fetchUser();
+      fetchUserStatus();
+    },30_000)
     return () => clearInterval(interval);
   }, [user]);
 
@@ -83,13 +98,14 @@ const Navbar = ({ className }: NavbarProps) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    const checkuserporfolio = async () => {
-      const response = await axios.get("/porfolio/check");
-      setShowprofile(response.data.hasPortfolio);
-    };
-    checkuserporfolio();
-  }, []);
+  // useEffect(() => {
+  //   const checkuserporfolio = async () => {
+  //     const response = await axios.get("/porfolio/check");
+  //     setShowprofile(response.data.hasPortfolio);
+  //     setHasMatchingPreferences(response.data.hasmatchingPreferences);
+  //   };
+  //   checkuserporfolio();
+  // }, []);
 
   const showNavbar = !pathname.startsWith("/dashboard");
   if (!showNavbar) return null;
@@ -191,23 +207,18 @@ const Navbar = ({ className }: NavbarProps) => {
             >
               Interview Prep
             </Link>
-            {showprofile ? (
-              <Link
-                href="/portfolio/userprofile"
-                className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
-              >
-                My Portfolio
-              </Link>
-            ) : (
-              <Link
-                href="/portfolio"
-                className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
-              >
-                My Portfolio
-              </Link>
-            )}
-            <Link href="/codebuddy" className="hover:text-blue-500 font-medium">
-              Code Buddy
+            
+            <Link
+              href={hasPortfolio ? "/portfolio/userprofile" : "/portfolio"}
+              className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
+            >
+              {hasPortfolio ? "My Portfolio" : "Create Portfolio"}
+            </Link>
+            <Link
+              href={hasMatchingPreferences ? "/recommendation" : "/codebuddy"}
+              className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
+            >
+              {hasMatchingPreferences ? "Matched Developers" : "Find Your Code Buddy"}
             </Link>
           </div>
         </div>
@@ -230,23 +241,17 @@ const Navbar = ({ className }: NavbarProps) => {
             <Link href="/interview" className="hover:text-blue-500 font-medium">
               Interview Prep
             </Link>
-            {showprofile ? (
-              <Link
-                href="/portfolio/userprofile"
-                className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
-              >
-                My Portfolio
-              </Link>
-            ) : (
-              <Link
-                href="/portfolio"
-                className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
-              >
-                Create Portfolio
-              </Link>
-            )}
-            <Link href="/codebuddy" className="hover:text-blue-500 font-medium">
-              Code Buddy
+           <Link
+              href={hasPortfolio ? "/portfolio/userprofile" : "/portfolio"}
+              className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
+            >
+              {hasPortfolio ? "My Portfolio" : "Create Portfolio"}
+            </Link>
+            <Link
+              href={hasMatchingPreferences ? "/recommendation" : "/codebuddy"}
+              className="p-2 font-medium hover:bg-zinc-200 dark:hover:bg-gray-700 rounded"
+            >
+                {hasMatchingPreferences ? "Matched Developers" : "Find Your Code Buddy"}
             </Link>
           </div>
         </div>
@@ -307,7 +312,13 @@ const Navbar = ({ className }: NavbarProps) => {
                             </div>
                             <div className="flex justify-between items-center">
                               <div className="text-gray-600 dark:text-gray-300 lowercase">
-                                has accepted your {data.type} request.
+                                {data.type === "MESSAGE" ? (
+    <>You have a new message.</>
+  ) : session?.user?.id === data.sender ? (
+    <>has accepted your {data.type} request.</>
+  ) : (
+    <>sent you a new {data.type} request.</>
+  )}
                               </div>
                               <Button
                                 variant="ghost"
@@ -329,6 +340,8 @@ const Navbar = ({ className }: NavbarProps) => {
               </div>
 
               <div className="relative" ref={dropDownRef}>
+               {session?.user.id && 
+               <OnlineStatus userId={session.user.id} />}
                 <Avatar
                   onClick={() => setDropDownVisible((prev) => !prev)}
                   className="cursor-pointer"

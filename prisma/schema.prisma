@@ -51,7 +51,7 @@ model User {
   allowedSnippets   Snippet[]        @relation("SnippetAllowedUsers")
   sentNotification Notification[] @relation("Sender")
   receivedNotifcations Notification[] @relation("Receiver")
-  porfolioid String?
+  portfolioId String?
   portfolio Portfolio?
   codeBuddyId String?
   codeBuddy   User? @relation("CodeBuddies",fields: [codeBuddyId],references: [id])
@@ -61,7 +61,9 @@ model User {
   matchingPreferences Json? 
   likes Like[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  //updatedAt DateTime @updatedAt
 }
 model CodeBuddyRequest{
   id String @id @default(cuid())
@@ -70,9 +72,10 @@ model CodeBuddyRequest{
   receiverId String
   reciever User @relation("UserReceiver",fields: [receiverId],references: [id])
   status RequestStatus @default(PENDING)
+  notification Notification[]
   createdAt   DateTime @default(now())
   expiresAt   DateTime @default(now()) 
-  @@unique([requesterId, receiverId])
+  @@unique([requesterId, receiverId]) //prevent duplicate request
   @@index([status])
 
 }
@@ -224,14 +227,29 @@ model Notification{
   receiverId String
   snippetId String?
   blogId String?
+  codebuddyId String?
   type   String? 
   isRead Boolean @default(false)
   status RequestStatus @default(PENDING)
   createdAt DateTime @default(now())
+  
   sender User @relation("Sender",fields: [senderId],references: [id])
   receiver User @relation("Receiver",fields: [receiverId],references: [id])
   snippet Snippet? @relation(fields: [snippetId],references: [id])
   blog Blog? @relation(fields: [blogId],references: [id])
+  codeBuddyRequest CodeBuddyRequest? @relation(fields: [codebuddyId], references: [id])
+}
+
+model Message{
+  id String @id @default(cuid())
+  content String
+  senderId String
+  recipientId String
+  timestamp DateTime @default(now())
+
+  sender User @relation("SentMessages",fields: [senderId],references: [id])
+  recipient User @relation("ReceivedMessages",fields: [recipientId],references: [id])
+
 }
 
 enum Role {

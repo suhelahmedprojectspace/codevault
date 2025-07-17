@@ -10,6 +10,8 @@ import {
   CopyIcon,
   Share,
   CircleUserRound,
+  MessageSquareText,
+  MessageSquare
 } from "lucide-react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
@@ -19,50 +21,57 @@ import axios from "@/lib/axios";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import ShareButton from "./ShareButton";
-
+import { useSession } from "next-auth/react";
+import { useNotifications } from "@/hooks/use-notification";
+import toast from "react-hot-toast";
+// import NotificationListener from "./NotificationListener";
 export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
-  const [requestCount, setRequestCount] = useState(0);
-  const [snippetCount, setSnippetCount] = useState(0);
-  const [showprofile, setShowprofile] = useState(null);
-  const [id, setId] = useState("");
-  const [blogCount, setBlogCount] = useState(0);
+  const session = useSession();
+  // const [requestCount, setRequestCount] = useState(0);
+  // const [snippetCount, setSnippetCount] = useState(0);
+  const [hasPortfolio, setHasPortfolio] = useState(false);
+  const { total ,
+  fetchCounts
+} = useNotifications();
+  console.log(total);
+ useEffect(() => {
+    fetchCounts(); 
+  }, [fetchCounts]);
 
-  const handleNotificationClick = async () => {
+  const [portfolioId, setPortfolioId] = useState("");
+  // const [blogCount, setBlogCount] = useState(0);
+
+  const fetchUserPortfolioStatus = async () => {
     try {
-      await axios.put("/notifications");
-      setRequestCount(0);
-    } catch (err) {
-      console.error("Failed to mark all read", err);
-    }
-  };
-
-  const fetchNotifications = async () => {
-    try {
-      const { data } = await axios.get("/notifications");
-      setSnippetCount(data.snippetCount);
-      setBlogCount(data.blogCount);
-    } catch (err) {
-      console.error("Failed to fetch notifications", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30_000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const checkuserporfolio = async () => {
       const response = await axios.get("/porfolio/check");
-      setShowprofile(response.data.hasPortfolio);
-      setId(response.data.portfolioId);
       console.log(response.data.hasPortfolio);
-    };
-    checkuserporfolio();
-  }, []);
-  const total = snippetCount + blogCount;
+      setHasPortfolio(response.data.hasPortfolio);
+      setPortfolioId(response.data.portfolioId);
+    } catch (error) {
+      console.error("Error checking portfolio status:", error);
+    }
+  };
 
+  useEffect(()=>{
+    fetchUserPortfolioStatus();
+  },[])
+
+  // const handleNotificationClick = async () => {
+  //   try {
+  //     await axios.put("/notifications");
+  //     setRequestCount(0);
+  //   } catch (err) {
+  //     console.error("Failed to mark all read", err);
+  //   }
+  // };
+
+  
+//   const handlePortfolioCreated = () => {
+//     setHasPortfolio(true);
+//     fetchUserPortfolioStatus(); 
+// };
+
+  
   return (
     <aside className="min-h-screen top-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out">
       <div className="h-full px-3 py-4 overflow-y-auto">
@@ -215,7 +224,7 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
-
+          
           <Link
             href="/dashboard/request"
             className={cn(
@@ -234,35 +243,74 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             </div>
             <span className="ms-3">Requests</span>
           </Link>
-
-          {showprofile ? (
-            <div className="space-y-2">
-              <Link
-                href="/portfolio/userprofile"
-                className={cn(
-                  "flex items-center p-3 rounded-lg group",
-                  "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-                  "transition-colors duration-200 relative",
-                )}
-              >
-                <Briefcase className="h-5 w-5" />
-                <span className="ms-3">My Porfolio</span>
-              </Link>
-              <ShareButton portfolioId={id} />
-            </div>
-          ) : (
-            <Link
-              href="/dashboard/portfolio"
-              className={cn(
-                "flex items-center p-3 rounded-lg group",
-                "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-                "transition-colors duration-200 relative",
+{/* 
+           <Link
+            href="/dashboard/request/codebuddyrequest"
+            className={cn(
+              "flex items-center p-3 rounded-lg group",
+              "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
+              "transition-colors duration-200 relative",
+            )}
+          >
+            <div className="relative">
+              <Bell className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              {total > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center">
+                  {total}
+                </span>
               )}
-            >
-              <Briefcase className="h-5 w-5" />
-              <span className="ms-3">Create Porfolio</span>
-            </Link>
+            </div>
+            <span className="ms-3">Friend Requests</span>
+          </Link> */}
+
+         {hasPortfolio ? (
+        <div className="space-y-2">
+          <Link
+            href="/portfolio/userprofile"
+            className={cn(
+              "flex items-center p-3 rounded-lg group",
+              "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
+              "transition-colors duration-200 relative",
+            )}
+          >
+            <Briefcase className="h-5 w-5" />
+            <span className="ms-3">My Portfolio</span>
+          </Link>
+          <ShareButton portfolioId={portfolioId} />
+        </div>
+      ) : (
+        <Link
+          href={{
+            pathname: "/dashboard/portfolio",
+            query: { onSuccess: "handlePortfolioCreated" } 
+          }}
+          className={cn(
+            "flex items-center p-3 rounded-lg group",
+            "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
+            "transition-colors duration-200 relative",
           )}
+        >
+          <Briefcase className="h-5 w-5" />
+          <span className="ms-3">Create Portfolio</span>
+        </Link>
+      )}
+         
+          <div className="space-y-2">
+ 
+  {/* {session.data?.user?.id && (
+    <>
+      <Bell/>
+      <NotificationListener userId={session.data.user.id}/>
+    </>
+  )} */}
+</div>
+
+{/* <button 
+  onClick={() => toast.success('Test toast')}
+  className="p-2 bg-blue-500 text-white rounded"
+>
+  Test Toast
+</button> */}
 
           <div className="space-y-2">
             <Link
@@ -275,6 +323,21 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             >
               <CircleUserRound className="h-5 w-5" />
               <span className="ms-3">My Account</span>
+            </Link>
+          </div>
+
+
+<div className="space-y-2">
+            <Link
+              href="/dashboard/chat"
+              className={cn(
+                "flex items-center p-3 rounded-lg group",
+                "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
+                "transition-colors duration-200 relative",
+              )}
+            >
+              <MessageSquareText  className="h-5 w-5" />
+              <span className="ms-3">Chat</span>
             </Link>
           </div>
 

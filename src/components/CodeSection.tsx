@@ -65,7 +65,7 @@ const CodeSection = () => {
             </Card>
           </div>
 
-          {/* Step 2 */}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
             <div className="space-y-3 sm:space-y-4 order-1 md:order-2">
               <div className="flex items-center">
@@ -120,7 +120,7 @@ const CodeSection = () => {
             </Card>
           </div>
 
-          {/* Step 3 */}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center">
@@ -131,7 +131,7 @@ const CodeSection = () => {
                   Your Code Showcase
                 </h3>
               </div>
-              <div className="bg-gray-50 text-gray-800 rounded-lg sm:rounded-xl border border-gray-200 overflow-hidden">
+              <div className="bg-gray-50 text-gray-800 rounded-lg sm:rounded-xl border border-gray-200 overflow-hidden custom-scrollbar">
                 <div className="flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3 bg-white border-b border-gray-200">
                   <span className="font-mono text-xs sm:text-sm text-gray-600">
                     utils/debounce.js

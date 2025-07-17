@@ -6,7 +6,7 @@ const PROTECTED_ROUTES = [
   "/dashboard",
   "/settings",
   "/profile",
-  "/marketplace",
+  "/recommedation",
 ];
 const AUTH_ROUTES = ["/login", "/register"];
 const PUBLIC_ROUTES = ["/"];

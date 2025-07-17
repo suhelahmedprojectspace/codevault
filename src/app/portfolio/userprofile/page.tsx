@@ -19,6 +19,10 @@ import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
+// interface IncompeleteSection{
+//   section:string;
+//   message:string;
+// }
 interface Portfolio {
   profile: string;
   name: string;
@@ -68,18 +72,57 @@ interface Portfolio {
 
 export default function PortfolioPage() {
   const router = useRouter();
-  const [showeditbutton, setShoweditButton] = useState(false);
-  const [showpencil, setShowPencil] = useState(false);
-  const [editdata, setEditData] = useState({
-    type: "",
-    data: "",
-  });
+ //const [incompleteSections, setIncompleteSections] = useState<IncompeleteSection[]>([]);
+  // const [showeditbutton, setShoweditButton] = useState(false);
+  // const [showpencil, setShowPencil] = useState(false);
+  // const [editdata, setEditData] = useState({
+  //   type: "",
+  //   data: "",
+  // });
   const { data: session } = useSession();
   console.log(`session ki user id  ${session?.user.id}`);
   const [owner, setOwner] = useState(null);
   console.log(`owner ki user id  ${owner}`);
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [progress, setProgress] = useState(0);
+
+//   const checkInComplete=()=>{
+//       const incomplete:IncompeleteSection[]=[];
+//       if(!portfolio?.certifications.length){
+//         incomplete.push({
+//           section:'certifications',
+//           message: 'Certifications/courses not added'
+//         })
+//       }
+//       if(!portfolio?.projects?.length){
+//          incomplete.push({
+//         section: 'projects',
+//         message: 'No projects added'
+//       });
+
+//       if(!portfolio?.experiences?.length){
+//         incomplete.push({
+//             section: 'experiences',
+//         message: 'Work experience missing'
+//         })
+//       }
+//        if (!portfolio?.techstack?.length) {
+//       incomplete.push({
+//         section: 'techstack',
+//         message: 'Tech stack not specified'
+//       });
+//     }
+    
+//     if (!portfolio?.links?.length) {
+//       incomplete.push({
+//         section: 'links',
+//         message: 'Social links missing'
+//       });
+//     }
+      
+//   }
+//       setIncompleteSections(incomplete);
+// }
   useEffect(() => {
     const fetchPortfolio = async () => {
       setProgress(10);
@@ -97,11 +140,14 @@ export default function PortfolioPage() {
       }, 500);
     };
     fetchPortfolio();
+    //checkInComplete()
   }, []);
 
-  const handleEditField = (field: keyof typeof portfolio) => {
-    console.log({ type: field });
-  };
+
+
+  // const handleEditField = (field: keyof typeof portfolio) => {
+  //   console.log({ type: field });
+  // };
   if (!portfolio)
     return (
       <div className="flex flex-col items-center bg-zinc-900 justify-center text-center min-h-screen">
@@ -130,9 +176,8 @@ export default function PortfolioPage() {
     );
   return (
     <div className="min-h-screen bg-zinc-900 text-white">
-      {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Animated Background Elements */}
+      
         {session?.user?.id === owner && (
           <div className="fixed z-20 top-10 right-4">
             <Button
@@ -393,17 +438,20 @@ export default function PortfolioPage() {
 
                 <div className="flex flex-col items-center p-6 bg-zinc-800/60 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all duration-300 h-full">
                   <div className="w-16 h-16 flex items-center justify-center mb-4">
-                    {tech.logo ? (
-                          <Image
-                      width={64}
-                      height={64}
-                      src={tech.logo}
-                      alt={tech.name}
-                      className="object-contain h-full w-full"
-                    />
-                    ):(
-                     <span className="text-4xl text-center font-extrabold text-blue-600">{tech.name.charAt(0).toLocaleUpperCase()}</span>
-                    )}
+                   {tech.logo ? (
+  <img
+    width={64}
+    height={64}
+    src={`${tech.logo}`}
+    alt={tech.name}
+    className="object-contain h-full w-full"
+  />
+) : (
+  <span className="text-4xl font-extrabold text-blue-600 flex items-center justify-center w-16 h-16">
+    {tech.name.charAt(0).toUpperCase()}
+  </span>
+)}
+
                     
                   </div>
                   <h3 className="text-lg font-medium text-center text-gray-300 group-hover:text-white transition-colors">
@@ -834,7 +882,7 @@ export default function PortfolioPage() {
             );
 
             return (
-              <motion.div
+               <motion.div
                 key={platform.id}
                 whileHover={{ y: -5 }}
                 whileTap={{ scale: 0.95 }}

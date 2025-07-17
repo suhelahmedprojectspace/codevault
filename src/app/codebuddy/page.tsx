@@ -5,36 +5,36 @@ import QuestionPage from './subpage/page'
 import Question from '@/components/Question'
 import { useSession } from 'next-auth/react'
 import axios from '@/lib/axios'
-import Recommendation from '@/components/Recommendation'
+import RecommendationPage from '../recommendation/page'
 import { useRouter } from 'next/navigation'
 import { Skeleton } from '@/components/ui/skeleton'
 
 const Page = () => {
   const { data: session, status } = useSession()
   const [hasPortfolio, setHasPortfolio] = useState(false)
-  const [hasMatchingPreferences, setHasMatchingPreferences] = useState(false)
+  const [hasMatchingPreferences, setHasMatchingPreferences] = useState<boolean | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (status === 'authenticated') {
-          const res = await axios.get('/portfolio/check')
-          setHasPortfolio(res.data.hasPortfolio)
-          setHasMatchingPreferences(res.data.hasMatchingPreferences)
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
+  const fetchData = async () => {
+    try {
+      if (status === 'authenticated') {
+        const res = await axios.get('/porfolio/check');
+        setHasPortfolio(res.data.hasPortfolio);
+        const matching = res.data.hasMatchingPreferences ?? res.data.hasmatchingPreferences;
+        setHasMatchingPreferences(matching);
+        //console.log("Client received matchingPreferences:", matching);
       }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
-
-    if (status !== 'loading') {
-      fetchData()
-    }
-  }, [status])
+  };
+  
+  fetchData();
+}, [status]);
 
   if (loading) {
     return (
@@ -63,12 +63,13 @@ const Page = () => {
     )
       
   }
-
+  
   if (status === 'unauthenticated') {
     return <CodeBuddyIntroPage />
   }
 
   if (!hasMatchingPreferences) {
+    console.log(hasMatchingPreferences);
     return <QuestionPage />
   }
 
@@ -76,7 +77,7 @@ const Page = () => {
     return <Question />
   }
 
-  return <Recommendation />
+  return <RecommendationPage />
 }
 
 export default Page

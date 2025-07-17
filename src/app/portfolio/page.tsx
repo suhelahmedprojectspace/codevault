@@ -15,7 +15,6 @@ const PortfolioPage = () => {
     if (!session) {
       signIn(undefined, { callbackUrl: targetRoute });
     } else {
-      // logged in — go directly
       router.push(targetRoute);
     }
   };

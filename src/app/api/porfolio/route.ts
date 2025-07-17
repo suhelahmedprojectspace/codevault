@@ -9,15 +9,15 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const PortfolioSchema = z.object({
-  title: z.string().min(1).max(100),
-  summary: z.string().max(500),
-  name: z.string().min(2).max(50),
-  education: z.string().max(100).optional(),
-  location: z.string().max(100).optional(),
-  yearofexperience: z.string().max(50).optional(),
-  passionate: z.string().max(50).optional(),
-  achievements: z.string().max(500).optional(),
-  availability: z.string().max(100).optional(),
+  title: z.string().min(1),
+  summary: z.string(),
+  name: z.string().min(2),
+  education: z.string().optional(),
+  location: z.string().optional(),
+  yearofexperience: z.string().optional(),
+  passionate: z.string().optional(),
+ // achievements: z.string().optional(),
+  //availability: z.string().optional(),
   techstack: z.array(z.any()).optional(),
   experiences: z.array(z.any()).optional(),
   projects: z.array(z.any()).optional(),
@@ -158,6 +158,7 @@ export async function POST(req: Request) {
     );
   }
 }
+
 
 export async function GET() {
   try {

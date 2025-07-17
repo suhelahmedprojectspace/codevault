@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from "react";
 import SnippetRequest from "./snippet/SnippetRequest";
 import BlogRequest from "./blog/BlogRequest";
+import CodeBuddyRequest from "./codebuddyrequest/page";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import axios from "@/lib/axios";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button"; // Import Button component
-
 export default function RequestDashboard() {
   const [snippetCount, setSnippetCount] = useState<number | null>(null);
   const [blogCount, setBlogCount] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<"snippets" | "blogs">("snippets");
+  const [activeTab, setActiveTab] = useState<"snippets" | "blogs" | "buddy">("snippets");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCount = async () => {
@@ -33,7 +33,7 @@ export default function RequestDashboard() {
   }, [activeTab]);
 
   const handleTabChange = async (value: string) => {
-    if (value !== "snippets" && value !== "blogs") return;
+    if (value !== "snippets" && value !== "blogs" && value!=="buddy") return;
 
     setIsLoading(true);
     setActiveTab(value);
@@ -69,7 +69,7 @@ export default function RequestDashboard() {
 
   return (
     <div className="pt-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="w-full mx-auto">
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
@@ -77,7 +77,7 @@ export default function RequestDashboard() {
         >
           <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 pb-4">
             <div className="flex justify-between items-center mb-4">
-              <TabsList className="grid w-full grid-cols-2 max-w-md rounded-lg p-1 h-12">
+              <TabsList className="flex flex-wrap gap-2 w-full rounded-lg p-1 h-auto">
                 <TabsTrigger
                   value="snippets"
                   className="relative rounded-md transition-all duration-200 hover:bg-muted/50"
@@ -113,6 +113,29 @@ export default function RequestDashboard() {
                       </Badge>
                     )}
                     {isLoading && activeTab === "blogs" && (
+                      <Skeleton className="h-4 w-4 rounded-full" />
+                    )}
+                  </span>
+                </TabsTrigger>
+
+
+
+                
+                <TabsTrigger
+                  value="buddy"
+                  className="relative rounded-md transition-all duration-200 hover:bg-muted/50"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    Buddy Requests
+                    {/* {blogCount !== null && blogCount > 0 && (
+                      <Badge
+                        variant="destructive"
+                        className="h-5 w-5 p-0 flex items-center justify-center animate-bounce"
+                      >
+                        {blogCount}
+                      </Badge>
+                    )} */}
+                    {isLoading && activeTab === "buddy" && (
                       <Skeleton className="h-4 w-4 rounded-full" />
                     )}
                   </span>
@@ -156,6 +179,19 @@ export default function RequestDashboard() {
                 <BlogRequest />
               )}
             </TabsContent>
+
+            <TabsContent value="buddy">
+              {isLoading ? (
+                <div className="space-y-4">
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              ) : (
+                <CodeBuddyRequest/>
+              )}
+            </TabsContent>
+            
           </div>
         </Tabs>
       </div>
