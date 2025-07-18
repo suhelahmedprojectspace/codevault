@@ -49,7 +49,7 @@ const HeroSection = () => {
             variant="outline"
             size="lg"
             className="border-2 hover:bg-accent/10"
-            onClick={() => router.push("/demo")}
+            onClick={() => router.push("/signup")}
           >
             See How It Works
           </Button>

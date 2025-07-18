@@ -9,6 +9,7 @@ import path from "path";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcryptjs";
+import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
 
 const ProfileSchema = z.object({
   username: z.string(),
@@ -18,7 +19,7 @@ const ProfileSchema = z.object({
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_MINI_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const UPLOAD_DIR = path.join(process.cwd(), "public/uploads");
+
 
 async function handleFileUpload(file: File | null, oldPath?: string) {
   if (!file) return undefined;
@@ -28,27 +29,9 @@ async function handleFileUpload(file: File | null, oldPath?: string) {
   if (file.size > MAX_FILE_SIZE) {
     throw new Error("File too large");
   }
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const ext = path.extname(file.name);
-  const filename = `${uuid()}${ext}`;
-
-  const absoluteUploadPath = path.join(UPLOAD_DIR, filename);
-
-  //file upload check
-  if (!fs.existsSync(UPLOAD_DIR)) {
-    await fs.promises.mkdir(UPLOAD_DIR, { recursive: true });
-  }
-  await writeFile(absoluteUploadPath, buffer);
-
-  if (oldPath) {
-    const oldAbsolutePath = path.join(process.cwd(), "public", oldPath);
-    //old file delete kar raha hai
-    if (fs.existsSync(oldAbsolutePath)) {
-      await unlink(oldAbsolutePath).catch(console.error);
-    }
-  }
-  return `/uploads/${filename}`;
+  
+  const uploaded=await uploadToCloudinary(file) as  { secure_url: string };
+  return uploaded.secure_url;
 }
 export async function GET(req: Request) {
   try {
@@ -78,26 +61,20 @@ export async function PATCH(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ messaage: "Unathorised" }, { status: 401 });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-    });
-    if (!existingUser) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
+
     const formData = await req.formData();
+    const file = formData.get("image") as File | null;
+    const password = formData.get("password") as string | null;
+    const username = formData.get("username") as string | null;
 
     const updateData: {
       username?: string;
       image?: string;
       password?: string;
     } = {};
-    const file = formData.get("image") as File | null;
-    const password = formData.get("password") as string;
-    const username = formData.get("username") as string;
+
     if (username) {
       updateData.username = username;
     }
@@ -105,36 +82,44 @@ export async function PATCH(req: Request) {
       updateData.password = await bcrypt.hash(password, 10);
     }
 
-    const profilePath = file
-      ? await handleFileUpload(file, existingUser.image || undefined)
-      : undefined;
-    if (profilePath) {
-      updateData.image = profilePath;
+    if (file && file.size > 0) {
+      try {
+        const result = await uploadToCloudinary(file);
+        if (result && typeof result === 'object' && 'secure_url' in result) {
+          updateData.image = result.secure_url;
+        }
+      } catch (error) {
+        console.error("Cloudinary upload error:", error);
+        return NextResponse.json(
+          { message: "Failed to upload image" },
+          { status: 500 }
+        );
+      }
     }
+
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
       data: updateData,
       select: {
-        // Only return necessary fields
         id: true,
         username: true,
         email: true,
         image: true,
       },
     });
+
     return NextResponse.json(
       { message: "Profile updated successfully", user: updatedUser },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error("Profile update error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
-
 export async function DELETE(req: Request) {
   try {
     const session = await getServerSession(authOptions);

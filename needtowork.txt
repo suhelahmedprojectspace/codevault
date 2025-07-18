@@ -1,0 +1,5 @@
+1) dashborad
+2) hero section 
+3) comment section and like
+4) only show chat if there is codebuddy
+5) before the blog or snippet is loaded if should show skelton

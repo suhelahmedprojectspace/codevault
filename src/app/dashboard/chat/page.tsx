@@ -195,7 +195,7 @@ const Page = () => {
         ))}
 
       
-       {buddy && isBuddyTyping ? (
+       {buddy && isBuddyTyping && (
   <div className="flex items-center gap-2 px-2">
      <Avatar className="h-10 w-10">
               <AvatarImage src={buddy.image || '/default-avatar.png'} alt={buddy.username} />
@@ -207,7 +207,7 @@ const Page = () => {
       <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
     </div>
   </div>
-):null}
+)}
 
         <div ref={messagesEndRef} />
       </main>
