@@ -7,9 +7,9 @@ if (!process.env.CLOUDINARY_CLOUD_NAME ||
 }
 
 cloudinary.config({
-  cloud_name: 'dautdq7cc',
-  api_key: '361957335258871',
-  api_secret: 'VfHm3TdPumMKiF5i5F5LyfOvzJM',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:process.env.CLOUDINARY_API_KEY ,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true
 });
 
