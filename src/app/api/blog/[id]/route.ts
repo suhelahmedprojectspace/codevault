@@ -3,18 +3,16 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: Request,  context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params
   try {
     const getBlog = await prisma.blog.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         author: {
           include: {
             blog: {
-              where: { NOT: { id: params.id } },
+              where: { NOT: { id } },
               select: {
                 id: true,
                 title: true,
@@ -42,15 +40,16 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id }= await context.params
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.id) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
     const getBlog = await prisma.blog.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
     if (!getBlog) {
       return NextResponse.json(
@@ -64,8 +63,7 @@ export async function DELETE(
 
     const deletedBlog = await prisma.blog.delete({
       where: {
-        id: params.id,
-      },
+        id},
     });
     return NextResponse.json(
       { message: "deleted successfully", deletedBlog },
@@ -81,8 +79,9 @@ export async function DELETE(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
+  const {id}=await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.id) {
@@ -92,7 +91,7 @@ export async function PUT(
     const body = await req.json();
     const { title, content } = body;
 
-    const existing = await prisma.blog.findUnique({ where: { id: params.id } });
+    const existing = await prisma.blog.findUnique({ where: { id } });
 
     if (!existing) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
@@ -103,7 +102,7 @@ export async function PUT(
     }
 
     const updated = await prisma.blog.update({
-      where: { id: params.id },
+      where: { id },
       data: { title, content },
     });
 

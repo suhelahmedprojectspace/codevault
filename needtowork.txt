@@ -1,5 +1,6 @@
 1) dashborad
-2) hero section 
+2) hero section (done)
 3) comment section and like
-4) only show chat if there is codebuddy
+4) only show chat if there is codebuddy(done)
 5) before the blog or snippet is loaded if should show skelton
+6) cloudinary (done)

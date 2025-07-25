@@ -24,58 +24,47 @@ import ShareButton from "./ShareButton";
 import { useSession } from "next-auth/react";
 import { useNotifications } from "@/hooks/use-notification";
 import toast from "react-hot-toast";
-// import NotificationListener from "./NotificationListener";
 export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
   const session = useSession();
-  // const [requestCount, setRequestCount] = useState(0);
-  // const [snippetCount, setSnippetCount] = useState(0);
+  const[hasCodeBuddy,setHasCodeBuddy]=useState(false);
   const [hasPortfolio, setHasPortfolio] = useState(false);
-  const { total ,
-  fetchCounts
-} = useNotifications();
-  console.log(total);
+  const[loading,setLoading]=useState(true);
+  const { total ,fetchCounts} = useNotifications();
+  const [portfolioId, setPortfolioId] = useState("");
  useEffect(() => {
     fetchCounts(); 
   }, [fetchCounts]);
 
-  const [portfolioId, setPortfolioId] = useState("");
-  // const [blogCount, setBlogCount] = useState(0);
-
-  const fetchUserPortfolioStatus = async () => {
-    try {
-      const response = await axios.get("/porfolio/check");
-      console.log(response.data.hasPortfolio);
-      setHasPortfolio(response.data.hasPortfolio);
-      setPortfolioId(response.data.portfolioId);
-    } catch (error) {
-      console.error("Error checking portfolio status:", error);
-    }
-  };
-
   useEffect(()=>{
-    fetchUserPortfolioStatus();
+    const init=async()=>{
+      try {
+        const portfolioRes=await axios.get("/porfolio/check");
+        setHasPortfolio(portfolioRes.data.hasPortfolio);
+        setPortfolioId(portfolioRes.data.portfolioId);
+        const buddyRes=await axios.get('/chat/codebuddy');
+        if (buddyRes.status === 200 && buddyRes.data.userWithBuddy?.codeBuddy) {
+        setHasCodeBuddy(true);
+      }
+      } catch (error) {
+         console.error("Sidebar loading error:", error);
+      }finally{
+        setLoading(false)
+      }
+    };
+    init()
   },[])
-
-  // const handleNotificationClick = async () => {
-  //   try {
-  //     await axios.put("/notifications");
-  //     setRequestCount(0);
-  //   } catch (err) {
-  //     console.error("Failed to mark all read", err);
-  //   }
-  // };
-
-  
-//   const handlePortfolioCreated = () => {
-//     setHasPortfolio(true);
-//     fetchUserPortfolioStatus(); 
-// };
-
-  
+  if(loading){
+    return(
+      <aside className="min-h-screen w-64 bg-white dark:bg-gray-800 border-r border-gray-200  dark:border-gray-700 p-4 space-y-4">
+        {Array.from({length:9}).map((_,i)=>(
+             <div key={i} className="h-5  p-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4" />
+        ))}
+      </aside>
+    )
+  }
   return (
     <aside className="min-h-screen top-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out">
       <div className="h-full px-3 py-4 overflow-y-auto">
-        {/* Header with Branding and Hamburger */}
         <div className="flex items-center justify-between mb-6 px-2">
           <Link href="/" className="flex items-center gap-2">
             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 text-white font-bold text-2xl shadow-sm">
@@ -243,25 +232,7 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             </div>
             <span className="ms-3">Requests</span>
           </Link>
-{/* 
-           <Link
-            href="/dashboard/request/codebuddyrequest"
-            className={cn(
-              "flex items-center p-3 rounded-lg group",
-              "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-              "transition-colors duration-200 relative",
-            )}
-          >
-            <div className="relative">
-              <Bell className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              {total > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center">
-                  {total}
-                </span>
-              )}
-            </div>
-            <span className="ms-3">Friend Requests</span>
-          </Link> */}
+
 
          {hasPortfolio ? (
         <div className="space-y-2">
@@ -327,6 +298,8 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
           </div>
 
 
+    {hasCodeBuddy && (
+
 <div className="space-y-2">
             <Link
               href="/dashboard/chat"
@@ -340,6 +313,7 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
               <span className="ms-3">Chat</span>
             </Link>
           </div>
+)}
 
           <button
             onClick={() => signOut()}

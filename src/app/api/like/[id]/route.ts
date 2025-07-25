@@ -5,8 +5,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } },
+   context: { params: Promise<{ id: string }> },
 ) {
+  const {id}=await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.id) {
@@ -17,7 +18,7 @@ export async function POST(
       where: {
         userId_blogId: {
           userId: session.user.id,
-          blogId: params.id,
+          blogId: id,
         },
       },
     });
@@ -29,7 +30,7 @@ export async function POST(
     const res = await prisma.like.create({
       data: {
         userId: session.user.id,
-        blogId: params.id,
+        blogId: id,
       },
     });
 
@@ -43,14 +44,15 @@ export async function POST(
   }
 }
 
-// Get like count
+
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } },
+    context: { params: Promise<{ id: string }> },
 ) {
+  const {id}=await context.params
   try {
     const count = await prisma.like.count({
-      where: { blogId: params.id },
+      where: { blogId: id },
     });
 
     return NextResponse.json(
@@ -63,11 +65,12 @@ export async function GET(
   }
 }
 
-// Remove like
+
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } },
+   context: { params: Promise<{ id: string }> },
 ) {
+  const { id } = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.id) {
@@ -76,7 +79,7 @@ export async function DELETE(
 
     await prisma.like.deleteMany({
       where: {
-        blogId: params.id,
+        blogId: id,
         userId: session.user.id,
       },
     });

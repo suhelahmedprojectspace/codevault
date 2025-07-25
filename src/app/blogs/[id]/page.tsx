@@ -1,18 +1,20 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import axios from "@/lib/axios";
 import Link from "next/link";
-import { BookOpen, Clock, Heart, Share2, MessageSquare } from "lucide-react";
+import { BookOpen, Clock, Heart, Share2, MessageSquareText  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 //import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { CommentSection } from "@/components/CommentSection";
+import { Blog, Comment } from "@/types/blog";
 interface Author {
   id: string;
   username: string;
@@ -23,17 +25,26 @@ interface Author {
   }>;
 }
 
-interface Blog {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  visibility: string;
-  author: Author;
-  likes: number;
-  tags?: string[];
-}
+// interface Blog {
+//   id: string;
+//   title: string;
+//   content: string;
+//   createdAt: string;
+//   updatedAt: string;
+//   visibility: string;
+//   author: Author;
+//   likes: number;
+//   tags?: string[];
+// }
+// interface Comment{
+//   author:{
+//     image:string;
+//     username:string;
+//   }
+//   id:string;
+//   content:string;
+//   parentId?:string
+// }
 
 const CodeBlock = ({
   language,
@@ -85,13 +96,33 @@ const getReadingTime = (text: string) => {
   return Math.ceil(words / wordsPerMinute);
 };
 const Page = () => {
+  const session=useSession();
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
+  const[showComment,setShowComment]=useState(false);
+  const [comment, setComment] = useState<Comment[]>([]);
+  const [content, setContent] = useState('');
   const [processedContent, setProcessedContent] = useState<string>("");
+  const isBlogAuthor = session.data?.user.id === blog?.author.id;
   const params = useParams();
+  
   const id = params.id;
+
+  useEffect(() => {
+  const fetchComments = async () => {
+    if (!blog?.id) return;
+    try {
+      const res = await axios.get(`/comment/${blog.id}`);
+      console.log('Bhai ek comment hai',res.data);
+      setComment(res.data.existBlog.comments);
+    } catch (error) {
+      console.error("Failed to fetch data");
+    }
+  }
+  fetchComments();
+}, [blog?.id]);
 
   useEffect(() => {
     if (!id) return;
@@ -100,7 +131,6 @@ const Page = () => {
       try {
         setLoading(true);
         const res = await axios.get(`/blog/${id}`);
-        console.log(res.data.getBlog);
         setBlog(res.data.getBlog);
         setLikes(res.data.getBlog.likes || 0);
       } catch (err) {
@@ -208,14 +238,37 @@ const Page = () => {
       );
     });
   };
+  
+  
+  const handlePostComment=async(id:String)=>{
+    if(!content.trim()){
+     toast.error("Comment cannot be empty");
+     return;
+    }
+     try {
+        const res=await axios.post('/comment',{
+          content,
+          blogId:id
+        })
+        if(res.status===201){
+          toast.success("Comment posted !!");
+          setContent('');
+          
+
+        }
+     } catch (error) {
+          toast.error("Failed to post comment");
+         console.error(error);
+     }
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main Content */}
+        
           <article className="lg:col-span-8 xl:col-span-9">
-            {/* Blog Header */}
+        
             <header className="mb-10">
               <div className="flex items-center gap-4 mb-6">
                 <Avatar className="h-12 w-12">
@@ -245,7 +298,6 @@ const Page = () => {
             <div className="prose dark:prose-invert max-w-none">
               {renderContent()}
             </div>
-            {/* Engagement Section */}
             <div className="mt-12 pt-6 border-t">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -261,6 +313,9 @@ const Page = () => {
                     />
                     <span>{likes}</span>
                   </Button>
+                 <Button variant="ghost" size="icon" className="flex items-center" onClick={() => setShowComment(prev => !prev)}>
+                <MessageSquareText  />  {comment.length}
+                </Button>
                 </div>
                 <Button
                   variant="ghost"
@@ -271,6 +326,15 @@ const Page = () => {
                   <span>Share</span>
                 </Button>
               </div>
+            <CommentSection
+         comments={comment}
+         blogId={blog.id}
+        blogAuthorId={blog.author.id}
+       isBlogAuthor={isBlogAuthor}
+   showComment={showComment}
+  setShowComment={setShowComment}
+
+/>
             </div>
           </article>
 

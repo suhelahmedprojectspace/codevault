@@ -5,16 +5,12 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } },
+   context: { params: Promise<{ id: string }> },
 ) {
   try {
-    // const session = await getServerSession(authOptions);
-
-    // if (!session || !session.user?.email) {
-    //   return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
-    // }
+    const {id}= await context.params;
     const response = await prisma.portfolio.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         links: true,
         user: {
@@ -27,7 +23,7 @@ export async function GET(
     if (!response) {
       return NextResponse.json(
         { message: "Portfolio not found" },
-        { status: 403 },
+        { status: 404 },
       );
     }
     return NextResponse.json(

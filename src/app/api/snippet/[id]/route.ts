@@ -5,16 +5,16 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } },
+    context: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
-
+  const {id}=await context.params;
   if (!session || !session.user?.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
   }
 
   const snippet = await prisma.snippet.findUnique({
-    where: { id: params.id },
+    where: { id: id },
   });
 
   if (!snippet) {
@@ -33,16 +33,17 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } },
+   context: { params: Promise<{ id: string }> },
 ) {
   const session = await getServerSession(authOptions);
+  const { id }=await context.params;
 
   if (!session || !session.user?.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
   }
 
   const snippet = await prisma.snippet.findUnique({
-    where: { id: params.id },
+    where: { id: id },
   });
 
   if (!snippet) {
@@ -54,7 +55,7 @@ export async function PUT(
 
   if (snippet.authorid === session.user.id) {
     const res = await prisma.snippet.update({
-      where: { id: params.id },
+      where: { id: id },
       data: {
         title,
         content,
@@ -75,10 +76,10 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{id:string}> },
 ) {
   const session = await getServerSession(authOptions);
-
+  const {id}=await context.params;
   if (!session || !session.user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
@@ -88,7 +89,7 @@ export async function DELETE(
   try {
     const snippet = await prisma.snippet.findUnique({
       where: {
-        id: params.id,
+        id: id,
       },
     });
 
@@ -108,7 +109,7 @@ export async function DELETE(
 
     const deletedSnippet = await prisma.snippet.delete({
       where: {
-        id: params.id,
+        id: id,
       },
     });
     return NextResponse.json(

@@ -1,7 +1,7 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -12,26 +12,58 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Activity,
-  CreditCard,
-  DollarSign,
-  Users,
+  MessageSquare,
+  Heart,
+  ClipboardList,
+  Code,
+  FileText,
   LogOut,
   Settings,
   User,
 } from "lucide-react";
+import axios from "@/lib/axios";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [stats, setStats] = useState({
+    comments: 0,
+    likes: 0,
+    requests: 0,
+    snippets: 0,
+    blogs: 0,
+    loading: true,
+  });
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
+    } else if (status === "authenticated") {
+      fetchStats();
     }
   }, [status, router]);
 
-  if (status === "loading") {
+  const fetchStats = async () => {
+    try {
+      setStats(prev => ({ ...prev, loading: true }));
+      const response=await axios.get('/account/count');
+       const { commentCount, _count } = response.data;
+
+    setStats({
+      comments: commentCount || 0,
+      likes: _count?.likes || 0,
+      requests: 0, // You can update this if you have real request data
+      snippets: _count?.snippetCollection || 0,
+      blogs: _count?.blog || 0,
+      loading: false,
+    });
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+      setStats(prev => ({ ...prev, loading: false }));
+    }
+  };
+
+  if (status === "loading" || stats.loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="space-y-4 w-full max-w-md">
@@ -82,66 +114,82 @@ export default function Dashboard() {
             <span className="text-primary">{session?.user?.name}</span>
           </h2>
           <p className="text-gray-600">
-            Here's what's happening with your account today.
+            Here's your activity overview.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          <Card>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5 mb-8">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer ">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Total Revenue
+                Comments
               </CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <MessageSquare className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
-              <p className="text-xs text-muted-foreground">
-                +20.1% from last month
+            <CardContent className="items-center justify-center flex flex-col ">
+              <div className="text-2xl font-bold">{stats.comments}</div>
+              <p className="text-xs text-muted-foreground text-center">
+                Your recent interactions
               </p>
             </CardContent>
           </Card>
-          <Card>
+          
+          <Card className="hover:shadow-md transition-shadow cursor-pointer" >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Subscriptions
+                Likes
               </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <Heart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
-              <p className="text-xs text-muted-foreground">
-                +180.1% from last month
+            <CardContent  className="items-center justify-center flex flex-col ">
+              <div className="text-2xl font-bold">{stats.likes}</div>
+              <p className="text-xs text-muted-foreground text-center">
+                Received on your content
               </p>
             </CardContent>
           </Card>
-          <Card>
+          
+          <Card className="hover:shadow-md transition-shadow cursor-pointer" >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sales</CardTitle>
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Requests</CardTitle>
+              <ClipboardList className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-muted-foreground">
-                +19% from last month
+            <CardContent  className="items-center justify-center flex flex-col ">
+              <div className="text-2xl font-bold">{stats.requests}</div>
+              <p className="text-xs text-muted-foreground text-center">
+                Pending collaborations
               </p>
             </CardContent>
           </Card>
-          <Card>
+          
+          <Card className="hover:shadow-md transition-shadow cursor-pointer" >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Snippets</CardTitle>
+              <Code className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-muted-foreground">
-                +201 since last hour
+            <CardContent  className="items-center justify-center flex flex-col ">
+              <div className="text-2xl font-bold">{stats.snippets}</div>
+              <p className="text-xs text-muted-foreground text-center">
+                Your code snippets
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Blogs</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent  className="items-center justify-center flex flex-col ">
+              <div className="text-2xl font-bold">{stats.blogs}</div>
+              <p className="text-xs text-muted-foreground text-center">
+                Your published articles
               </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* User Profile Card */}
+      
         <Card className="max-w-md">
           <CardHeader>
             <CardTitle>Your Profile</CardTitle>
@@ -157,7 +205,7 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-600">{session?.user?.email}</p>
               </div>
             </div>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => router.push('/dashboard/account')}>
               Edit Profile
             </Button>
           </CardContent>

@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./node_modules/@prisma/client"
 }
 
 datasource db {
@@ -51,6 +50,7 @@ model User {
   sendBlogRequest           BlogRequest[]      @relation("UserBlogRequests")
   receivedCodeBuddyRequests CodeBuddyRequest[] @relation("UserReceiver")
   codeBuddyRequests         CodeBuddyRequest[] @relation("UserRequests")
+  comments                  Comment[]
   likes                     Like[]
   receivedMessages          Message[]          @relation("ReceivedMessages")
   sentMessages              Message[]          @relation("SentMessages")
@@ -189,6 +189,7 @@ model Blog {
   visibilty     Visibility     @default(private)
   author        User           @relation(fields: [authorId], references: [id])
   blogRequests  BlogRequest[]
+  comments      Comment[]
   likes         Like[]
   notifications Notification[]
   allowedUsers  User[]         @relation("BlogAllowedUsers")
@@ -210,6 +211,23 @@ model Notification {
   receiver         User              @relation("Receiver", fields: [receiverId], references: [id])
   sender           User              @relation("Sender", fields: [senderId], references: [id])
   snippet          Snippet?          @relation(fields: [snippetId], references: [id])
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  content   String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  authorId  String
+  blogId    String
+  parentId  String?
+  author    User      @relation(fields: [authorId], references: [id])
+  blog      Blog      @relation(fields: [blogId], references: [id])
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+
+  @@index([blogId])
+  @@index([parentId])
 }
 
 model Message {
