@@ -1,13 +1,7 @@
-"use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { TopicOptions } from "@/constants/topic";
-import { motion } from "framer-motion";
+'use client';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { TopicOptions } from '@/constants/topic';
+import { motion } from 'framer-motion';
 import {
   ArrowRight,
   Code,
@@ -16,8 +10,8 @@ import {
   DraftingCompass,
   LockKeyhole,
   Network,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 // const iconComponents = {
 //   dsa: <Code className="w-6 h-6" />,
 //   js: <CpuIcon className="w-6 h-6" />,
@@ -27,14 +21,11 @@ import { useRouter } from "next/navigation";
 // };
 
 const colorVariants = {
-  dsa: "hover:border-blue-500/50 hover:bg-blue-50/50 dark:hover:bg-blue-900/10",
-  js: "hover:border-amber-500/50 hover:bg-amber-50/50 dark:hover:bg-amber-900/10",
-  system:
-    "hover:border-purple-500/50 hover:bg-purple-50/50 dark:hover:bg-purple-900/10",
-  react:
-    "hover:border-cyan-500/50 hover:bg-cyan-50/50 dark:hover:bg-cyan-900/10",
-  python:
-    "hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10",
+  dsa: 'hover:border-blue-500/50 hover:bg-blue-50/50 dark:hover:bg-blue-900/10',
+  js: 'hover:border-amber-500/50 hover:bg-amber-50/50 dark:hover:bg-amber-900/10',
+  system: 'hover:border-purple-500/50 hover:bg-purple-50/50 dark:hover:bg-purple-900/10',
+  react: 'hover:border-cyan-500/50 hover:bg-cyan-50/50 dark:hover:bg-cyan-900/10',
+  python: 'hover:border-emerald-500/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10',
 };
 
 const Page = () => {
@@ -52,9 +43,7 @@ const Page = () => {
             Master the Building Blocks
           </span>
           <br className="hidden sm:block" />
-          <span className="text-gray-900 dark:text-gray-100">
-            of Modern Development
-          </span>
+          <span className="text-gray-900 dark:text-gray-100">of Modern Development</span>
         </h1>
 
         <motion.p
@@ -63,8 +52,8 @@ const Page = () => {
           transition={{ delay: 0.3 }}
           className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
         >
-          Choose your path through coding, system design, and modern web
-          technologies. Track your progress and level up your skills.
+          Choose your path through coding, system design, and modern web technologies. Track your
+          progress and level up your skills.
         </motion.p>
 
         <motion.div
@@ -97,14 +86,8 @@ const Page = () => {
 
               <CardHeader className="pb-2">
                 <div className="flex items-center space-x-2">
-                  <img
-                    src={topic.image}
-                    alt={topic.label}
-                    className="w-8 h-8 object-contians"
-                  />
-                  <CardTitle className="text-xl font-semibold">
-                    {topic.label}
-                  </CardTitle>
+                  <img src={topic.image} alt={topic.label} className="w-8 h-8 object-contians" />
+                  <CardTitle className="text-xl font-semibold">{topic.label}</CardTitle>
                 </div>
               </CardHeader>
 

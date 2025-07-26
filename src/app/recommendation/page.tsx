@@ -40,7 +40,9 @@ const RecommendationPage = () => {
         setLoading(true);
         const res = await axios.get('/codebuddy');
         const matches = res.data.matches;
-        const ids = matches.map((match: any) => match.userId).filter((id: string | null) => id !== null);
+        const ids = matches
+          .map((match: any) => match.userId)
+          .filter((id: string | null) => id !== null);
         setAccountIDs(ids);
       } catch (error) {
         console.error('Error fetching recommendations:', error);
@@ -91,7 +93,9 @@ const RecommendationPage = () => {
 
   const handleRequest = async (userId: string) => {
     try {
-      const res = await axios.post('/codebuddy/request', { receiverId: userId });
+      const res = await axios.post('/codebuddy/request', {
+        receiverId: userId,
+      });
       if (res.status === 201) {
         toast.success('Connection request sent!');
         setSentRequests((prev) => ({ ...prev, [userId]: true }));
@@ -143,7 +147,8 @@ const RecommendationPage = () => {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
           >
-            We've curated a list of developers that best align with your skills, preferences, and goals.
+            We've curated a list of developers that best align with your skills, preferences, and
+            goals.
           </motion.p>
         </div>
 
@@ -235,7 +240,7 @@ const RecommendationPage = () => {
                         <div className="flex justify-center space-x-2 mt-2">
                           {SOCIAL_MEDIA_PLATFORMS.map((platform) => {
                             const match = dev.links?.find((link) =>
-                              link.url?.includes(platform.baseUrl)
+                              link.url?.includes(platform.baseUrl),
                             );
                             if (!match) return null;
                             const Icon = platform.icon;

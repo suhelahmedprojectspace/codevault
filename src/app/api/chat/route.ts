@@ -1,51 +1,41 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
-export async function POST(req:Request){
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
+export async function POST(req: Request) {
   try {
-    const {content,senderId,recipientId}=await req.json();
-    if(!content || !senderId || !recipientId){
-         return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+    const { content, senderId, recipientId } = await req.json();
+    if (!content || !senderId || !recipientId) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-     const [sender, recipient] = await Promise.all([
+    const [sender, recipient] = await Promise.all([
       prisma.user.findUnique({ where: { id: senderId } }),
       prisma.user.findUnique({ where: { id: recipientId } }),
     ]);
 
     if (!sender || !recipient) {
-      return NextResponse.json(
-        { error: "Sender or recipient not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Sender or recipient not found' }, { status: 404 });
     }
 
-    const response=await prisma.message.create({
-        data:{
-            content,
-            sender:{connect:{id:senderId}},
-            recipient:{connect:{id:recipientId}}
-        }
-    })
+    const response = await prisma.message.create({
+      data: {
+        content,
+        sender: { connect: { id: senderId } },
+        recipient: { connect: { id: recipientId } },
+      },
+    });
     await prisma.notification.create({
-        data:{
-            senderId,
-            receiverId:recipientId,
-            type:"MESSAGE",
-        }
-    })
-    return NextResponse.json({message:"Successfully Created",data:response},{status:201})
+      data: {
+        senderId,
+        receiverId: recipientId,
+        type: 'MESSAGE',
+      },
+    });
+    return NextResponse.json({ message: 'Successfully Created', data: response }, { status: 201 });
   } catch (error) {
-     console.error("Error creating message:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error('Error creating message:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-
 
 export async function GET(req: Request) {
   try {
@@ -56,10 +46,7 @@ export async function GET(req: Request) {
     const cursor = searchParams.get('cursor');
 
     if (!userId1 || !userId2) {
-      return NextResponse.json(
-        { error: "Missing user IDs" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing user IDs' }, { status: 400 });
     }
 
     const messages = await prisma.message.findMany({
@@ -67,55 +54,51 @@ export async function GET(req: Request) {
         OR: [
           {
             senderId: userId1,
-            recipientId: userId2
+            recipientId: userId2,
           },
           {
             senderId: userId2,
-            recipientId: userId1
-          }
-        ]
+            recipientId: userId1,
+          },
+        ],
       },
       orderBy: {
-        timestamp: 'desc'
+        timestamp: 'desc',
       },
       take: limit,
       ...(cursor && {
         skip: 1,
         cursor: {
-          id: cursor
-        }
+          id: cursor,
+        },
       }),
       include: {
         sender: {
           select: {
             id: true,
             username: true,
-            image: true
-          }
+            image: true,
+          },
         },
         recipient: {
           select: {
             id: true,
             username: true,
-            image: true
-          }
-        }
-      }
+            image: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json(
-      { 
+      {
         data: messages,
-        nextCursor: messages.length === limit ? messages[messages.length - 1].id : null
+        nextCursor: messages.length === limit ? messages[messages.length - 1].id : null,
       },
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (error) {
-    console.error("Error fetching messages:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error('Error fetching messages:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

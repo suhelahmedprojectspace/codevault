@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import axios from "@/lib/axios";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import axios from '@/lib/axios';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import toast from 'react-hot-toast';
 import {
   Card,
   CardHeader,
@@ -14,15 +14,15 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 
 export default function EditBlogPage() {
   const { id } = useParams();
   const router = useRouter();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -31,8 +31,9 @@ export default function EditBlogPage() {
         const blog = res.data.getBlog;
         setTitle(blog.title);
         setContent(blog.content);
-      } catch (err) {
-        toast.error("Failed to load blog");
+      } catch (error) {
+        console.error(error);
+        toast.error('Failed to load blog');
       }
     };
     if (id) fetchBlog();
@@ -42,12 +43,13 @@ export default function EditBlogPage() {
     e.preventDefault();
     try {
       await axios.put(`/blog/${id}`, { title, content });
-      toast.success("Blog updated!");
-      setTitle(" ");
-      setContent(" ");
-      router.push("/");
-    } catch (err) {
-      toast.error("Update failed");
+      toast.success('Blog updated!');
+      setTitle(' ');
+      setContent(' ');
+      router.push('/');
+    } catch (error) {
+      console.error(error);
+      toast.error('Update failed');
     }
   };
 
@@ -56,9 +58,7 @@ export default function EditBlogPage() {
       <Card>
         <CardHeader>
           <CardTitle>Edit Blog</CardTitle>
-          <CardDescription>
-            Update your blog post details below.
-          </CardDescription>
+          <CardDescription>Update your blog post details below.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

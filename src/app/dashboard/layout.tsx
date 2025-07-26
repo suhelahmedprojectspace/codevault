@@ -1,22 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { AppSideBar } from "@/components/AppSidebar";
-import { Menu, Bell } from "lucide-react";
-import { Notification } from "@prisma/client";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import Logo from "@/components/Logo";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import { AppSideBar } from '@/components/AppSidebar';
+import { Menu } from 'lucide-react';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { TooltipProvider } from '@/components/ui/tooltip';
+import Logo from '@/components/Logo';
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebar, setSidebarOpen] = useState(false);
   // const [notifications, setNotifications] = useState<Notification[]>([]);
-
-  
 
   // const unreadCount = notifications.filter((n) => !n.isRead).length;
 
@@ -25,7 +18,7 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <div
         className={`md:block ${
-          sidebar ? "block" : "hidden"
+          sidebar ? 'block' : 'hidden'
         } fixed z-30 md:relative md:h-auto bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 w-64`}
       >
         <AppSideBar closeSidebar={() => setSidebarOpen(false)} />

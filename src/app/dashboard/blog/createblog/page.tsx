@@ -1,14 +1,14 @@
-"use client";
-import * as React from "react";
-import { useState, useRef } from "react";
-import { createLowlight } from "lowlight";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import css from "highlight.js/lib/languages/css";
-import xml from "highlight.js/lib/languages/xml";
-import javascript from "highlight.js/lib/languages/javascript";
-import ts from "highlight.js/lib/languages/typescript";
-import python from "highlight.js/lib/languages/python";
-import { Button } from "@/components/ui/button";
+'use client';
+import * as React from 'react';
+import { useState, useRef } from 'react';
+import { createLowlight } from 'lowlight';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import css from 'highlight.js/lib/languages/css';
+import xml from 'highlight.js/lib/languages/xml';
+import javascript from 'highlight.js/lib/languages/javascript';
+import ts from 'highlight.js/lib/languages/typescript';
+import python from 'highlight.js/lib/languages/python';
+import { Button } from '@/components/ui/button';
 
 import {
   Card,
@@ -17,45 +17,44 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Visibility, visibilityOptions } from "@/constants/visibility";
-import axios from "@/lib/axios";
-import { EditorContent } from "@tiptap/react";
-import toast from "react-hot-toast";
-import { Toggle } from "@/components/ui/toggle";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Visibility, visibilityOptions } from '@/constants/visibility';
+import axios from '@/lib/axios';
+import { EditorContent } from '@tiptap/react';
+import toast from 'react-hot-toast';
+import { Toggle } from '@/components/ui/toggle';
 import {
   Bold,
   Italic,
   List,
   ListOrdered,
   Image,
-  Code,
   Quote,
   Link,
   Undo,
   Redo,
   CodeSquareIcon,
-} from "lucide-react";
-import { Editor } from "@tiptap/react";
-import { useEditor, BubbleMenu } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import ImageExtension from "@tiptap/extension-image";
-import LinkExtension from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
+} from 'lucide-react';
+
+import { useEditor, BubbleMenu } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import ImageExtension from '@tiptap/extension-image';
+import LinkExtension from '@tiptap/extension-link';
+import Placeholder from '@tiptap/extension-placeholder';
 
 const lowlight = createLowlight();
-lowlight.register("html", xml);
-lowlight.register("css", css);
-lowlight.register("js", javascript);
-lowlight.register("typescript", ts);
-lowlight.register("python", python);
+lowlight.register('html', xml);
+lowlight.register('css', css);
+lowlight.register('js', javascript);
+lowlight.register('typescript', ts);
+lowlight.register('python', python);
 
 const Page = () => {
-  const [visibility, setVisibility] = useState<Visibility>("public");
-  const [title, setTitle] = useState("");
+  const [visibility, setVisibility] = useState<Visibility>('public');
+  const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -65,26 +64,23 @@ const Page = () => {
       ImageExtension,
       CodeBlockLowlight.configure({
         lowlight,
-        defaultLanguage: "javascript",
+        defaultLanguage: 'javascript',
         HTMLAttributes: {
-          class: "code-block",
+          class: 'code-block',
         },
       }),
       LinkExtension.configure({
         openOnClick: false,
       }),
       Placeholder.configure({
-        placeholder: "Write your story here...",
+        placeholder: 'Write your story here...',
       }),
     ],
-    content: "",
+    content: '',
     editorProps: {
       attributes: {
-        class: "focus:outline-none min-h-[300px]",
+        class: 'focus:outline-none min-h-[300px]',
       },
-    },
-    onUpdate: ({ editor }) => {
-      // Content updates are handled automatically
     },
   });
 
@@ -93,11 +89,11 @@ const Page = () => {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append('file', file);
 
-      const response = await axios.post("/api/upload", formData, {
+      const response = await axios.post('/api/upload', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
 
@@ -105,31 +101,33 @@ const Page = () => {
         editor.chain().focus().setImage({ src: response.data.url }).run();
       }
     } catch (error) {
-      toast.error("Failed to upload image");
+      console.error(error);
+      toast.error('Failed to upload image');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !editor?.getText()) {
-      toast.error("Title and content are required");
+      toast.error('Title and content are required');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const res = await axios.post("/blog", {
+      const res = await axios.post('/blog', {
         title,
         content: editor?.getHTML(),
         visibilty: visibility,
       });
       if (res.status === 201) {
-        toast.success("Blog published successfully");
-        setTitle("");
+        toast.success('Blog published successfully');
+        setTitle('');
         editor?.commands.clearContent();
       }
     } catch (error) {
-      toast.error("Failed to publish blog");
+      console.error(error);
+      toast.error('Failed to publish blog');
     } finally {
       setIsSubmitting(false);
     }
@@ -145,9 +143,7 @@ const Page = () => {
         <form onSubmit={handleSubmit}>
           <CardHeader>
             <CardTitle className="text-2xl">Create Blog Post</CardTitle>
-            <CardDescription>
-              Craft your story with our rich text editor
-            </CardDescription>
+            <CardDescription>Craft your story with our rich text editor</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-1.5">
@@ -164,62 +160,50 @@ const Page = () => {
             <div className="flex flex-wrap gap-1 p-2 border rounded-lg bg-muted">
               <Toggle
                 size="sm"
-                pressed={editor.isActive("bold")}
-                onPressedChange={() =>
-                  editor.chain().focus().toggleBold().run()
-                }
+                pressed={editor.isActive('bold')}
+                onPressedChange={() => editor.chain().focus().toggleBold().run()}
               >
                 <Bold className="h-4 w-4" />
               </Toggle>
               <Toggle
                 size="sm"
-                pressed={editor.isActive("italic")}
-                onPressedChange={() =>
-                  editor.chain().focus().toggleItalic().run()
-                }
+                pressed={editor.isActive('italic')}
+                onPressedChange={() => editor.chain().focus().toggleItalic().run()}
               >
                 <Italic className="h-4 w-4" />
               </Toggle>
               <Toggle
                 size="sm"
-                pressed={editor.isActive("bulletList")}
-                onPressedChange={() =>
-                  editor.chain().focus().toggleBulletList().run()
-                }
+                pressed={editor.isActive('bulletList')}
+                onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
               >
                 <List className="h-4 w-4" />
               </Toggle>
               <Toggle
                 size="sm"
-                pressed={editor.isActive("orderedList")}
-                onPressedChange={() =>
-                  editor.chain().focus().toggleOrderedList().run()
-                }
+                pressed={editor.isActive('orderedList')}
+                onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
               >
                 <ListOrdered className="h-4 w-4" />
               </Toggle>
               <Toggle
                 size="sm"
-                pressed={editor.isActive("codeBlock")}
-                onPressedChange={() =>
-                  editor.chain().focus().toggleCodeBlock().run()
-                }
+                pressed={editor.isActive('codeBlock')}
+                onPressedChange={() => editor.chain().focus().toggleCodeBlock().run()}
               >
                 <CodeSquareIcon className="h-4 w-4" />
               </Toggle>
               <Toggle
                 size="sm"
-                pressed={editor.isActive("blockquote")}
-                onPressedChange={() =>
-                  editor.chain().focus().toggleBlockquote().run()
-                }
+                pressed={editor.isActive('blockquote')}
+                onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
               >
                 <Quote className="h-4 w-4" />
               </Toggle>
               <button
                 type="button"
                 onClick={() => {
-                  const url = window.prompt("Enter the URL");
+                  const url = window.prompt('Enter the URL');
                   if (url) {
                     editor.chain().focus().toggleLink({ href: url }).run();
                   }
@@ -233,13 +217,11 @@ const Page = () => {
                 onClick={() => fileInputRef.current?.click()}
                 className="inline-flex items-center justify-center rounded-md p-2 text-sm hover:bg-accent"
               >
-                <Image className="h-4 w-4" />
+                <img className="h-4 w-4 " alt="#" />
                 <input
                   type="file"
                   ref={fileInputRef}
-                  onChange={(e) =>
-                    e.target.files?.[0] && handleImageUpload(e.target.files[0])
-                  }
+                  onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
                   className="hidden"
                   accept="image/*"
                 />
@@ -276,21 +258,19 @@ const Page = () => {
                 <div className="flex gap-1 p-1 bg-white border rounded-lg shadow-lg">
                   <button
                     onClick={() => editor.chain().focus().toggleBold().run()}
-                    className={`p-1 rounded ${editor.isActive("bold") ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                    className={`p-1 rounded ${editor.isActive('bold') ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
                   >
                     <Bold className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => editor.chain().focus().toggleItalic().run()}
-                    className={`p-1 rounded ${editor.isActive("italic") ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                    className={`p-1 rounded ${editor.isActive('italic') ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
                   >
                     <Italic className="h-4 w-4" />
                   </button>
                   <button
-                    onClick={() =>
-                      editor.chain().focus().toggleLink({ href: "" }).run()
-                    }
-                    className={`p-1 rounded ${editor.isActive("link") ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                    onClick={() => editor.chain().focus().toggleLink({ href: '' }).run()}
+                    className={`p-1 rounded ${editor.isActive('link') ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
                   >
                     <Link className="h-4 w-4" />
                   </button>
@@ -313,10 +293,7 @@ const Page = () => {
                 onValueChange={(val: Visibility) => setVisibility(val)}
               >
                 {visibilityOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2"
-                  >
+                  <div key={option.value} className="flex items-center space-x-2">
                     <RadioGroupItem value={option.value} id={option.value} />
                     <Label
                       htmlFor={option.value}
@@ -335,17 +312,14 @@ const Page = () => {
               variant="outline"
               type="button"
               onClick={() => {
-                setTitle("");
+                setTitle('');
                 editor.commands.clearContent();
               }}
             >
               Discard
             </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting || !title || !editor.getText()}
-            >
-              {isSubmitting ? "Publishing..." : "Publish Blog"}
+            <Button type="submit" disabled={isSubmitting || !title || !editor.getText()}>
+              {isSubmitting ? 'Publishing...' : 'Publish Blog'}
             </Button>
           </CardFooter>
         </form>

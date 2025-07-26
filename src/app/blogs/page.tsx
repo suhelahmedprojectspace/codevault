@@ -1,23 +1,17 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import axios from "@/lib/axios";
-import { Lock, Clock } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
-import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
-import { formatDistanceToNow } from "date-fns";
+'use client';
+import { Button } from '@/components/ui/button';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import axios from '@/lib/axios';
+import { Lock, Clock } from 'lucide-react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useSession } from 'next-auth/react';
+import { motion } from 'framer-motion';
+import { Skeleton } from '@/components/ui/skeleton';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Blog {
   id: string;
@@ -49,13 +43,11 @@ const Page = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get(
-          `/blog/available?page=${page}&limit=${LIMIT}`,
-        );
+        const res = await axios.get(`/blog/available?page=${page}&limit=${LIMIT}`);
         setTotalBlogs(res.data.total);
         setBlogs(res.data.blogs);
       } catch (error) {
-        toast.error("Failed to load blogs");
+        toast.error('Failed to load blogs');
       } finally {
         setIsLoading(false);
       }
@@ -64,7 +56,7 @@ const Page = () => {
   }, [page, userid]);
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status === 'authenticated') {
       setUserid(session?.user?.id || null);
     }
   }, [session, status]);
@@ -73,21 +65,21 @@ const Page = () => {
 
   const handleRequest = async (e: React.FormEvent, id: string) => {
     e.preventDefault();
-    if (status === "unauthenticated") {
-      toast.error("Please login to access this feature.");
-      setTimeout(() => router.push("/login"), 2000);
+    if (status === 'unauthenticated') {
+      toast.error('Please login to access this feature.');
+      setTimeout(() => router.push('/login'), 2000);
       return;
     }
 
     try {
-      const res = await axios.post("/blog/request", { blogId: id });
+      const res = await axios.post('/blog/request', { blogId: id });
       if (res.status === 201) {
-        toast.success("Access request sent!");
+        toast.success('Access request sent!');
         setRequestedIds((prev) => [...prev, id]);
       }
     } catch (error) {
-      console.error("Request error:", error);
-      toast.error("Failed to send request");
+      console.error('Request error:', error);
+      toast.error('Failed to send request');
     }
   };
 
@@ -123,11 +115,9 @@ const Page = () => {
                 </Card>
               ))
             : blogs.map((blog, index) => {
-                const isPrivate = blog.visibilty === "private";
+                const isPrivate = blog.visibilty === 'private';
                 const isAuthor = blog.author.id === userid;
-                const isAllowed = blog.allowedUsers?.some(
-                  (user) => user.id === userid,
-                );
+                const isAllowed = blog.allowedUsers?.some((user) => user.id === userid);
                 const showRequestUI = isPrivate && !isAuthor && !isAllowed;
 
                 return (
@@ -143,16 +133,15 @@ const Page = () => {
                           <Avatar className="h-10 w-10">
                             <AvatarImage src={blog.author?.image} />
                             <AvatarFallback>
-                              {blog.author?.username?.[0]?.toUpperCase() || "U"}
+                              {blog.author?.username?.[0]?.toUpperCase() || 'U'}
                             </AvatarFallback>
                           </Avatar>
                           <div>
                             <h3 className="font-medium text-gray-900 dark:text-gray-100">
-                              {blog.author?.username || "Unknown"}
+                              {blog.author?.username || 'Unknown'}
                             </h3>
                             <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {formatDistanceToNow(new Date(blog.createdAt))}{" "}
-                              ago
+                              {formatDistanceToNow(new Date(blog.createdAt))} ago
                             </p>
                           </div>
                         </div>
@@ -179,8 +168,8 @@ const Page = () => {
                                 >
                                   <Lock className="w-4 h-4 mr-2" />
                                   {requestedIds.includes(blog.id)
-                                    ? "Request Sent"
-                                    : "Request Access"}
+                                    ? 'Request Sent'
+                                    : 'Request Access'}
                                 </Button>
                               </div>
                             </>

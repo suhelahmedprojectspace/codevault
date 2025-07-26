@@ -1,25 +1,25 @@
-"use client";
-import React, { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import toast from "react-hot-toast";
+'use client';
+import React, { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
+import toast from 'react-hot-toast';
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get('token');
   const router = useRouter();
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [message, setMessage] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleReset = async () => {
     if (!password || !confirm) {
-      setMessage("Password or Confirm Password is missig");
+      setMessage('Password or Confirm Password is missig');
       return;
     }
     if (!token) {
-      setMessage("Invalid or missing token");
+      setMessage('Invalid or missing token');
       return;
     }
     if (password !== confirm) {
@@ -28,29 +28,29 @@ export default function ResetPasswordPage() {
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/resetpassword", {
-        method: "POST",
+      const res = await fetch('/api/resetpassword', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ token, password }),
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success("Password reset successful! Redirecting to login...");
-        setTimeout(() => router.push("/login"), 2000);
+        toast.success('Password reset successful! Redirecting to login...');
+        setTimeout(() => router.push('/login'), 2000);
       } else {
-        toast.error("Something went wrong");
+        toast.error('Something went wrong');
       }
     } catch (error) {
       console.log(error);
-      setMessage("Something went wrong.");
+      setMessage('Something went wrong.');
     } finally {
       setLoading(false);
     }
   };
   const handleClose = (e: React.MouseEvent) => {
-    setMessage("");
+    setMessage('');
   };
 
   return (
@@ -66,14 +66,12 @@ export default function ResetPasswordPage() {
               className="w-full border px-3 py-2 rounded"
               onChange={(e) => {
                 setPassword(e.target.value);
-                setMessage("");
+                setMessage('');
               }}
             />
           </div>
           <div>
-            <h1 className="text-sm font-semibold mb-1">
-              Confirm Your Password
-            </h1>
+            <h1 className="text-sm font-semibold mb-1">Confirm Your Password</h1>
             <input
               type="password"
               name="password"
@@ -81,7 +79,7 @@ export default function ResetPasswordPage() {
               className="w-full rounded "
               onChange={(e) => {
                 setConfirm(e.target.value);
-                setMessage("");
+                setMessage('');
               }}
             />
           </div>
@@ -93,7 +91,7 @@ export default function ResetPasswordPage() {
               onClick={handleReset}
               disabled={loading}
             >
-              {loading ? "Resetting..." : "Reset Password"}
+              {loading ? 'Resetting...' : 'Reset Password'}
             </Button>
           </div>
         </div>

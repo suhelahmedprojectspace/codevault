@@ -35,12 +35,12 @@ export interface Comment {
 
 export interface CommentItemProps {
   comment: Comment;
-  blogId:string;
+  blogId: string;
   blogAuthorId: string;
-  isBlogAuthor?:boolean;
+  isBlogAuthor?: boolean;
   onReply: (commentId: string) => void;
   depth?: number;
-  isCurrentUser?:boolean;
+  isCurrentUser?: boolean;
 }
 
 export interface CommentSectionProps {

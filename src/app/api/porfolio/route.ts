@@ -1,12 +1,12 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { writeFile, unlink } from "fs/promises";
-import fs from "fs";
-import path from "path";
-import { v4 as uuid } from "uuid";
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import { z } from "zod";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { writeFile, unlink } from 'fs/promises';
+import fs from 'fs';
+import path from 'path';
+import { v4 as uuid } from 'uuid';
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const PortfolioSchema = z.object({
   title: z.string().min(1),
@@ -16,7 +16,7 @@ const PortfolioSchema = z.object({
   location: z.string().optional(),
   yearofexperience: z.string().optional(),
   passionate: z.string().optional(),
- // achievements: z.string().optional(),
+  // achievements: z.string().optional(),
   //availability: z.string().optional(),
   techstack: z.array(z.any()).optional(),
   experiences: z.array(z.any()).optional(),
@@ -33,18 +33,18 @@ const PortfolioSchema = z.object({
 });
 
 const MAX_FILE_SIZE = 5 * 1024 * 1025; //5MD
-const ALLOWED_MINI_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const UPLOAD_DIR = path.join(process.cwd(), "public/uploads");
+const ALLOWED_MINI_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const UPLOAD_DIR = path.join(process.cwd(), 'public/uploads');
 
 //helper
 async function handleFileUpload(file: File | null, oldPath?: string) {
   if (!file) return undefined;
 
   if (!ALLOWED_MINI_TYPES.includes(file.type)) {
-    throw new Error("Invalid file type");
+    throw new Error('Invalid file type');
   }
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error("File too large");
+    throw new Error('File too large');
   }
 
   const bytes = await file.arrayBuffer();
@@ -60,7 +60,7 @@ async function handleFileUpload(file: File | null, oldPath?: string) {
   await writeFile(absoluteUploadPath, buffer);
 
   if (oldPath) {
-    const oldAbsolutePath = path.join(process.cwd(), "public", oldPath);
+    const oldAbsolutePath = path.join(process.cwd(), 'public', oldPath);
     //old file delete kar raha hai
     if (fs.existsSync(oldAbsolutePath)) {
       await unlink(oldAbsolutePath).catch(console.error);
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     // const user = await prisma.user.findUnique({
@@ -89,47 +89,36 @@ export async function POST(req: Request) {
     });
 
     if (existingPortfolio) {
-      return NextResponse.json(
-        { message: "Portfolio already exists" },
-        { status: 409 },
-      );
+      return NextResponse.json({ message: 'Portfolio already exists' }, { status: 409 });
     }
 
     const formData = await req.formData();
     console.log(formData);
-    const file = formData.get("profile") as File | null;
-    let profilePath = await handleFileUpload(file);
+    const file = formData.get('profile') as File | null;
+    const profilePath = await handleFileUpload(file);
     if (!profilePath) {
-      return NextResponse.json(
-        { message: "Profile image is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ message: 'Profile image is required' }, { status: 400 });
     }
     const portfolioData = {
-      title: formData.get("title"),
-      summary: formData.get("summary"),
-      name: formData.get("name"),
-      education: formData.get("education"),
-      passionate: formData.get("passionate"),
-      location: formData.get("location"),
-      yearofexperience: formData.get("yearofexperience"),
-      experiences: JSON.parse((formData.get("experiences") as string) || "[]"),
-      projects: JSON.parse((formData.get("projects") as string) || "[]"),
-      techstack: JSON.parse((formData.get("techstack") as string) || "[]"),
-      certifications: JSON.parse(
-        (formData.get("certifications") as string) || "[]",
-      ),
-      achievements: formData.get("achievements"),
-      availability: formData.get("availability"),
-      links: JSON.parse((formData.get("links") as string) || "[]"),
+      title: formData.get('title'),
+      summary: formData.get('summary'),
+      name: formData.get('name'),
+      education: formData.get('education'),
+      passionate: formData.get('passionate'),
+      location: formData.get('location'),
+      yearofexperience: formData.get('yearofexperience'),
+      experiences: JSON.parse((formData.get('experiences') as string) || '[]'),
+      projects: JSON.parse((formData.get('projects') as string) || '[]'),
+      techstack: JSON.parse((formData.get('techstack') as string) || '[]'),
+      certifications: JSON.parse((formData.get('certifications') as string) || '[]'),
+      achievements: formData.get('achievements'),
+      availability: formData.get('availability'),
+      links: JSON.parse((formData.get('links') as string) || '[]'),
     };
 
     const validation = PortfolioSchema.safeParse(portfolioData);
     if (!validation.success) {
-      return NextResponse.json(
-        { errors: validation.error.flatten() },
-        { status: 400 },
-      );
+      return NextResponse.json({ errors: validation.error.flatten() }, { status: 400 });
     }
     const portfolio = await prisma.portfolio.create({
       data: {
@@ -147,25 +136,21 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(
-      { message: "Porfolio Created Successfuly", portfolio },
+      { message: 'Porfolio Created Successfuly', portfolio },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Portfolio creation error:", error);
-    return NextResponse.json(
-      { message: "Server error", error },
-      { status: 500 },
-    );
+    console.error('Portfolio creation error:', error);
+    return NextResponse.json({ message: 'Server error', error }, { status: 500 });
   }
 }
-
 
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
     }
 
     const portfolio = await prisma.portfolio.findUnique({
@@ -183,19 +168,13 @@ export async function GET() {
     });
 
     if (!portfolio) {
-      return NextResponse.json(
-        { message: "Portfolio not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ message: 'Portfolio not found' }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { message: "Successfully fetched", portfolio },
-      { status: 200 },
-    );
+    return NextResponse.json({ message: 'Successfully fetched', portfolio }, { status: 200 });
   } catch (error) {
-    console.error("Portfolio fetch error:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    console.error('Portfolio fetch error:', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
@@ -203,7 +182,7 @@ export async function PATCH(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
     }
 
     const existingPortfolio = await prisma.portfolio.findUnique({
@@ -211,14 +190,11 @@ export async function PATCH(req: Request) {
     });
 
     if (!existingPortfolio) {
-      return NextResponse.json(
-        { message: "No portfolio found to update" },
-        { status: 404 },
-      );
+      return NextResponse.json({ message: 'No portfolio found to update' }, { status: 404 });
     }
 
     const formData = await req.formData();
-    const file = formData.get("profile") as File | null;
+    const file = formData.get('profile') as File | null;
 
     const profilePath = file
       ? await handleFileUpload(file, existingPortfolio.profile || undefined)
@@ -227,39 +203,26 @@ export async function PATCH(req: Request) {
     //partial makes all all properties optional:
     const updateData: any = {};
 
-    if (formData.has("title"))
-      updateData.title = formData.get("title") as string;
-    if (formData.has("summary"))
-      updateData.summary = formData.get("summary") as string;
-    if (formData.has("name")) updateData.name = formData.get("name") as string;
-    if (formData.has("education"))
-      updateData.education = formData.get("education") as string;
-    if (formData.has("passionate"))
-      updateData.passionate = formData.get("passionate") as string;
-    if (formData.has("location"))
-      updateData.location = formData.get("location") as string;
-    if (formData.has("yearofexperience"))
-      updateData.yearofexperience = formData.get("yearofexperience") as string;
-    if (formData.has("achievements"))
-      updateData.achievements = formData.get("achievements") as string;
-    if (formData.has("availability"))
-      updateData.availability = formData.get("availability") as string;
-    if (formData.has("experiences"))
-      updateData.experiences = JSON.parse(
-        (formData.get("experiences") as string) || "[]",
-      );
-    if (formData.has("projects"))
-      updateData.projects = JSON.parse(
-        (formData.get("projects") as string) || "[]",
-      );
-    if (formData.has("techstack"))
-      updateData.techstack = JSON.parse(
-        (formData.get("techstack") as string) || "[]",
-      );
-    if (formData.has("certifications"))
-      updateData.certifications = JSON.parse(
-        (formData.get("certifications") as string) || "[]",
-      );
+    if (formData.has('title')) updateData.title = formData.get('title') as string;
+    if (formData.has('summary')) updateData.summary = formData.get('summary') as string;
+    if (formData.has('name')) updateData.name = formData.get('name') as string;
+    if (formData.has('education')) updateData.education = formData.get('education') as string;
+    if (formData.has('passionate')) updateData.passionate = formData.get('passionate') as string;
+    if (formData.has('location')) updateData.location = formData.get('location') as string;
+    if (formData.has('yearofexperience'))
+      updateData.yearofexperience = formData.get('yearofexperience') as string;
+    if (formData.has('achievements'))
+      updateData.achievements = formData.get('achievements') as string;
+    if (formData.has('availability'))
+      updateData.availability = formData.get('availability') as string;
+    if (formData.has('experiences'))
+      updateData.experiences = JSON.parse((formData.get('experiences') as string) || '[]');
+    if (formData.has('projects'))
+      updateData.projects = JSON.parse((formData.get('projects') as string) || '[]');
+    if (formData.has('techstack'))
+      updateData.techstack = JSON.parse((formData.get('techstack') as string) || '[]');
+    if (formData.has('certifications'))
+      updateData.certifications = JSON.parse((formData.get('certifications') as string) || '[]');
     if (profilePath) updateData.profile = profilePath;
 
     //  const validation=PortfolioSchema.partial().safeParse(updateData);
@@ -270,16 +233,13 @@ export async function PATCH(req: Request) {
     //   );
     //  }
     //  let linksUpdate={};
-    if (formData.has("links")) {
-      const links = JSON.parse((formData.get("links") as string) || "[]");
+    if (formData.has('links')) {
+      const links = JSON.parse((formData.get('links') as string) || '[]');
       //.shape.links gives you just the links part:
       const linksValidation = PortfolioSchema.shape.links.safeParse(links);
 
       if (!linksValidation.success) {
-        return NextResponse.json(
-          { errors: linksValidation.error.flatten() },
-          { status: 400 },
-        );
+        return NextResponse.json({ errors: linksValidation.error.flatten() }, { status: 400 });
       }
 
       await prisma.socialLink.deleteMany({
@@ -300,15 +260,12 @@ export async function PATCH(req: Request) {
       include: { links: true },
     });
     return NextResponse.json(
-      { message: "Portfolio updated", portfolio: updatedPortfolio },
+      { message: 'Portfolio updated', portfolio: updatedPortfolio },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Update portfolio error:", error);
-    return NextResponse.json(
-      { message: "Internal Server error" },
-      { status: 500 },
-    );
+    console.error('Update portfolio error:', error);
+    return NextResponse.json({ message: 'Internal Server error' }, { status: 500 });
   }
 }
 
@@ -317,29 +274,22 @@ export async function DELETE(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
     }
 
     const existingPortfolio = await prisma.portfolio.findUnique({
       where: { userid: session.user.id },
     });
     if (!existingPortfolio) {
-      return NextResponse.json(
-        { message: "No profile to delete" },
-        { status: 404 },
-      );
+      return NextResponse.json({ message: 'No profile to delete' }, { status: 404 });
     }
 
     if (existingPortfolio.profile) {
-      const imagePath = path.join(
-        process.cwd(),
-        "public",
-        existingPortfolio.profile,
-      );
+      const imagePath = path.join(process.cwd(), 'public', existingPortfolio.profile);
       try {
         fs.unlinkSync(imagePath);
       } catch (error) {
-        console.error("Could able to deleted the image", error);
+        console.error('Could able to deleted the image', error);
       }
     }
     await prisma.socialLink.deleteMany({
@@ -350,11 +300,11 @@ export async function DELETE(req: Request) {
     });
 
     return NextResponse.json(
-      { message: "Portfolio deleted successfully", portfolio: deleteProfile },
+      { message: 'Portfolio deleted successfully', portfolio: deleteProfile },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error deleting portfolio:", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    console.error('Error deleting portfolio:', error);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }

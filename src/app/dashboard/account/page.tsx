@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Card,
   CardContent,
@@ -6,28 +6,18 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import toast from "react-hot-toast";
-import {
-  Eye,
-  EyeOff,
-  Pencil,
-  Save,
-  Upload,
-  Lock,
-  User,
-  Mail,
-  Trash2,
-} from "lucide-react";
-import axios from "@/lib/axios";
-import React, { useEffect, useState } from "react";
-import DeleteCard from "@/components/DeleteCard";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import toast from 'react-hot-toast';
+import { Eye, EyeOff, Pencil, Save, Upload, Lock, User, Mail, Trash2 } from 'lucide-react';
+import axios from '@/lib/axios';
+import React, { useEffect, useState } from 'react';
+import DeleteCard from '@/components/DeleteCard';
+import { useRouter } from 'next/navigation';
 interface UserData {
   username: string;
   email: string;
@@ -41,17 +31,15 @@ interface PasswordData {
 }
 
 const AccountPage = () => {
-  //   const { toast } = useToast();
-  const router = useRouter();
   const [userData, setUserData] = useState<UserData>({
-    username: "",
-    email: "",
-    image: "",
+    username: '',
+    email: '',
+    image: '',
   });
   const [passwordData, setPasswordData] = useState<PasswordData>({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -70,11 +58,12 @@ const AccountPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/account");
+        const response = await axios.get('/account');
         console.log(response.data.user);
         setUserData(response.data.user);
       } catch (error) {
-        toast.error("Failed to fetch user data");
+        console.log(error);
+        toast.error('Failed to fetch user data');
         // toast({
         //   title: 'Error',
         //   description: 'Failed to fetch user data',
@@ -96,21 +85,19 @@ const AccountPage = () => {
     setIsLoading({ ...isLoading, profile: true });
     try {
       const formData = new FormData();
-      formData.append("username", userData.username);
-      formData.append("email", userData.email);
+      formData.append('username', userData.username);
+      formData.append('email', userData.email);
 
       if (previewImage) {
-        const fileInput = document.getElementById(
-          "image-upload",
-        ) as HTMLInputElement;
+        const fileInput = document.getElementById('image-upload') as HTMLInputElement;
         if (fileInput?.files?.[0]) {
-          formData.append("image", fileInput.files[0]);
+          formData.append('image', fileInput.files[0]);
         }
       }
 
-      const response = await axios.patch("/account", formData, {
+      const response = await axios.patch('/account', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
 
@@ -122,6 +109,7 @@ const AccountPage = () => {
       //     description: 'Profile updated successfully',
       //   });
     } catch (error) {
+      console.log(error);
       //   toast({
       //     title: 'Error',
       //     description: 'Failed to update profile',
@@ -134,27 +122,27 @@ const AccountPage = () => {
 
   const handlePasswordUpdate = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("New password do not match");
+      toast.error('New password do not match');
       return;
     }
 
     setIsLoading({ ...isLoading, password: true });
     try {
-      await axios.patch("/account", {
+      await axios.patch('/account', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       });
 
       setPasswordData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
       });
       setIsPasswordEditing(false);
-      toast.success("Password updated successfully");
+      toast.success('Password updated successfully');
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update password");
+      toast.error('Failed to update password');
     } finally {
       setIsLoading({ ...isLoading, password: false });
     }
@@ -164,10 +152,10 @@ const AccountPage = () => {
     setDialogOpen(true);
     try {
       await axios.delete(`/account`);
-      toast.success("Account Deleted Successfully");
+      toast.success('Account Deleted Successfully');
     } catch (error) {
-      console.error("Error deleting account:", error);
-      toast.error("Failed to delete account");
+      console.error('Error deleting account:', error);
+      toast.error('Failed to delete account');
     }
   };
   return (
@@ -177,9 +165,7 @@ const AccountPage = () => {
         <Card>
           <CardHeader>
             <CardTitle>Profile Information</CardTitle>
-            <CardDescription>
-              Update your profile details and avatar
-            </CardDescription>
+            <CardDescription>Update your profile details and avatar</CardDescription>
             <Separator />
           </CardHeader>
 
@@ -188,11 +174,7 @@ const AccountPage = () => {
               <div className="relative group">
                 <Avatar className="h-32 w-32 border-2 border-primary/20">
                   {previewImage ? (
-                    <AvatarImage
-                      src={previewImage}
-                      alt="Preview"
-                      className="object-cover"
-                    />
+                    <AvatarImage src={previewImage} alt="Preview" className="object-cover" />
                   ) : (
                     <AvatarImage
                       src={userData.image}
@@ -230,9 +212,7 @@ const AccountPage = () => {
                   <Input
                     id="username"
                     value={userData.username}
-                    onChange={(e) =>
-                      setUserData({ ...userData, username: e.target.value })
-                    }
+                    onChange={(e) => setUserData({ ...userData, username: e.target.value })}
                     disabled={!isEditing}
                     className="bg-background"
                   />
@@ -247,9 +227,7 @@ const AccountPage = () => {
                     id="email"
                     type="email"
                     value={userData.email}
-                    onChange={(e) =>
-                      setUserData({ ...userData, email: e.target.value })
-                    }
+                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                     disabled={!isEditing}
                     className="bg-background"
                   />
@@ -275,7 +253,7 @@ const AccountPage = () => {
                   className="gap-2"
                 >
                   {isLoading.profile ? (
-                    "Saving..."
+                    'Saving...'
                   ) : (
                     <>
                       <Save className="h-4 w-4" />
@@ -290,11 +268,7 @@ const AccountPage = () => {
                   <Pencil className="h-4 w-4" />
                   Edit Profile
                 </Button>
-                <Button
-                  className="gap-2"
-                  variant="destructive"
-                  onClick={handleDelete}
-                >
+                <Button className="gap-2" variant="destructive" onClick={handleDelete}>
                   <Trash2 className="h-4 w-4" />
                   Delete Profile
                 </Button>
@@ -319,7 +293,7 @@ const AccountPage = () => {
                   <div className="relative">
                     <Input
                       id="currentPassword"
-                      type={showPassword.current ? "text" : "password"}
+                      type={showPassword.current ? 'text' : 'password'}
                       value={passwordData.currentPassword}
                       onChange={(e) =>
                         setPasswordData({
@@ -354,7 +328,7 @@ const AccountPage = () => {
                   <div className="relative">
                     <Input
                       id="newPassword"
-                      type={showPassword.new ? "text" : "password"}
+                      type={showPassword.new ? 'text' : 'password'}
                       value={passwordData.newPassword}
                       onChange={(e) =>
                         setPasswordData({
@@ -389,7 +363,7 @@ const AccountPage = () => {
                   <div className="relative">
                     <Input
                       id="confirmPassword"
-                      type={showPassword.confirm ? "text" : "password"}
+                      type={showPassword.confirm ? 'text' : 'password'}
                       value={passwordData.confirmPassword}
                       onChange={(e) =>
                         setPasswordData({
@@ -427,10 +401,7 @@ const AccountPage = () => {
                     Last changed: {new Date().toLocaleDateString()}
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  onClick={() => setIsPasswordEditing(true)}
-                >
+                <Button variant="outline" onClick={() => setIsPasswordEditing(true)}>
                   Change Password
                 </Button>
               </div>
@@ -443,9 +414,9 @@ const AccountPage = () => {
                 onClick={() => {
                   setIsPasswordEditing(false);
                   setPasswordData({
-                    currentPassword: "",
-                    newPassword: "",
-                    confirmPassword: "",
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmPassword: '',
                   });
                 }}
               >
@@ -457,7 +428,7 @@ const AccountPage = () => {
                 className="gap-2"
               >
                 {isLoading.password ? (
-                  "Updating..."
+                  'Updating...'
                 ) : (
                   <>
                     <Save className="h-4 w-4" />

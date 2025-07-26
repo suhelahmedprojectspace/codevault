@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+'use client';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,13 +7,13 @@ import {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { motion } from "framer-motion";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { motion } from 'framer-motion';
 // import { Calendar } from "@/components/ui/calendar"
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
 interface Props {
   open: boolean;
@@ -28,9 +28,7 @@ export default function EditCard({ open, onClose, type, data, onSave }: Props) {
   const [isSaving, setIsSaving] = useState(false);
 
   // Handle simple field changes
-  const handleSimpleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleSimpleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setEditedData(e.target.value);
   };
 
@@ -48,7 +46,7 @@ export default function EditCard({ open, onClose, type, data, onSave }: Props) {
       await onSave(type, editedData);
       onClose();
     } catch (error) {
-      console.error("Error saving data:", error);
+      console.error('Error saving data:', error);
     } finally {
       setIsSaving(false);
     }
@@ -57,20 +55,14 @@ export default function EditCard({ open, onClose, type, data, onSave }: Props) {
   // Field-specific configuration
   const renderField = () => {
     switch (type) {
-      case "name":
-      case "title":
-      case "education":
-      case "yearofexperience":
-      case "location":
-        return (
-          <Input
-            value={editedData}
-            onChange={handleSimpleChange}
-            className="text-lg"
-          />
-        );
+      case 'name':
+      case 'title':
+      case 'education':
+      case 'yearofexperience':
+      case 'location':
+        return <Input value={editedData} onChange={handleSimpleChange} className="text-lg" />;
 
-      case "summary":
+      case 'summary':
         return (
           <Textarea
             value={editedData}
@@ -79,56 +71,42 @@ export default function EditCard({ open, onClose, type, data, onSave }: Props) {
           />
         );
 
-      case "experience":
+      case 'experience':
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
-                Job Title
-              </label>
+              <label className="block text-sm font-medium text-gray-400 mb-1">Job Title</label>
               <Input
                 value={editedData.role}
-                onChange={(e) => handleExperienceChange("role", e.target.value)}
+                onChange={(e) => handleExperienceChange('role', e.target.value)}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
-                Company
-              </label>
+              <label className="block text-sm font-medium text-gray-400 mb-1">Company</label>
               <Input
                 value={editedData.company}
-                onChange={(e) =>
-                  handleExperienceChange("company", e.target.value)
-                }
+                onChange={(e) => handleExperienceChange('company', e.target.value)}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">
-                  Start Date
-                </label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Start Date</label>
                 <Input
                   type="date"
                   value={editedData.startDate}
-                  onChange={(e) =>
-                    handleExperienceChange("startDate", e.target.value)
-                  }
+                  onChange={(e) => handleExperienceChange('startDate', e.target.value)}
                 />
               </div>
 
               {!editedData.currentlyWorking && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">
-                    End Date
-                  </label>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">End Date</label>
                   <Input
                     type="date"
                     value={editedData.endDate}
-                    onChange={(e) =>
-                      handleExperienceChange("endDate", e.target.value)
-                    }
+                    onChange={(e) => handleExperienceChange('endDate', e.target.value)}
                   />
                 </div>
               )}
@@ -139,28 +117,19 @@ export default function EditCard({ open, onClose, type, data, onSave }: Props) {
                 type="checkbox"
                 id="currentlyWorking"
                 checked={editedData.currentlyWorking}
-                onChange={(e) =>
-                  handleExperienceChange("currentlyWorking", e.target.checked)
-                }
+                onChange={(e) => handleExperienceChange('currentlyWorking', e.target.checked)}
                 className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <label
-                htmlFor="currentlyWorking"
-                className="text-sm text-gray-400"
-              >
+              <label htmlFor="currentlyWorking" className="text-sm text-gray-400">
                 I currently work here
               </label>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
-                Description
-              </label>
+              <label className="block text-sm font-medium text-gray-400 mb-1">Description</label>
               <Textarea
                 value={editedData.description}
-                onChange={(e) =>
-                  handleExperienceChange("description", e.target.value)
-                }
+                onChange={(e) => handleExperienceChange('description', e.target.value)}
                 className="min-h-[150px]"
               />
             </div>
@@ -170,11 +139,11 @@ export default function EditCard({ open, onClose, type, data, onSave }: Props) {
                 Technologies Used
               </label>
               <Input
-                value={editedData.techTag?.join(", ") || ""}
+                value={editedData.techTag?.join(', ') || ''}
                 onChange={(e) =>
                   handleExperienceChange(
-                    "techTag",
-                    e.target.value.split(",").map((t: string) => t.trim()),
+                    'techTag',
+                    e.target.value.split(',').map((t: string) => t.trim()),
                   )
                 }
                 placeholder="React, Node.js, TypeScript"
@@ -212,7 +181,7 @@ export default function EditCard({ open, onClose, type, data, onSave }: Props) {
               Cancel
             </Button>
             <Button onClick={handleSubmit} disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save changes"}
+              {isSaving ? 'Saving...' : 'Save changes'}
             </Button>
           </DialogFooter>
         </motion.div>

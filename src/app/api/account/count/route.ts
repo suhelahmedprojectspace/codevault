@@ -1,8 +1,8 @@
-import { checkSession } from "@/lib/checkSession";
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { checkSession } from '@/lib/checkSession';
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
-export async function GET(req: Request) {
+export async function GET() {
   const session = await checkSession();
 
   try {
@@ -28,7 +28,7 @@ export async function GET(req: Request) {
       commentCount,
     });
   } catch (error) {
-    console.error("Error fetching user stats:", error);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    console.error('Error fetching user stats:', error);
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
   }
 }

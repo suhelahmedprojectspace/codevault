@@ -1,16 +1,9 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import {
-  Sparkles,
-  Users,
-  Search,
-  Code,
-  GitBranch,
-  ShieldCheck,
-} from "lucide-react";
-import { motion } from "framer-motion";
-import { TypeAnimation } from "react-type-animation";
+'use client';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { Sparkles, Users, Search, Code } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { TypeAnimation } from 'react-type-animation';
 
 export default function CodeBuddyIntroPage() {
   const router = useRouter();
@@ -18,21 +11,20 @@ export default function CodeBuddyIntroPage() {
   const features = [
     {
       icon: <Search className="h-6 w-6 text-blue-500" />,
-      title: "Smart Matching",
+      title: 'Smart Matching',
       description:
-        "Our algorithm pairs you with ideal coding partners based on skill level, tech stack, and learning goals.",
+        'Our algorithm pairs you with ideal coding partners based on skill level, tech stack, and learning goals.',
     },
     {
       icon: <Users className="h-6 w-6 text-blue-500" />,
-      title: "Collaborative Learning",
+      title: 'Collaborative Learning',
       description:
-        "Work on real projects together with shared environments and version control integration.",
+        'Work on real projects together with shared environments and version control integration.',
     },
     {
       icon: <Code className="h-6 w-6 text-blue-500" />,
-      title: "Code Together",
-      description:
-        "Real-time pair programming with built-in video chat and code synchronization.",
+      title: 'Code Together',
+      description: 'Real-time pair programming with built-in video chat and code synchronization.',
     },
     // {
     //   icon: <GitBranch className="h-6 w-6 text-blue-500" />,
@@ -41,9 +33,8 @@ export default function CodeBuddyIntroPage() {
     // },
     {
       icon: <Sparkles className="h-6 w-6 text-blue-500" />,
-      title: "Skill Validation",
-      description:
-        "Earn verifiable badges by completing challenges with your buddy.",
+      title: 'Skill Validation',
+      description: 'Earn verifiable badges by completing challenges with your buddy.',
     },
     // {
     //   icon: <ShieldCheck className="h-6 w-6 text-blue-500" />,
@@ -62,19 +53,11 @@ export default function CodeBuddyIntroPage() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              <span className="text-blue-600">Pair Program</span> with Your
-              Perfect{" "}
+              <span className="text-blue-600">Pair Program</span> with Your Perfect{' '}
             </h1>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               <TypeAnimation
-                sequence={[
-                  "Dev Match",
-                  1500,
-                  "Code Partner",
-                  1500,
-                  "Tech Buddy",
-                  1500,
-                ]}
+                sequence={['Dev Match', 1500, 'Code Partner', 1500, 'Tech Buddy', 1500]}
                 wrapper="span"
                 cursor={true}
                 repeat={Infinity}
@@ -82,15 +65,14 @@ export default function CodeBuddyIntroPage() {
               />
             </h1>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-              Connect with developers who match your stack, skill level, and
-              learning objectives. Grow faster through collaborative coding and
-              peer accountability.
+              Connect with developers who match your stack, skill level, and learning objectives.
+              Grow faster through collaborative coding and peer accountability.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
                 className="px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
-                onClick={() => router.push("/onboarding")}
+                onClick={() => router.push('/onboarding')}
               >
                 Find My Coding Buddy
               </Button>
@@ -98,7 +80,7 @@ export default function CodeBuddyIntroPage() {
                 variant="outline"
                 size="lg"
                 className="px-8 py-6 text-lg"
-                onClick={() => router.push("/demo")}
+                onClick={() => router.push('/demo')}
               >
                 See How It Works
               </Button>
@@ -123,12 +105,9 @@ export default function CodeBuddyIntroPage() {
 
         <section className="bg-white rounded-xl border-1 border-black p-8 md:p-12 max-w-5xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              How CodeBuddy Works
-            </h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">How CodeBuddy Works</h2>
             <p className="text-gray-600 max-w-3xl mx-auto">
-              Three simple steps to find your ideal coding partner and start
-              growing together
+              Three simple steps to find your ideal coding partner and start growing together
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">

@@ -1,14 +1,14 @@
-type QuestionsType='radio'|'checkbox'
+type QuestionsType = 'radio' | 'checkbox';
 
-interface MatchingQuestion{
-    id:string;
-    question:string;
-    type:QuestionsType,
-    options:string[];
-    weight:number
+interface MatchingQuestion {
+  id: string;
+  question: string;
+  type: QuestionsType;
+  options: string[];
+  weight: number;
 }
 
-export const matchingQuestions:MatchingQuestion[] = [
+export const matchingQuestions: MatchingQuestion[] = [
   {
     id: 'primaryLanguage',
     question: 'Which programming language do you use most frequently?',
@@ -26,9 +26,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Rust',
       'Swift',
       'Kotlin',
-      'Other'
+      'Other',
     ],
-    weight: 3
+    weight: 3,
   },
   {
     id: 'techFocus',
@@ -42,9 +42,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Data Science/AI',
       'Game Development',
       'Embedded Systems',
-      'Blockchain/Web3'
+      'Blockchain/Web3',
     ],
-    weight: 2
+    weight: 2,
   },
   {
     id: 'experienceLevel',
@@ -54,9 +54,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Beginner (0-1 years)',
       'Intermediate (1-3 years)',
       'Advanced (3-5 years)',
-      'Expert (5+ years)'
+      'Expert (5+ years)',
     ],
-    weight: 1
+    weight: 1,
   },
   {
     id: 'workSchedule',
@@ -66,9 +66,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Early bird (morning focus)',
       'Standard 9-5 hours',
       'Night owl (evening focus)',
-      'Flexible/irregular hours'
+      'Flexible/irregular hours',
     ],
-    weight: 3
+    weight: 3,
   },
   {
     id: 'collabStyle',
@@ -78,9 +78,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Pair programming (live together)',
       'Async code reviews',
       'Divide and conquer modules',
-      'Mixed depending on task'
+      'Mixed depending on task',
     ],
-    weight: 2
+    weight: 2,
   },
   {
     id: 'commsPreference',
@@ -91,9 +91,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Voice calls',
       'Video calls',
       'In-person when possible',
-      'Mostly async (messages)'
+      'Mostly async (messages)',
     ],
-    weight: 2
+    weight: 2,
   },
   {
     id: 'projectGoals',
@@ -106,9 +106,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Open source contributions',
       'Startup/product development',
       'Competitive programming',
-      'Just for fun'
+      'Just for fun',
     ],
-    weight: 1
+    weight: 1,
   },
   {
     id: 'feedbackStyle',
@@ -119,9 +119,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Gentle suggestions',
       'Written comments only',
       'Through live discussion',
-      'Prefer minimal feedback'
+      'Prefer minimal feedback',
     ],
-    weight: 2
+    weight: 2,
   },
   {
     id: 'debuggingApproach',
@@ -132,22 +132,16 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Console.log debugging',
       'Rubber duck explanation',
       'Stack overflow first',
-      'Rewrite the code'
+      'Rewrite the code',
     ],
-    weight: 1
+    weight: 1,
   },
   {
     id: 'timeCommitment',
     question: 'How many hours weekly can you commit to pairing?',
     type: 'radio',
-    options: [
-      '1-5 hours',
-      '5-10 hours',
-      '10-15 hours',
-      '15-20 hours',
-      '20+ hours'
-    ],
-    weight: 3
+    options: ['1-5 hours', '5-10 hours', '10-15 hours', '15-20 hours', '20+ hours'],
+    weight: 3,
   },
   {
     id: 'projectTypes',
@@ -162,9 +156,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'AI/ML projects',
       'Games',
       'Browser extensions',
-      'DevOps automation'
+      'DevOps automation',
     ],
-    weight: 2
+    weight: 2,
   },
   {
     id: 'learningStyle',
@@ -176,9 +170,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Hands-on experimentation',
       'Pair programming',
       'Online courses',
-      'Books/guides'
+      'Books/guides',
     ],
-    weight: 1
+    weight: 1,
   },
   {
     id: 'conflictResolution',
@@ -189,9 +183,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Research best practices',
       'Delegate decision',
       'Try both approaches',
-      'Follow senior dev'
+      'Follow senior dev',
     ],
-    weight: 2
+    weight: 2,
   },
   {
     id: 'tools',
@@ -207,9 +201,9 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Kubernetes',
       'JIRA',
       'Figma',
-      'Postman'
+      'Postman',
     ],
-    weight: 1
+    weight: 1,
   },
   {
     id: 'personalityMatch',
@@ -223,10 +217,10 @@ export const matchingQuestions:MatchingQuestion[] = [
       'Good communicator',
       'Highly technical',
       'Creative problem solver',
-      'Structured/organized'
+      'Structured/organized',
     ],
-    weight: 2
-  }
+    weight: 2,
+  },
 ];
 
 export type QuestionId = (typeof matchingQuestions)[number]['id'];

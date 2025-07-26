@@ -1,22 +1,10 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { Button } from "./ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Button } from './ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 
-const UserHoverCard = ({
-  name,
-  email,
-  image,
-}: {
-  email: string;
-  name: string;
-  image: string;
-}) => {
+const UserHoverCard = ({ name, email, image }: { email: string; name: string; image: string }) => {
   const initials = name.slice(0, 2).toUpperCase();
   return (
     <HoverCard>

@@ -1,44 +1,50 @@
-"use client";
-import { useState } from "react";
-import { format } from "date-fns";
-import { Reply, ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import toast from "react-hot-toast";
-import axios from "@/lib/axios";
-import { CommentItemProps } from "@/types/blog";
+'use client';
+import { useState } from 'react';
+import { format } from 'date-fns';
+import { Reply, ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import toast from 'react-hot-toast';
+import axios from '@/lib/axios';
+import { CommentItemProps } from '@/types/blog';
 
-export const CommentItem = ({ comment,blogId, blogAuthorId, onReply, depth = 0, }: CommentItemProps) => {
+export const CommentItem = ({
+  comment,
+  blogId,
+  blogAuthorId,
+  onReply,
+  depth = 0,
+}: CommentItemProps) => {
   const [isReplying, setIsReplying] = useState(false);
-  const [replyContent, setReplyContent] = useState("");
+  const [replyContent, setReplyContent] = useState('');
   const [showReplies, setShowReplies] = useState(true);
   const isAuthor = comment.author.id === blogAuthorId;
-  const isCurrentUser=comment.author.id===blogAuthorId;
-  
+  const isCurrentUser = comment.author.id === blogAuthorId;
+
   const replies = comment.replies || [];
   const hasReplies = replies.length > 0;
 
   const handlePostReply = async () => {
     if (!replyContent.trim()) {
-      toast.error("Reply cannot be empty");
+      toast.error('Reply cannot be empty');
       return;
     }
     try {
       const res = await axios.post('/comment', {
         content: replyContent,
         blogId,
-        parentId: comment.id
+        parentId: comment.id,
       });
       if (res.status === 201) {
-        toast.success("Reply posted!");
-        setReplyContent("");
+        toast.success('Reply posted!');
+        setReplyContent('');
         setIsReplying(false);
         onReply(comment.id);
       }
     } catch (error) {
-      toast.error("Failed to post reply");
+      toast.error('Failed to post reply');
       console.error(error);
     }
   };
@@ -56,7 +62,7 @@ export const CommentItem = ({ comment,blogId, blogAuthorId, onReply, depth = 0, 
             {isAuthor && <Badge variant="secondary">Author</Badge>}
             {isCurrentUser && <Badge variant="outline">You</Badge>}
             <span className="text-sm text-muted-foreground">
-              {format(new Date(comment.createdAt), "MMM d, yyyy")}
+              {format(new Date(comment.createdAt), 'MMM d, yyyy')}
             </span>
           </div>
           <p className="mt-1 text-sm">{comment.content}</p>

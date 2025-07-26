@@ -3,7 +3,7 @@ import { RootState } from '@/lib/store/store';
 import { setCounts } from '@/redux/notificationSlice';
 import { useSession } from 'next-auth/react';
 import axios from '@/lib/axios';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 type NotificationEvent = {
   type: 'SNIPPET' | 'BLOG' | 'CONNECTION';
@@ -19,9 +19,8 @@ type NotificationEvent = {
 
 export function useNotifications() {
   const { data: session } = useSession();
-  const dispatch=useDispatch();
-  const counts=useSelector((state:RootState)=>state.notifications);
-
+  const dispatch = useDispatch();
+  const counts = useSelector((state: RootState) => state.notifications);
 
   // const [counts, setCounts] = useState({
   //   snippetCount: 0,
@@ -36,10 +35,10 @@ export function useNotifications() {
       const { data } = await axios.get('/notifications');
       dispatch(
         setCounts({
-           snippetCount: data.snippetCount || 0,
+          snippetCount: data.snippetCount || 0,
           blogCount: data.blogCount || 0,
           codeBuddyCount: data.codeBuddyCount || 0,
-        })
+        }),
       );
     } catch (error) {
       console.error('Failed to fetch notifications', error);
@@ -48,6 +47,6 @@ export function useNotifications() {
 
   return {
     ...counts,
-    fetchCounts
+    fetchCounts,
   };
 }

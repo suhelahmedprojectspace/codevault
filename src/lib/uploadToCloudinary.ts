@@ -1,16 +1,18 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-if (!process.env.CLOUDINARY_CLOUD_NAME || 
-    !process.env.CLOUDINARY_API_KEY || 
-    !process.env.CLOUDINARY_API_SECRET) {
+if (
+  !process.env.CLOUDINARY_CLOUD_NAME ||
+  !process.env.CLOUDINARY_API_KEY ||
+  !process.env.CLOUDINARY_API_SECRET
+) {
   throw new Error('Cloudinary environment variables not configured');
 }
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key:process.env.CLOUDINARY_API_KEY ,
+  api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true
+  secure: true,
 });
 
 interface CloudinaryUploadResult {
@@ -25,25 +27,25 @@ export async function uploadToCloudinary(file: File): Promise<CloudinaryUploadRe
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: "codevault_uploads",
-        resource_type: "auto"
+        folder: 'codevault_uploads',
+        resource_type: 'auto',
       },
       (error, result) => {
         if (error) {
-          console.error("Final Cloudinary error:", {
+          console.error('Final Cloudinary error:', {
             error,
-            config: cloudinary.config()
+            config: cloudinary.config(),
           });
           return reject(new Error(`Upload failed: ${error.message}`));
         }
         if (!result) {
-          return reject(new Error("No result from Cloudinary"));
+          return reject(new Error('No result from Cloudinary'));
         }
         resolve({
           secure_url: result.secure_url,
-          public_id: result.public_id
+          public_id: result.public_id,
         });
-      }
+      },
     );
 
     uploadStream.on('error', (error) => {

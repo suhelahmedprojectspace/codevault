@@ -6,58 +6,58 @@ import {
   FaFacebook,
   FaInstagram,
   FaDiscord,
-} from "react-icons/fa";
-import { FaThreads } from "react-icons/fa6";
+} from 'react-icons/fa';
+import { FaThreads } from 'react-icons/fa6';
 
 export const SOCIAL_MEDIA_PLATFORMS = [
   {
-    id: "github",
-    label: "GitHub",
+    id: 'github',
+    label: 'GitHub',
     icon: FaGithub, // Just reference the component, don't create JSX here
-    baseUrl: "https://github.com/",
+    baseUrl: 'https://github.com/',
   },
   {
-    id: "linkedin",
-    label: "LinkedIn",
+    id: 'linkedin',
+    label: 'LinkedIn',
     icon: FaLinkedin,
-    baseUrl: "https://linkedin.com/in/",
+    baseUrl: 'https://linkedin.com/in/',
   },
   {
-    id: "youtube",
-    label: "YouTube",
+    id: 'youtube',
+    label: 'YouTube',
     icon: FaYoutube,
-    baseUrl: "https://youtube.com/",
+    baseUrl: 'https://youtube.com/',
   },
   {
-    id: "twitter",
-    label: "X (Twitter)",
+    id: 'twitter',
+    label: 'X (Twitter)',
     icon: FaTwitter,
-    baseUrl: "https://x.com/",
+    baseUrl: 'https://x.com/',
   },
   {
-    id: "facebook",
-    label: "Facebook",
+    id: 'facebook',
+    label: 'Facebook',
     icon: FaFacebook,
-    baseUrl: "https://facebook.com/",
+    baseUrl: 'https://facebook.com/',
   },
   {
-    id: "instagram",
-    label: "Instagram",
+    id: 'instagram',
+    label: 'Instagram',
     icon: FaInstagram,
-    baseUrl: "https://instagram.com/",
+    baseUrl: 'https://instagram.com/',
   },
   {
-    id: "threads",
-    label: "Threads",
+    id: 'threads',
+    label: 'Threads',
     icon: FaThreads,
-    baseUrl: "https://threads.net/",
+    baseUrl: 'https://threads.net/',
   },
   {
-    id: "discord",
-    label: "Discord",
+    id: 'discord',
+    label: 'Discord',
     icon: FaDiscord,
-    baseUrl: "https://discord.com/users/",
+    baseUrl: 'https://discord.com/users/',
   },
 ] as const;
 
-export type SocialMediaPlatform = (typeof SOCIAL_MEDIA_PLATFORMS)[number]["id"];
+export type SocialMediaPlatform = (typeof SOCIAL_MEDIA_PLATFORMS)[number]['id'];

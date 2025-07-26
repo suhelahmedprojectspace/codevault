@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import axios from "@/lib/axios";
-import Editor from "@monaco-editor/react";
-import { Input } from "@/components/ui/input";
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import axios from '@/lib/axios';
+import Editor from '@monaco-editor/react';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectItem,
@@ -12,30 +12,28 @@ import {
   SelectValue,
   SelectContent,
   SelectGroup,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Framework, FrameworkOptions } from "@/constants/framework";
-import { Visibility, visibilityOptions } from "@/constants/visibility";
-import toast from "react-hot-toast";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Framework, FrameworkOptions } from '@/constants/framework';
+import { Visibility, visibilityOptions } from '@/constants/visibility';
+import toast from 'react-hot-toast';
 
 const UpdateSnippetPage = () => {
-  const [selectedFramework, setSelectedFramework] = useState<
-    Framework | undefined
-  >();
+  const [selectedFramework, setSelectedFramework] = useState<Framework | undefined>();
   const [form, setForm] = useState({
-    title: "",
-    description: "",
-    content: "",
+    title: '',
+    description: '',
+    content: '',
   });
 
-  const [visibility, setVisibility] = useState<Visibility>("public");
+  const [visibility, setVisibility] = useState<Visibility>('public');
   //const [selectFramework, setSelectFramework] = useState<Framework | undefined>();
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const id = searchParams.get('id');
 
   useEffect(() => {
     if (id) fetchData(id);
@@ -49,7 +47,7 @@ const UpdateSnippetPage = () => {
       content: res.data.snippet.content,
     });
     setSelectedFramework(res.data.snippet.framework);
-    setVisibility(res.data.snippet.visibility || "public");
+    setVisibility(res.data.snippet.visibility || 'public');
   }
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,19 +60,19 @@ const UpdateSnippetPage = () => {
         visibility: visibility,
       });
       if (res.status === 200) {
-        toast.success("Successfully updated");
+        toast.success('Successfully updated');
         setForm({
-          title: "",
-          content: "",
-          description: "",
+          title: '',
+          content: '',
+          description: '',
         });
         setSelectedFramework(undefined);
-        setVisibility("public");
+        setVisibility('public');
       } else {
-        toast.error("Something went wrong from our side");
+        toast.error('Something went wrong from our side');
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     }
   };
   return (
@@ -98,9 +96,7 @@ const UpdateSnippetPage = () => {
             <div className="space-y-2">
               <Label>Framework</Label>
               <Select
-                onValueChange={(value: Framework) =>
-                  setSelectedFramework(value)
-                }
+                onValueChange={(value: Framework) => setSelectedFramework(value)}
                 value={selectedFramework}
               >
                 <SelectTrigger className="w-full">
@@ -125,9 +121,9 @@ const UpdateSnippetPage = () => {
               <Label>Code Snippet</Label>
               <Editor
                 height="400px"
-                defaultLanguage={selectedFramework || "javascript"}
+                defaultLanguage={selectedFramework || 'javascript'}
                 value={form.content}
-                onChange={(value) => setForm({ ...form, content: value || "" })}
+                onChange={(value) => setForm({ ...form, content: value || '' })}
                 theme="vs-dark"
               />
             </div>
@@ -137,9 +133,7 @@ const UpdateSnippetPage = () => {
               <Textarea
                 rows={4}
                 value={form.description}
-                onChange={(e) =>
-                  setForm({ ...form, description: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="Briefly describe your snippet"
               />
             </div>
@@ -152,10 +146,7 @@ const UpdateSnippetPage = () => {
                 onValueChange={(val: Visibility) => setVisibility(val)}
               >
                 {visibilityOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2"
-                  >
+                  <div key={option.value} className="flex items-center space-x-2">
                     <RadioGroupItem value={option.value} id={option.value} />
                     <Label
                       htmlFor={option.value}

@@ -1,22 +1,22 @@
-"use client";
-import { system_design_questions } from "@/data/design";
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Search, ChevronRight, X } from "lucide-react";
+'use client';
+import { system_design_questions } from '@/data/design';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Search, ChevronRight, X } from 'lucide-react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 export default function SystemDesignQuestions() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Calculate all unique topics for filtering
   const allTopics = Array.from(
@@ -28,9 +28,7 @@ export default function SystemDesignQuestions() {
   const filteredQuestions = system_design_questions.filter((question) => {
     const matchesSearch =
       question.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.key_topics.some((topic) =>
-        topic.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
+      question.key_topics.some((topic) => topic.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesTopics =
       selectedTopics.length === 0 ||
@@ -58,8 +56,7 @@ export default function SystemDesignQuestions() {
             System Design Interview Questions
           </h1>
           <p className="text-xl text-muted-foreground">
-            Practice with {system_design_questions.length} real-world system
-            design challenges
+            Practice with {system_design_questions.length} real-world system design challenges
           </p>
         </div>
 
@@ -129,9 +126,7 @@ export default function SystemDesignQuestions() {
 
         {/* Results Info */}
         <div className="mb-6 flex justify-between items-center">
-          <p className="text-muted-foreground">
-            Showing {filteredQuestions.length} questions
-          </p>
+          <p className="text-muted-foreground">Showing {filteredQuestions.length} questions</p>
         </div>
 
         {/* Questions Grid */}
@@ -144,13 +139,9 @@ export default function SystemDesignQuestions() {
               >
                 <CardHeader>
                   <div className="flex justify-between items-start">
-                    <span className="text-sm text-muted-foreground">
-                      #{question.id}
-                    </span>
+                    <span className="text-sm text-muted-foreground">#{question.id}</span>
                   </div>
-                  <CardTitle className="text-xl line-clamp-2">
-                    {question.question}
-                  </CardTitle>
+                  <CardTitle className="text-xl line-clamp-2">{question.question}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -182,7 +173,7 @@ export default function SystemDesignQuestions() {
             <Button
               variant="outline"
               onClick={() => {
-                setSearchTerm("");
+                setSearchTerm('');
                 setSelectedTopics([]);
               }}
             >

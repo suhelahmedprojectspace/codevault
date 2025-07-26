@@ -1,4 +1,5 @@
-# 🚀 CodeVault 
+# 🚀 CodeVault
+
 <p align="center">
   <img src="public/favicon.ico" alt="CodeVault Logo" width="50" />
 </p>
@@ -12,15 +13,13 @@ It includes features like portfolio creation, real-time notifications, advanced 
 
 > Built using a full-stack modern tech stack to elevate your developer workflow.
 
-
-
 ---
 
 ## 🌟 Features
 
 - 🧩 **CRUD Snippets** – Create, update, and delete code snippets
 - 🧩 **CRUD Blog** – Create, update, and delete content
-- 🧩 **Beautiful Blog UI – With Like and comment functionality Estimated reading time** 
+- 🧩 **Beautiful Blog UI – With Like and comment functionality Estimated reading time**
 - 💼 **Portfolio Builder** – Showcase selected snippets in a clean UI
 - 🔍 **Advanced Filtering & Search** – Search by title, tag, language, or framework
 - 📄 **Pagination** – Efficient browsing for large snippet libraries
@@ -35,20 +34,20 @@ It includes features like portfolio creation, real-time notifications, advanced 
 
 ## 🧪 Tech Stack
 
-| Layer        | Tech                                                                 |
-|--------------|----------------------------------------------------------------------|
-| **Frontend** | `Next.js (App Router)` · `Tailwind CSS` · `ShadCN UI` · `CSS3`       |
-| **Backend**  | `Next.js API Routes` · `Prisma ORM` · `Auth.js` · `bcrypt`           |
-| **Editor**   | `Monaco Editor` (VS Code-like experience)                            |
-| **Realtime** | `Native WebSocket` for instant notifications                         |
-| **Database** | `PostgreSQL` (via Prisma)                                            |
-| **Others**   | `Axios` · `Framer Motion` · `Radix UI` · `Zod`                       |
+| Layer        | Tech                                                           |
+| ------------ | -------------------------------------------------------------- |
+| **Frontend** | `Next.js (App Router)` · `Tailwind CSS` · `ShadCN UI` · `CSS3` |
+| **Backend**  | `Next.js API Routes` · `Prisma ORM` · `Auth.js` · `bcrypt`     |
+| **Editor**   | `Monaco Editor` (VS Code-like experience)                      |
+| **Realtime** | `Native WebSocket` for instant notifications                   |
+| **Database** | `PostgreSQL` (via Prisma)                                      |
+| **Others**   | `Axios` · `Framer Motion` · `Radix UI` · `Zod`                 |
 
 ---
 
 ## 📁 Project Structure
 
-```bash
+````bash
 /app                  # Next.js App Router
   /(auth)             # Login/Register logic
   /dashboard          # Snippet management UI
@@ -80,7 +79,7 @@ Foobar is a Python library for dealing with word pluralization.
 ```bash
 git clone https://github.com/suhelahmedprojectspace/codevault.git
 cd codevault
-```
+````
 
 ## Install Dependencies
 
@@ -89,6 +88,7 @@ npm install
 # or
 yarn install
 ```
+
 ## Setup Environment Variables
 
 #### Create a .env file in the root:
@@ -106,12 +106,10 @@ npx prisma migrate dev --name init
 
 ## 🤝 Contributing
 
-```bash Contributions, suggestions, and feature requests are welcome! Feel free to open issues or submit a pull request.```
-
+`bash Contributions, suggestions, and feature requests are welcome! Feel free to open issues or submit a pull request.`
 
 ## 📬 Connect
+
 ###### GitHub: @suhelahmedprojectspace
 
 ### Built with ❤️ by Sahel — for developers who love clean code and beautiful UIs.
-
-

@@ -1,13 +1,13 @@
-"use client";
-import React, { useState, useMemo } from "react";
-import * as Checkbox from "@radix-ui/react-checkbox";
-import { CheckIcon } from "@radix-ui/react-icons";
-import { cn } from "@/lib/utils";
-import { Input } from "./ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+'use client';
+import React, { useState, useMemo } from 'react';
+import * as Checkbox from '@radix-ui/react-checkbox';
+import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Input } from './ui/input';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 interface Tag {
-  id?:string;
+  id?: string;
   name: string;
   logo?: string;
 }
@@ -22,12 +22,10 @@ const MultiSelectTag: React.FC<MultiSelectTagProps> = ({
   selectedTags,
   onChange,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredTags = useMemo(() => {
-    return availableTags.filter((tag) =>
-      tag.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
+    return availableTags.filter((tag) => tag.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [availableTags, searchTerm]);
 
   const handleTagChange = (tag: Tag, checked: boolean) => {
@@ -66,9 +64,7 @@ const MultiSelectTag: React.FC<MultiSelectTagProps> = ({
                 {tag.logo && (
                   <Avatar className="h-4 w-4 mr-2">
                     <AvatarImage src={tag.logo} />
-                    <AvatarFallback>
-                      {tag.name.charAt(0).toUpperCase()}
-                    </AvatarFallback>
+                    <AvatarFallback>{tag.name.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 )}
                 {tag.name}
@@ -126,13 +122,13 @@ const CheckboxItem = React.memo(
         checked={checked}
         onCheckedChange={onCheckedChange}
         className={cn(
-          "flex h-5 w-5 items-center justify-center rounded border mr-3",
-          "data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500",
-          "focus:outline-none focus:ring-2 focus:ring-blue-500",
+          'flex h-5 w-5 items-center justify-center rounded border mr-3',
+          'data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500',
+          'focus:outline-none focus:ring-2 focus:ring-blue-500',
         )}
       >
         <Checkbox.Indicator>
-          <CheckIcon className="h-4 w-4 text-white" />
+          <Check className="h-4 w-4 text-white" />
         </Checkbox.Indicator>
       </Checkbox.Root>
 

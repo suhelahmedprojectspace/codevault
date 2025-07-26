@@ -1,17 +1,17 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import SnippetRequest from "./snippet/SnippetRequest";
-import BlogRequest from "./blog/BlogRequest";
-import CodeBuddyRequest from "./codebuddyrequest/page";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import axios from "@/lib/axios";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button"; // Import Button component
+'use client';
+import React, { useEffect, useState } from 'react';
+import SnippetRequest from './snippet/SnippetRequest';
+import BlogRequest from './blog/BlogRequest';
+import CodeBuddyRequest from './codebuddyrequest/page';
+import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
+import axios from '@/lib/axios';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button'; // Import Button component
 export default function RequestDashboard() {
   const [snippetCount, setSnippetCount] = useState<number | null>(null);
   const [blogCount, setBlogCount] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<"snippets" | "blogs" | "buddy">("snippets");
+  const [activeTab, setActiveTab] = useState<'snippets' | 'blogs' | 'buddy'>('snippets');
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCount = async () => {
@@ -21,7 +21,7 @@ export default function RequestDashboard() {
       setBlogCount(res.data.blogCount);
       setIsLoading(false);
     } catch (err) {
-      console.error("Failed to fetch notification counts", err);
+      console.error('Failed to fetch notification counts', err);
       setIsLoading(false);
     }
   };
@@ -33,16 +33,16 @@ export default function RequestDashboard() {
   }, [activeTab]);
 
   const handleTabChange = async (value: string) => {
-    if (value !== "snippets" && value !== "blogs" && value!=="buddy") return;
+    if (value !== 'snippets' && value !== 'blogs' && value !== 'buddy') return;
 
     setIsLoading(true);
     setActiveTab(value);
 
     try {
-      const type = value === "snippets" ? "SNIPPET" : "BLOG";
+      const type = value === 'snippets' ? 'SNIPPET' : 'BLOG';
       await axios.put(`/notifications/mark-read?type=${type}`);
 
-      if (type === "SNIPPET") {
+      if (type === 'SNIPPET') {
         setSnippetCount(0);
       } else {
         setBlogCount(0);
@@ -57,11 +57,11 @@ export default function RequestDashboard() {
   const markAllAsRead = async () => {
     setIsLoading(true);
     try {
-      await axios.put("/notifications");
+      await axios.put('/notifications');
       setSnippetCount(0);
       setBlogCount(0);
     } catch (err) {
-      console.error("Failed to mark all notifications as read", err);
+      console.error('Failed to mark all notifications as read', err);
     } finally {
       setIsLoading(false);
     }
@@ -70,11 +70,7 @@ export default function RequestDashboard() {
   return (
     <div className="pt-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full mx-auto">
-        <Tabs
-          value={activeTab}
-          onValueChange={handleTabChange}
-          className="w-full"
-        >
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 pb-4">
             <div className="flex justify-between items-center mb-4">
               <TabsList className="flex flex-wrap gap-2 w-full rounded-lg p-1 h-auto">
@@ -92,7 +88,7 @@ export default function RequestDashboard() {
                         {snippetCount}
                       </Badge>
                     )}
-                    {isLoading && activeTab === "snippets" && (
+                    {isLoading && activeTab === 'snippets' && (
                       <Skeleton className="h-4 w-4 rounded-full" />
                     )}
                   </span>
@@ -112,15 +108,12 @@ export default function RequestDashboard() {
                         {blogCount}
                       </Badge>
                     )}
-                    {isLoading && activeTab === "blogs" && (
+                    {isLoading && activeTab === 'blogs' && (
                       <Skeleton className="h-4 w-4 rounded-full" />
                     )}
                   </span>
                 </TabsTrigger>
 
-
-
-                
                 <TabsTrigger
                   value="buddy"
                   className="relative rounded-md transition-all duration-200 hover:bg-muted/50"
@@ -135,7 +128,7 @@ export default function RequestDashboard() {
                         {blogCount}
                       </Badge>
                     )} */}
-                    {isLoading && activeTab === "buddy" && (
+                    {isLoading && activeTab === 'buddy' && (
                       <Skeleton className="h-4 w-4 rounded-full" />
                     )}
                   </span>
@@ -144,11 +137,7 @@ export default function RequestDashboard() {
 
               {(snippetCount !== null && snippetCount > 0) ||
               (blogCount !== null && blogCount > 0) ? (
-                <Button
-                  variant="outline"
-                  onClick={markAllAsRead}
-                  disabled={isLoading}
-                >
+                <Button variant="outline" onClick={markAllAsRead} disabled={isLoading}>
                   Mark All as Read
                 </Button>
               ) : null}
@@ -188,10 +177,9 @@ export default function RequestDashboard() {
                   <Skeleton className="h-20 w-full" />
                 </div>
               ) : (
-                <CodeBuddyRequest/>
+                <CodeBuddyRequest />
               )}
             </TabsContent>
-            
           </div>
         </Tabs>
       </div>

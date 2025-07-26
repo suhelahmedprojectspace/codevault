@@ -1,19 +1,19 @@
-"use client";
-import { useEffect, useState } from "react";
-import MySnippets from "./mycode/page";
-import SharedSnippetsPage from "./sharedcode/page";
-import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import axios from "@/lib/axios";
+'use client';
+import { useEffect, useState } from 'react';
+import MySnippets from './mycode/page';
+import SharedSnippetsPage from './sharedcode/page';
+import { Tabs, TabsContent, TabsTrigger, TabsList } from '@/components/ui/tabs';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import axios from '@/lib/axios';
 
 const SnippetsPage = () => {
-  const [mysnippet, setMysnippet] = useState("");
-  const [sharedsnippet, setSharedSnippet] = useState("");
+  const [mysnippet, setMysnippet] = useState('');
+  const [sharedsnippet, setSharedSnippet] = useState('');
   useEffect(() => {
     const fetchSnippetLength = async () => {
-      const res = await axios.get("/snippet");
+      const res = await axios.get('/snippet');
       setMysnippet(res.data.user.snippetCollection);
       setSharedSnippet(res.data.user.allowedSnippets);
     };
@@ -61,7 +61,7 @@ const SnippetsPage = () => {
                 <span className="flex items-center gap-2">
                   <span>Shared Snippets</span>
                   <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs">
-                    {sharedsnippet.length || "0"}
+                    {sharedsnippet.length || '0'}
                   </span>
                 </span>
               </TabsTrigger>

@@ -1,15 +1,15 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import axios from "@/lib/axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import BlogHoverCard from "@/components/BlogHoverCard";
-import DeleteCard from "@/components/DeleteCard";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { Skeleton } from "@/components/ui/skeleton";
-import { format } from "date-fns";
-import { Edit2, Trash2, Plus } from "lucide-react";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import axios from '@/lib/axios';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import BlogHoverCard from '@/components/BlogHoverCard';
+import DeleteCard from '@/components/DeleteCard';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { Skeleton } from '@/components/ui/skeleton';
+import { format } from 'date-fns';
+import { Edit2, Trash2, Plus } from 'lucide-react';
 
 interface BlogItem {
   id: string;
@@ -35,10 +35,10 @@ const PublicBlog = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("/blog");
+        const response = await axios.get('/blog');
         setData(response.data.user);
       } catch (error) {
-        toast.error("Failed to load articles");
+        toast.error('Failed to load articles');
         console.error(error);
       } finally {
         setLoading(false);
@@ -52,7 +52,7 @@ const PublicBlog = () => {
     try {
       const res = await axios.delete(`/blog/${deleteId}`);
       if (res.status === 200) {
-        toast.success("Article deleted successfully");
+        toast.success('Article deleted successfully');
         setData((prev) =>
           prev
             ? {
@@ -63,7 +63,7 @@ const PublicBlog = () => {
         );
       }
     } catch (error) {
-      toast.error("Failed to delete article");
+      toast.error('Failed to delete article');
       console.error(error);
     } finally {
       setDialogOpen(false);
@@ -109,16 +109,11 @@ const PublicBlog = () => {
           <div className="bg-blue-100 dark:bg-blue-900/30 p-6 rounded-full">
             <span className="text-4xl">📝</span>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            No articles published yet
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight">No articles published yet</h2>
           <p className="text-muted-foreground max-w-md">
             Share your knowledge with the world by creating your first article.
           </p>
-          <Button
-            onClick={() => router.push("/dashboard/blog/createblog")}
-            className="gap-2 mt-4"
-          >
+          <Button onClick={() => router.push('/dashboard/blog/createblog')} className="gap-2 mt-4">
             <Plus className="w-4 h-4" />
             Create Article
           </Button>
@@ -129,14 +124,10 @@ const PublicBlog = () => {
             <div>
               <h1 className="text-2xl font-bold tracking-tight">My Articles</h1>
               <p className="text-muted-foreground">
-                {data?.blog.length}{" "}
-                {data?.blog.length === 1 ? "article" : "articles"} published
+                {data?.blog.length} {data?.blog.length === 1 ? 'article' : 'articles'} published
               </p>
             </div>
-            <Button
-              onClick={() => router.push("/dashboard/blog/createblog")}
-              className="gap-2"
-            >
+            <Button onClick={() => router.push('/dashboard/blog/createblog')} className="gap-2">
               <Plus className="w-4 h-4" />
               New Article
             </Button>
@@ -144,25 +135,18 @@ const PublicBlog = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2  gap-6">
             {data?.blog.map((article) => (
-              <Card
-                key={article.id}
-                className="hover:shadow-lg transition-shadow duration-200"
-              >
+              <Card key={article.id} className="hover:shadow-lg transition-shadow duration-200">
                 <CardHeader>
-                  <CardTitle className="line-clamp-2 text-lg">
-                    {article.title}
-                  </CardTitle>
+                  <CardTitle className="line-clamp-2 text-lg">{article.title}</CardTitle>
                   <p className="text-sm text-muted-foreground">
-                    {format(new Date(article.createdAt), "MMM d, yyyy")}
-                    {article.updatedAt &&
-                      article.updatedAt !== article.createdAt && (
-                        <span className="text-xs ml-2">(edited)</span>
-                      )}
+                    {format(new Date(article.createdAt), 'MMM d, yyyy')}
+                    {article.updatedAt && article.updatedAt !== article.createdAt && (
+                      <span className="text-xs ml-2">(edited)</span>
+                    )}
                   </p>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground line-clamp-3">
-                  {article.content.slice(0, 200) +
-                    (article.content.length > 200 ? "..." : "")}
+                  {article.content.slice(0, 200) + (article.content.length > 200 ? '...' : '')}
                 </CardContent>
                 <div className="p-4 flex justify-between items-center border-t">
                   <BlogHoverCard id={article.id} action="Read More" />
@@ -170,9 +154,7 @@ const PublicBlog = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() =>
-                        router.push(`/dashboard/blog/editblog/${article.id}`)
-                      }
+                      onClick={() => router.push(`/dashboard/blog/editblog/${article.id}`)}
                       className="text-blue-600 hover:bg-blue-50"
                     >
                       <Edit2 className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,9 +7,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "./ui/button";
-import axios from "@/lib/axios";
+} from '@/components/ui/dialog';
+import { Button } from './ui/button';
+import axios from '@/lib/axios';
 
 interface BlogItem {
   id: string;
@@ -28,7 +28,7 @@ const BlogHoverCard = ({ id, action }: { id: string; action: string }) => {
         const res = await axios.get(`/blog/${id}`);
         setData(res.data.getBlog);
       } catch (error) {
-        console.error("Error fetching blog data:", error);
+        console.error('Error fetching blog data:', error);
       }
     };
     fetchData();
@@ -44,9 +44,7 @@ const BlogHoverCard = ({ id, action }: { id: string; action: string }) => {
           <DialogHeader>
             <DialogTitle>{data.title}</DialogTitle>
           </DialogHeader>
-          <DialogDescription className="text-sm">
-            {data.content}
-          </DialogDescription>
+          <DialogDescription className="text-sm">{data.content}</DialogDescription>
         </DialogContent>
       ) : null}
     </Dialog>

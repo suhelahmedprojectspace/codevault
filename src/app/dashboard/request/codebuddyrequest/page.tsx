@@ -1,14 +1,14 @@
 'use client';
-import { useEffect, useState } from "react";
-import { useAppSelector } from "@/lib/store/store";
-import toast from "react-hot-toast";
-import axios from "@/lib/axios";
-import { Card, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useNotifications } from "@/hooks/use-notification";
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '@/lib/store/store';
+import toast from 'react-hot-toast';
+import axios from '@/lib/axios';
+import { Card, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useNotifications } from '@/hooks/use-notification';
 type NotificationPayload = {
-  type: "CONNECTION";
+  type: 'CONNECTION';
   id: string;
   requester: {
     email: string;
@@ -23,16 +23,16 @@ const CodeBuddyRequest = () => {
   const [data, setData] = useState<NotificationPayload[]>([]);
   const [loading, setLoading] = useState(true);
   const notifications = useAppSelector((state) => state.notifications.list);
-  const {fetchCounts}=useNotifications();
+  const { fetchCounts } = useNotifications();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/codebuddy/request');
         setData(response.data.request);
-        console.log(`aur ya fetcdata ka response ${response.data.request}`)
+        console.log(`aur ya fetcdata ka response ${response.data.request}`);
       } catch (error) {
-        toast.error("Failed to fetch code buddy requests.");
+        toast.error('Failed to fetch code buddy requests.');
       } finally {
         setLoading(false);
       }
@@ -40,30 +40,29 @@ const CodeBuddyRequest = () => {
     fetchData();
   }, []);
 
-  const handleAction = async (id: string,action:"APPROVED"|"REJECTED") => {
-   try {
-        const response=await axios.patch(`/codebuddy/request`,{requestId:id,status:action})
-        console.log(`ya handleAction ka id ha ${id}`)
-        toast.success(
-        action === "APPROVED"
-          ? "Request accepted successfully."
-          : "Request rejected."
-      );
-      setData((prev)=>prev.filter((req)=>req.id!==id));
+  const handleAction = async (id: string, action: 'APPROVED' | 'REJECTED') => {
+    try {
+      const response = await axios.patch(`/codebuddy/request`, {
+        requestId: id,
+        status: action,
+      });
+      console.log(`ya handleAction ka id ha ${id}`);
+      toast.success(action === 'APPROVED' ? 'Request accepted successfully.' : 'Request rejected.');
+      setData((prev) => prev.filter((req) => req.id !== id));
       fetchCounts();
-   } catch (error) {
-    toast.error("Something went wrong.");
+    } catch (error) {
+      toast.error('Something went wrong.');
       console.error(error);
-   }
+    }
   };
 
-//   useEffect(() => {
-//   const interval = setInterval(() => {
-//     fetchCounts();
-//   }, 30000); // every 30s
+  //   useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetchCounts();
+  //   }, 30000); // every 30s
 
-//   return () => clearInterval(interval);
-// }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-4">
@@ -89,7 +88,7 @@ const CodeBuddyRequest = () => {
           >
             <div className="flex items-center gap-4 w-full sm:w-auto">
               <img
-                src={request.requester.image ?? "/default-avatar.png"}
+                src={request.requester.image ?? '/default-avatar.png'}
                 alt={request.requester.username}
                 className="w-12 h-12 rounded-full border object-cover"
               />
@@ -104,16 +103,13 @@ const CodeBuddyRequest = () => {
             </div>
 
             <div className="flex gap-2 flex-wrap lg:justify-end justify-center">
-              <Button
-                size="sm"
-                onClick={() => handleAction(request.id,"APPROVED")}
-              >
+              <Button size="sm" onClick={() => handleAction(request.id, 'APPROVED')}>
                 Accept
               </Button>
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => handleAction(request.id,"REJECTED")}
+                onClick={() => handleAction(request.id, 'REJECTED')}
               >
                 Decline
               </Button>

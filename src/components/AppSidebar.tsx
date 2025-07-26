@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   CodeXml,
   ChevronDown,
@@ -11,56 +11,56 @@ import {
   Share,
   CircleUserRound,
   MessageSquareText,
-  MessageSquare
-} from "lucide-react";
-import Link from "next/link";
-import { signOut } from "next-auth/react";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useEffect, useState } from "react";
-import axios from "@/lib/axios";
-import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
-import ShareButton from "./ShareButton";
-import { useSession } from "next-auth/react";
-import { useNotifications } from "@/hooks/use-notification";
-import toast from "react-hot-toast";
+  MessageSquare,
+} from 'lucide-react';
+import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { useEffect, useState } from 'react';
+import axios from '@/lib/axios';
+import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
+import ShareButton from './ShareButton';
+import { useSession } from 'next-auth/react';
+import { useNotifications } from '@/hooks/use-notification';
+import toast from 'react-hot-toast';
 export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
   const session = useSession();
-  const[hasCodeBuddy,setHasCodeBuddy]=useState(false);
+  const [hasCodeBuddy, setHasCodeBuddy] = useState(false);
   const [hasPortfolio, setHasPortfolio] = useState(false);
-  const[loading,setLoading]=useState(true);
-  const { total ,fetchCounts} = useNotifications();
-  const [portfolioId, setPortfolioId] = useState("");
- useEffect(() => {
-    fetchCounts(); 
+  const [loading, setLoading] = useState(true);
+  const { total, fetchCounts } = useNotifications();
+  const [portfolioId, setPortfolioId] = useState('');
+  useEffect(() => {
+    fetchCounts();
   }, [fetchCounts]);
 
-  useEffect(()=>{
-    const init=async()=>{
+  useEffect(() => {
+    const init = async () => {
       try {
-        const portfolioRes=await axios.get("/porfolio/check");
+        const portfolioRes = await axios.get('/porfolio/check');
         setHasPortfolio(portfolioRes.data.hasPortfolio);
         setPortfolioId(portfolioRes.data.portfolioId);
-        const buddyRes=await axios.get('/chat/codebuddy');
+        const buddyRes = await axios.get('/chat/codebuddy');
         if (buddyRes.status === 200 && buddyRes.data.userWithBuddy?.codeBuddy) {
-        setHasCodeBuddy(true);
-      }
+          setHasCodeBuddy(true);
+        }
       } catch (error) {
-         console.error("Sidebar loading error:", error);
-      }finally{
-        setLoading(false)
+        console.error('Sidebar loading error:', error);
+      } finally {
+        setLoading(false);
       }
     };
-    init()
-  },[])
-  if(loading){
-    return(
+    init();
+  }, []);
+  if (loading) {
+    return (
       <aside className="min-h-screen w-64 bg-white dark:bg-gray-800 border-r border-gray-200  dark:border-gray-700 p-4 space-y-4">
-        {Array.from({length:9}).map((_,i)=>(
-             <div key={i} className="h-5  p-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4" />
+        {Array.from({ length: 9 }).map((_, i) => (
+          <div key={i} className="h-5  p-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4" />
         ))}
       </aside>
-    )
+    );
   }
   return (
     <aside className="min-h-screen top-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out">
@@ -92,9 +92,9 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
           <Link
             href="/dashboard"
             className={cn(
-              "flex items-center p-3 rounded-lg group",
-              "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-              "transition-colors duration-200",
+              'flex items-center p-3 rounded-lg group',
+              'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+              'transition-colors duration-200',
             )}
           >
             <svg
@@ -114,9 +114,9 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             <DropdownMenu.Trigger asChild>
               <button
                 className={cn(
-                  "flex items-center justify-between w-full p-3 rounded-lg group",
-                  "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-                  "transition-colors duration-200",
+                  'flex items-center justify-between w-full p-3 rounded-lg group',
+                  'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+                  'transition-colors duration-200',
                 )}
               >
                 <div className="flex items-center">
@@ -130,9 +130,9 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
               align="start"
               sideOffset={5}
               className={cn(
-                "min-w-[200px] rounded-md shadow-lg bg-white dark:bg-gray-700",
-                "border border-gray-200 dark:border-gray-600",
-                "animate-in slide-in-from-top-2 z-10",
+                'min-w-[200px] rounded-md shadow-lg bg-white dark:bg-gray-700',
+                'border border-gray-200 dark:border-gray-600',
+                'animate-in slide-in-from-top-2 z-10',
               )}
             >
               <DropdownMenu.Item className="p-0">
@@ -166,9 +166,9 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             <DropdownMenu.Trigger asChild>
               <button
                 className={cn(
-                  "flex items-center justify-between w-full p-3 rounded-lg group",
-                  "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-                  "transition-colors duration-200",
+                  'flex items-center justify-between w-full p-3 rounded-lg group',
+                  'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+                  'transition-colors duration-200',
                 )}
               >
                 <div className="flex items-center">
@@ -182,9 +182,9 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
               align="start"
               sideOffset={5}
               className={cn(
-                "min-w-[200px] rounded-md shadow-lg bg-white dark:bg-gray-700",
-                "border border-gray-200 dark:border-gray-600",
-                "animate-in slide-in-from-top-2 z-10",
+                'min-w-[200px] rounded-md shadow-lg bg-white dark:bg-gray-700',
+                'border border-gray-200 dark:border-gray-600',
+                'animate-in slide-in-from-top-2 z-10',
               )}
             >
               <DropdownMenu.Item className="p-0">
@@ -213,13 +213,13 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
-          
+
           <Link
             href="/dashboard/request"
             className={cn(
-              "flex items-center p-3 rounded-lg group",
-              "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-              "transition-colors duration-200 relative",
+              'flex items-center p-3 rounded-lg group',
+              'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+              'transition-colors duration-200 relative',
             )}
           >
             <div className="relative">
@@ -233,50 +233,48 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             <span className="ms-3">Requests</span>
           </Link>
 
-
-         {hasPortfolio ? (
-        <div className="space-y-2">
-          <Link
-            href="/portfolio/userprofile"
-            className={cn(
-              "flex items-center p-3 rounded-lg group",
-              "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-              "transition-colors duration-200 relative",
-            )}
-          >
-            <Briefcase className="h-5 w-5" />
-            <span className="ms-3">My Portfolio</span>
-          </Link>
-          <ShareButton portfolioId={portfolioId} />
-        </div>
-      ) : (
-        <Link
-          href={{
-            pathname: "/dashboard/portfolio",
-            query: { onSuccess: "handlePortfolioCreated" } 
-          }}
-          className={cn(
-            "flex items-center p-3 rounded-lg group",
-            "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-            "transition-colors duration-200 relative",
+          {hasPortfolio ? (
+            <div className="space-y-2">
+              <Link
+                href="/portfolio/userprofile"
+                className={cn(
+                  'flex items-center p-3 rounded-lg group',
+                  'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+                  'transition-colors duration-200 relative',
+                )}
+              >
+                <Briefcase className="h-5 w-5" />
+                <span className="ms-3">My Portfolio</span>
+              </Link>
+              <ShareButton portfolioId={portfolioId} />
+            </div>
+          ) : (
+            <Link
+              href={{
+                pathname: '/dashboard/portfolio',
+                query: { onSuccess: 'handlePortfolioCreated' },
+              }}
+              className={cn(
+                'flex items-center p-3 rounded-lg group',
+                'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+                'transition-colors duration-200 relative',
+              )}
+            >
+              <Briefcase className="h-5 w-5" />
+              <span className="ms-3">Create Portfolio</span>
+            </Link>
           )}
-        >
-          <Briefcase className="h-5 w-5" />
-          <span className="ms-3">Create Portfolio</span>
-        </Link>
-      )}
-         
+
           <div className="space-y-2">
- 
-  {/* {session.data?.user?.id && (
+            {/* {session.data?.user?.id && (
     <>
       <Bell/>
       <NotificationListener userId={session.data.user.id}/>
     </>
   )} */}
-</div>
+          </div>
 
-{/* <button 
+          {/* <button 
   onClick={() => toast.success('Test toast')}
   className="p-2 bg-blue-500 text-white rounded"
 >
@@ -287,9 +285,9 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             <Link
               href="/dashboard/account"
               className={cn(
-                "flex items-center p-3 rounded-lg group",
-                "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-                "transition-colors duration-200 relative",
+                'flex items-center p-3 rounded-lg group',
+                'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+                'transition-colors duration-200 relative',
               )}
             >
               <CircleUserRound className="h-5 w-5" />
@@ -297,30 +295,28 @@ export function AppSideBar({ closeSidebar }: { closeSidebar?: () => void }) {
             </Link>
           </div>
 
-
-    {hasCodeBuddy && (
-
-<div className="space-y-2">
-            <Link
-              href="/dashboard/chat"
-              className={cn(
-                "flex items-center p-3 rounded-lg group",
-                "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-                "transition-colors duration-200 relative",
-              )}
-            >
-              <MessageSquareText  className="h-5 w-5" />
-              <span className="ms-3">Chat</span>
-            </Link>
-          </div>
-)}
+          {hasCodeBuddy && (
+            <div className="space-y-2">
+              <Link
+                href="/dashboard/chat"
+                className={cn(
+                  'flex items-center p-3 rounded-lg group',
+                  'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+                  'transition-colors duration-200 relative',
+                )}
+              >
+                <MessageSquareText className="h-5 w-5" />
+                <span className="ms-3">Chat</span>
+              </Link>
+            </div>
+          )}
 
           <button
             onClick={() => signOut()}
             className={cn(
-              "flex items-center w-full p-3 rounded-lg group mt-4",
-              "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-gray-700",
-              "transition-colors duration-200",
+              'flex items-center w-full p-3 rounded-lg group mt-4',
+              'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-gray-700',
+              'transition-colors duration-200',
             )}
           >
             <LogOut className="w-5 h-5" />

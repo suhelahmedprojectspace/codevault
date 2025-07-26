@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,10 +7,10 @@ import {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, Loader2, Trash2 } from "lucide-react";
-import { motion } from "framer-motion";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, Loader2, Trash2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface Props {
   open: boolean;
@@ -28,10 +28,10 @@ const DeleteCard = ({
   open,
   onClose,
   onConfirm,
-  message = "This action cannot be undone. This will permanently delete the item.",
-  title = "Are you absolutely sure?",
-  confirmText = "Delete",
-  cancelText = "Cancel",
+  message = 'This action cannot be undone. This will permanently delete the item.',
+  title = 'Are you absolutely sure?',
+  confirmText = 'Delete',
+  cancelText = 'Cancel',
   isLoading = false,
   isDestructive = true,
 }: Props) => {
@@ -46,13 +46,11 @@ const DeleteCard = ({
           <DialogHeader className="space-y-4">
             <div className="flex items-center gap-3">
               <div
-                className={`p-2 rounded-full ${isDestructive ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}
+                className={`p-2 rounded-full ${isDestructive ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary'}`}
               >
                 <AlertTriangle className="h-5 w-5" />
               </div>
-              <DialogTitle className="text-lg font-semibold">
-                {title}
-              </DialogTitle>
+              <DialogTitle className="text-lg font-semibold">{title}</DialogTitle>
             </div>
           </DialogHeader>
 
@@ -70,7 +68,7 @@ const DeleteCard = ({
               {cancelText}
             </Button>
             <Button
-              variant={isDestructive ? "destructive" : "default"}
+              variant={isDestructive ? 'destructive' : 'default'}
               onClick={onConfirm}
               disabled={isLoading}
               className="px-4 gap-2"

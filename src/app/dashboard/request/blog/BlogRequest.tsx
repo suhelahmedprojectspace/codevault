@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import axios from "@/lib/axios";
+import React, { useEffect, useState } from 'react';
+import axios from '@/lib/axios';
 import {
   Card,
   CardContent,
@@ -9,19 +9,19 @@ import {
   CardTitle,
   CardHeader,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import toast from "react-hot-toast";
-import UserHoverCard from "@/components/UserHoverCard";
-import { Check, X, Clock, ChevronDown, ChevronUp } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { format } from "date-fns";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import toast from 'react-hot-toast';
+import UserHoverCard from '@/components/UserHoverCard';
+import { Check, X, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { format } from 'date-fns';
 
 interface Blog {
   id: string;
   createdAt: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
   blog: {
     id: string;
     title: string;
@@ -45,11 +45,11 @@ const BlogRequest = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("/blog/request");
+        const response = await axios.get('/blog/request');
         setBlogs(response.data.request);
       } catch (error) {
-        toast.error("Failed to fetch blog requests");
-        console.error("Fetch error:", error);
+        toast.error('Failed to fetch blog requests');
+        console.error('Fetch error:', error);
       } finally {
         setLoading(false);
       }
@@ -58,20 +58,16 @@ const BlogRequest = () => {
     fetchData();
   }, []);
 
-  const handleAction = async (id: string, action: "APPROVED" | "REJECTED") => {
+  const handleAction = async (id: string, action: 'APPROVED' | 'REJECTED') => {
     try {
-      await axios.put("/blog/request", { requestId: id, status: action });
-      setBlogs((prev) =>
-        prev.map((req) => (req.id === id ? { ...req, status: action } : req)),
-      );
+      await axios.put('/blog/request', { requestId: id, status: action });
+      setBlogs((prev) => prev.map((req) => (req.id === id ? { ...req, status: action } : req)));
       toast.success(
-        action === "APPROVED"
-          ? "Blog access approved successfully"
-          : "Request rejected",
+        action === 'APPROVED' ? 'Blog access approved successfully' : 'Request rejected',
       );
     } catch (error) {
-      toast.error("Action failed");
-      console.error("Action error:", error);
+      toast.error('Action failed');
+      console.error('Action error:', error);
     }
   };
 
@@ -100,12 +96,8 @@ const BlogRequest = () => {
     <div className="w-full max-w-4xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Blog Access Requests
-          </h1>
-          <p className="text-muted-foreground">
-            Manage requests to access your private blog posts
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight">Blog Access Requests</h1>
+          <p className="text-muted-foreground">Manage requests to access your private blog posts</p>
         </div>
         <Button variant="outline" onClick={() => window.location.reload()}>
           Refresh
@@ -131,25 +123,22 @@ const BlogRequest = () => {
                   <div>
                     <CardTitle>{blog.blog.title}</CardTitle>
                     <CardDescription className="mt-1">
-                      Created:{" "}
-                      {format(new Date(blog.blog.createdAt), "MMM d, yyyy")}
+                      Created: {format(new Date(blog.blog.createdAt), 'MMM d, yyyy')}
                     </CardDescription>
                   </div>
                   <Badge
                     variant={
-                      blog.status === "APPROVED"
-                        ? "default"
-                        : blog.status === "REJECTED"
-                          ? "destructive"
-                          : "secondary"
+                      blog.status === 'APPROVED'
+                        ? 'default'
+                        : blog.status === 'REJECTED'
+                          ? 'destructive'
+                          : 'secondary'
                     }
                     className="flex items-center gap-1"
                   >
-                    {blog.status === "PENDING" && <Clock className="h-3 w-3" />}
-                    {blog.status === "APPROVED" && (
-                      <Check className="h-3 w-3" />
-                    )}
-                    {blog.status === "REJECTED" && <X className="h-3 w-3" />}
+                    {blog.status === 'PENDING' && <Clock className="h-3 w-3" />}
+                    {blog.status === 'APPROVED' && <Check className="h-3 w-3" />}
+                    {blog.status === 'REJECTED' && <X className="h-3 w-3" />}
                     {blog.status}
                   </Badge>
                 </div>
@@ -166,7 +155,7 @@ const BlogRequest = () => {
                     />
                   </div>
                   <span className="text-muted-foreground">
-                    {format(new Date(blog.createdAt), "MMM d, yyyy - h:mm a")}
+                    {format(new Date(blog.createdAt), 'MMM d, yyyy - h:mm a')}
                   </span>
                 </div>
 
@@ -184,9 +173,7 @@ const BlogRequest = () => {
                     size="sm"
                     className="gap-1 text-muted-foreground"
                     onClick={() =>
-                      setExpandedId((prev) =>
-                        prev === blog.blog.id ? null : blog.blog.id,
-                      )
+                      setExpandedId((prev) => (prev === blog.blog.id ? null : blog.blog.id))
                     }
                   >
                     {expandedId === blog.blog.id ? (
@@ -204,20 +191,17 @@ const BlogRequest = () => {
                 )}
               </CardContent>
 
-              {blog.status === "PENDING" && (
+              {blog.status === 'PENDING' && (
                 <CardFooter className="flex justify-end gap-2 bg-muted/50 p-4">
                   <Button
                     variant="outline"
-                    onClick={() => handleAction(blog.id, "REJECTED")}
+                    onClick={() => handleAction(blog.id, 'REJECTED')}
                     className="gap-2"
                   >
                     <X className="h-4 w-4" />
                     Reject
                   </Button>
-                  <Button
-                    onClick={() => handleAction(blog.id, "APPROVED")}
-                    className="gap-2"
-                  >
+                  <Button onClick={() => handleAction(blog.id, 'APPROVED')} className="gap-2">
                     <Check className="h-4 w-4" />
                     Approve
                   </Button>

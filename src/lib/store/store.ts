@@ -1,8 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
-import formReducer from "@/redux/portfolioSlice";
-import notificationReducer from "@/redux/notificationSlice";
+import formReducer from '@/redux/portfolioSlice';
+import notificationReducer from '@/redux/notificationSlice';
 
 export const store = configureStore({
   reducer: {

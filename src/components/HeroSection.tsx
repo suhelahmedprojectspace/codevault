@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+'use client';
+import React from 'react';
+import { Button } from './ui/button';
+import { useRouter } from 'next/navigation';
 
 const HeroSection = () => {
   const router = useRouter();
@@ -33,15 +33,15 @@ const HeroSection = () => {
         </h2>
 
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-          Store private snippets, share public code, and organize technical
-          resources - all with enterprise-grade security and intuitive search.
+          Store private snippets, share public code, and organize technical resources - all with
+          enterprise-grade security and intuitive search.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
             size="lg"
             className="shadow-md hover:shadow-lg transition-all"
-            onClick={() => router.push("/signup")}
+            onClick={() => router.push('/signup')}
           >
             Start For Free
           </Button>
@@ -49,7 +49,7 @@ const HeroSection = () => {
             variant="outline"
             size="lg"
             className="border-2 hover:bg-accent/10"
-            onClick={() => router.push("/signup")}
+            onClick={() => router.push('/signup')}
           >
             See How It Works
           </Button>
@@ -76,12 +76,7 @@ const HeroSection = () => {
 
 // Reusable icons
 const LockIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -92,12 +87,7 @@ const LockIcon = ({ className }: { className?: string }) => (
 );
 
 const CodeIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -108,12 +98,7 @@ const CodeIcon = ({ className }: { className?: string }) => (
 );
 
 const CloudIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"

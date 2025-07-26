@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import axios from "@/lib/axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import BlogHoverCard from "@/components/BlogHoverCard";
-import { Skeleton } from "@/components/ui/skeleton";
-import { format } from "date-fns";
-import { Share2, BookOpen } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import React, { useState, useEffect } from 'react';
+import axios from '@/lib/axios';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import BlogHoverCard from '@/components/BlogHoverCard';
+import { Skeleton } from '@/components/ui/skeleton';
+import { format } from 'date-fns';
+import { Share2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 interface BlogItem {
   id: string;
@@ -29,16 +29,15 @@ const SharedBlog = () => {
   const [data, setData] = useState<BlogData | null>(null);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("/blog");
+        const response = await axios.get('/blog');
         setData(response.data.user);
       } catch (error) {
-        toast.error("Failed to load shared articles");
+        toast.error('Failed to load shared articles');
         console.error(error);
       } finally {
         setLoading(false);
@@ -50,7 +49,7 @@ const SharedBlog = () => {
   const copyToClipboard = (id: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/blog/${id}`);
     setCopiedId(id);
-    toast.success("Link copied to clipboard");
+    toast.success('Link copied to clipboard');
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -84,9 +83,7 @@ const SharedBlog = () => {
           <div className="bg-blue-100 dark:bg-blue-900/30 p-6 rounded-full">
             <span className="text-4xl">📬</span>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            No shared articles yet
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight">No shared articles yet</h2>
           <p className="text-muted-foreground max-w-md">
             When someone shares an article with you, it will appear here.
           </p>
@@ -94,29 +91,21 @@ const SharedBlog = () => {
       ) : (
         <>
           <div className="mb-8">
-            <h1 className="text-2xl font-bold tracking-tight">
-              Shared With Me
-            </h1>
+            <h1 className="text-2xl font-bold tracking-tight">Shared With Me</h1>
             <p className="text-muted-foreground">
-              {data?.allowedBlog.length}{" "}
-              {data?.allowedBlog.length === 1 ? "article" : "articles"} shared
-              with you
+              {data?.allowedBlog.length} {data?.allowedBlog.length === 1 ? 'article' : 'articles'}{' '}
+              shared with you
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2  gap-6">
             {data?.allowedBlog.map((article) => (
-              <Card
-                key={article.id}
-                className="hover:shadow-lg transition-shadow duration-200"
-              >
+              <Card key={article.id} className="hover:shadow-lg transition-shadow duration-200">
                 <CardHeader>
-                  <CardTitle className="line-clamp-2 text-lg">
-                    {article.title}
-                  </CardTitle>
+                  <CardTitle className="line-clamp-2 text-lg">{article.title}</CardTitle>
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-muted-foreground">
-                      {format(new Date(article.createdAt), "MMM d, yyyy")}
+                      {format(new Date(article.createdAt), 'MMM d, yyyy')}
                     </p>
                     {article.author && (
                       <span className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
@@ -126,8 +115,7 @@ const SharedBlog = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground line-clamp-3">
-                  {article.content.slice(0, 200) +
-                    (article.content.length > 200 ? "..." : "")}
+                  {article.content.slice(0, 200) + (article.content.length > 200 ? '...' : '')}
                 </CardContent>
                 <div className="p-4 flex justify-between items-center border-t">
                   <BlogHoverCard id={article.id} action="Read Full Article" />
@@ -136,11 +124,7 @@ const SharedBlog = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => copyToClipboard(article.id)}
-                      className={
-                        copiedId === article.id
-                          ? "bg-green-50 text-green-600"
-                          : ""
-                      }
+                      className={copiedId === article.id ? 'bg-green-50 text-green-600' : ''}
                     >
                       <Share2 className="h-4 w-4" />
                     </Button>

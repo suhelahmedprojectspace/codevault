@@ -1,30 +1,23 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  atomDark,
-  materialOceanic,
-} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { Globe, Lock, Copy, Search, Filter, Share2 } from "lucide-react";
-import axios from "@/lib/axios";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import React, { useState, useEffect } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark, materialOceanic } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { Globe, Lock, Copy, Search, Filter, Share2 } from 'lucide-react';
+import axios from '@/lib/axios';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { toast } from "react-hot-toast";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { toast } from 'react-hot-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Snippet {
   id: string;
@@ -44,10 +37,10 @@ const SharedSnippetsPage = () => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [filteredSnippets, setFilteredSnippets] = useState<Snippet[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFramework, setSelectedFramework] = useState<string>("all");
-  const [selectedVisibility, setSelectedVisibility] = useState<string>("all");
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFramework, setSelectedFramework] = useState<string>('all');
+  const [selectedVisibility, setSelectedVisibility] = useState<string>('all');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -56,24 +49,18 @@ const SharedSnippetsPage = () => {
 
   useEffect(() => {
     filterSnippets();
-  }, [
-    snippets,
-    searchQuery,
-    selectedFramework,
-    selectedVisibility,
-    selectedLanguage,
-  ]);
+  }, [snippets, searchQuery, selectedFramework, selectedVisibility, selectedLanguage]);
 
   const fetchSnippets = async (): Promise<void> => {
     try {
       setLoading(true);
-      const res = await axios.get("/snippet");
+      const res = await axios.get('/snippet');
       // Use allowedSnippets instead of snippetCollection
       setSnippets(res.data.user.allowedSnippets || []);
-      console.log("Shared snippets:", res.data.user.allowedSnippets);
+      console.log('Shared snippets:', res.data.user.allowedSnippets);
     } catch (error) {
-      console.error("Error fetching shared snippets", error);
-      toast.error("Failed to load shared snippets");
+      console.error('Error fetching shared snippets', error);
+      toast.error('Failed to load shared snippets');
     } finally {
       setLoading(false);
     }
@@ -88,31 +75,21 @@ const SharedSnippetsPage = () => {
           snippet.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           snippet.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
           (snippet.description &&
-            snippet.description
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())) ||
-          snippet.tags?.some((tag) =>
-            tag.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
+            snippet.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          snippet.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())),
       );
     }
 
-    if (selectedFramework !== "all") {
-      result = result.filter(
-        (snippet) => snippet.framework === selectedFramework,
-      );
+    if (selectedFramework !== 'all') {
+      result = result.filter((snippet) => snippet.framework === selectedFramework);
     }
 
-    if (selectedVisibility !== "all") {
-      result = result.filter(
-        (snippet) => snippet.visibility === selectedVisibility,
-      );
+    if (selectedVisibility !== 'all') {
+      result = result.filter((snippet) => snippet.visibility === selectedVisibility);
     }
 
-    if (selectedLanguage !== "all") {
-      result = result.filter(
-        (snippet) => snippet.language === selectedLanguage,
-      );
+    if (selectedLanguage !== 'all') {
+      result = result.filter((snippet) => snippet.language === selectedLanguage);
     }
 
     setFilteredSnippets(result);
@@ -121,7 +98,7 @@ const SharedSnippetsPage = () => {
   const copyToClipboard = (content: string, id: string) => {
     navigator.clipboard.writeText(content);
     setCopiedId(id);
-    toast.success("Copied to clipboard");
+    toast.success('Copied to clipboard');
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -129,18 +106,16 @@ const SharedSnippetsPage = () => {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: "Check out this code snippet",
-          text: "I found this interesting code snippet you might like",
+          title: 'Check out this code snippet',
+          text: 'I found this interesting code snippet you might like',
           url: `${window.location.origin}/snippet/${id}`,
         });
       } else {
-        navigator.clipboard.writeText(
-          `${window.location.origin}/snippet/${id}`,
-        );
-        toast.success("Link copied to clipboard");
+        navigator.clipboard.writeText(`${window.location.origin}/snippet/${id}`);
+        toast.success('Link copied to clipboard');
       }
     } catch (err) {
-      console.error("Error sharing:", err);
+      console.error('Error sharing:', err);
     }
   };
 
@@ -150,7 +125,7 @@ const SharedSnippetsPage = () => {
       new Set(
         values
           .flatMap((value) => (Array.isArray(value) ? value : [value]))
-          .filter((v) => typeof v === "string"),
+          .filter((v) => typeof v === 'string'),
       ),
     );
   };
@@ -185,10 +160,7 @@ const SharedSnippetsPage = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <Select
-            value={selectedFramework}
-            onValueChange={setSelectedFramework}
-          >
+          <Select value={selectedFramework} onValueChange={setSelectedFramework}>
             <SelectTrigger className="w-[180px]">
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4" />
@@ -197,7 +169,7 @@ const SharedSnippetsPage = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Frameworks</SelectItem>
-              {getUniqueValues("framework").map((framework) => (
+              {getUniqueValues('framework').map((framework) => (
                 <SelectItem key={framework} value={framework}>
                   {framework}
                 </SelectItem>
@@ -214,7 +186,7 @@ const SharedSnippetsPage = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Languages</SelectItem>
-              {getUniqueValues("language").map((language) => (
+              {getUniqueValues('language').map((language) => (
                 <SelectItem key={language} value={language}>
                   {language}
                 </SelectItem>
@@ -222,10 +194,7 @@ const SharedSnippetsPage = () => {
             </SelectContent>
           </Select>
 
-          <Select
-            value={selectedVisibility}
-            onValueChange={setSelectedVisibility}
-          >
+          <Select value={selectedVisibility} onValueChange={setSelectedVisibility}>
             <SelectTrigger className="w-[180px]">
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4" />
@@ -247,8 +216,8 @@ const SharedSnippetsPage = () => {
           <h2 className="text-xl font-semibold">No shared snippets found</h2>
           <p className="text-muted-foreground max-w-md">
             {snippets.length === 0
-              ? "No one has shared any snippets with you yet."
-              : "No snippets match your current filters. Try adjusting your search criteria."}
+              ? 'No one has shared any snippets with you yet.'
+              : 'No snippets match your current filters. Try adjusting your search criteria.'}
           </p>
         </div>
       ) : (
@@ -260,15 +229,10 @@ const SharedSnippetsPage = () => {
             >
               <div className="flex justify-between items-start p-4">
                 <div className="space-y-1">
-                  <h3 className="text-lg font-semibold line-clamp-1">
-                    {snippet.title}
-                  </h3>
+                  <h3 className="text-lg font-semibold line-clamp-1">{snippet.title}</h3>
 
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span>
-                      Shared on{" "}
-                      {new Date(snippet.createdAt).toLocaleDateString()}
-                    </span>
+                    <span>Shared on {new Date(snippet.createdAt).toLocaleDateString()}</span>
                     {snippet.updatedAt !== snippet.createdAt && (
                       <span className="text-xs">(edited)</span>
                     )}
@@ -278,7 +242,7 @@ const SharedSnippetsPage = () => {
                   <Badge variant="outline" className="font-mono text-xs">
                     {snippet.framework}
                   </Badge>
-                  {snippet.visibility === "public" ? (
+                  {snippet.visibility === 'public' ? (
                     <Tooltip>
                       <TooltipTrigger>
                         <Globe className="w-4 h-4 text-blue-500" />
@@ -308,13 +272,13 @@ const SharedSnippetsPage = () => {
 
               <div className="relative flex-1 overflow-auto max-h-60">
                 <SyntaxHighlighter
-                  language={snippet.language || "javascript"}
+                  language={snippet.language || 'javascript'}
                   style={materialOceanic}
                   customStyle={{
                     margin: 0,
                     borderRadius: 0,
-                    height: "100%",
-                    fontSize: "0.8rem",
+                    height: '100%',
+                    fontSize: '0.8rem',
                   }}
                   showLineNumbers
                 >
@@ -326,16 +290,12 @@ const SharedSnippetsPage = () => {
                   className="absolute top-2 right-2 h-8 w-8"
                   onClick={() => copyToClipboard(snippet.content, snippet.id)}
                 >
-                  <Copy
-                    className={`h-4 w-4 ${copiedId === snippet.id ? "text-green-500" : ""}`}
-                  />
+                  <Copy className={`h-4 w-4 ${copiedId === snippet.id ? 'text-green-500' : ''}`} />
                 </Button>
               </div>
 
               <div className="flex justify-between items-center p-4 border-t">
-                <div className="text-xs text-muted-foreground">
-                  {snippet.language}
-                </div>
+                <div className="text-xs text-muted-foreground">{snippet.language}</div>
                 <div className="flex gap-2">
                   <Tooltip>
                     <TooltipTrigger asChild>

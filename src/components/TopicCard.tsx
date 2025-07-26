@@ -1,6 +1,6 @@
-"use client";
-import React from "react";
-import Link from "next/link";
+'use client';
+import React from 'react';
+import Link from 'next/link';
 
 interface Question {
   Topic: string;
@@ -26,9 +26,7 @@ interface TopicCardProps {
 }
 
 const TopicCard: React.FC<TopicCardProps> = ({ topic, onClick }) => {
-  const progressPercentage = Math.round(
-    (topic.doneQuestions / topic.questions.length) * 100,
-  );
+  const progressPercentage = Math.round((topic.doneQuestions / topic.questions.length) * 100);
 
   return (
     <div
@@ -37,9 +35,7 @@ const TopicCard: React.FC<TopicCardProps> = ({ topic, onClick }) => {
     >
       <div className="p-4">
         <div className="flex justify-between items-start">
-          <h3 className="font-semibold text-lg text-gray-800">
-            {topic.topicName}
-          </h3>
+          <h3 className="font-semibold text-lg text-gray-800">{topic.topicName}</h3>
           <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
             {topic.questions.length} problems
           </span>
@@ -49,8 +45,7 @@ const TopicCard: React.FC<TopicCardProps> = ({ topic, onClick }) => {
           <div className="flex justify-between text-sm text-gray-600 mb-1">
             <span>Progress</span>
             <span className="font-medium">
-              {topic.doneQuestions}/{topic.questions.length} (
-              {progressPercentage}%)
+              {topic.doneQuestions}/{topic.questions.length} ({progressPercentage}%)
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5">

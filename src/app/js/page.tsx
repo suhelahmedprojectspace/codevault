@@ -1,8 +1,8 @@
-"use client";
-import { JSQuestions } from "@/data/interview";
-import React, { useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+'use client';
+import { JSQuestions } from '@/data/interview';
+import React, { useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface Question {
   id: number;
@@ -12,21 +12,17 @@ interface Question {
 }
 
 const InterviewPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
-  const categories = [
-    "All",
-    ...new Set(JSQuestions.questions.map((q) => q.category)),
-  ];
+  const categories = ['All', ...new Set(JSQuestions.questions.map((q) => q.category))];
 
   const filteredQuestions = JSQuestions.questions.filter((q) => {
     const matchesSearch =
       q.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
       q.answer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || q.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || q.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -38,8 +34,8 @@ const InterviewPage = () => {
     const parts = answer.split(/(```[\s\S]*?```)/g);
 
     return parts.map((part, index) => {
-      if (part.startsWith("```") && part.endsWith("```")) {
-        const code = part.replace(/```[a-z]*\n/, "").replace(/```$/, "");
+      if (part.startsWith('```') && part.endsWith('```')) {
+        const code = part.replace(/```[a-z]*\n/, '').replace(/```$/, '');
         return (
           <SyntaxHighlighter
             key={index}
@@ -52,25 +48,22 @@ const InterviewPage = () => {
           </SyntaxHighlighter>
         );
       } else {
-        const lines = part.split("\n");
+        const lines = part.split('\n');
         return lines.map((line, lineIndex) => {
-          if (line.startsWith("**") && line.endsWith("**")) {
+          if (line.startsWith('**') && line.endsWith('**')) {
             return <strong key={lineIndex}>{line.slice(2, -2)}</strong>;
-          } else if (line.includes("|") && line.includes("-")) {
+          } else if (line.includes('|') && line.includes('-')) {
             // Simple table rendering
-            const rows = part.split("\n").filter((l) => l.includes("|"));
+            const rows = part.split('\n').filter((l) => l.includes('|'));
             return (
-              <table
-                key={lineIndex}
-                className="min-w-full my-4 border-collapse"
-              >
+              <table key={lineIndex} className="min-w-full my-4 border-collapse">
                 <tbody>
                   {rows.map((row, rowIndex) => (
                     <tr key={rowIndex}>
-                      {row.split("|").map((cell, cellIndex) => (
+                      {row.split('|').map((cell, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className={`border px-4 py-2 ${rowIndex === 0 ? "font-bold bg-gray-100" : ""}`}
+                          className={`border px-4 py-2 ${rowIndex === 0 ? 'font-bold bg-gray-100' : ''}`}
                         >
                           {cell.trim()}
                         </td>
@@ -96,12 +89,9 @@ const InterviewPage = () => {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            JavaScript Interview Questions
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">JavaScript Interview Questions</h1>
           <p className="text-lg text-gray-600">
-            {JSQuestions.questions.length} curated questions to prepare for your
-            next interview
+            {JSQuestions.questions.length} curated questions to prepare for your next interview
           </p>
         </div>
 
@@ -114,11 +104,7 @@ const InterviewPage = () => {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -155,8 +141,7 @@ const InterviewPage = () => {
             </div>
           </div>
           <div className="text-sm text-gray-500">
-            Showing {filteredQuestions.length} of {JSQuestions.questions.length}{" "}
-            questions
+            Showing {filteredQuestions.length} of {JSQuestions.questions.length} questions
           </div>
         </div>
 
@@ -164,10 +149,7 @@ const InterviewPage = () => {
         <div className="space-y-4">
           {filteredQuestions.length > 0 ? (
             filteredQuestions.map((q) => (
-              <div
-                key={q.id}
-                className="bg-white overflow-hidden shadow rounded-lg"
-              >
+              <div key={q.id} className="bg-white overflow-hidden shadow rounded-lg">
                 <div
                   className="px-4 py-5 sm:p-6 cursor-pointer flex justify-between items-start"
                   onClick={() => toggleAnswer(q.id)}
@@ -176,9 +158,7 @@ const InterviewPage = () => {
                     <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mb-2">
                       {q.category}
                     </span>
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {q.question}
-                    </h3>
+                    <h3 className="text-lg font-medium text-gray-900">{q.question}</h3>
                   </div>
                   <button
                     className="ml-4 flex-shrink-0"
@@ -242,12 +222,9 @@ const InterviewPage = () => {
                   d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h3 className="mt-2 text-lg font-medium text-gray-900">
-                No questions found
-              </h3>
+              <h3 className="mt-2 text-lg font-medium text-gray-900">No questions found</h3>
               <p className="mt-1 text-gray-500">
-                Try adjusting your search or filter to find what you're looking
-                for.
+                Try adjusting your search or filter to find what you're looking for.
               </p>
             </div>
           )}

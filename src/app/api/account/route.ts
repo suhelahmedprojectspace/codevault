@@ -1,59 +1,48 @@
-import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import fs from "fs";
-import { unlink } from "fs/promises";
-import path from "path";
-import { z } from "zod";
-import { v4 as uuid } from "uuid";
-import bcrypt from "bcryptjs";
-import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
+import prisma from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { NextResponse } from 'next/server';
+import { unlink } from 'fs/promises';
+import path from 'path';
+import bcrypt from 'bcryptjs';
+import { uploadToCloudinary } from '@/lib/uploadToCloudinary';
 
-const ProfileSchema = z.object({
-  username: z.string(),
-  email: z.string().email(),
-  password: z.string().min(6),
-});
+// const ProfileSchema = z.object({
+//   username: z.string(),
+//   email: z.string().email(),
+//   password: z.string().min(6),
+// });
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ALLOWED_MINI_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const ALLOWED_MINI_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
+// async function handleFileUpload(file: File | null, oldPath?: string) {
+//   if (!file) return undefined;
+//   if (!ALLOWED_MINI_TYPES.includes(file.type)) {
+//     throw new Error("Invalid file type");
+//   }
+//   if (file.size > MAX_FILE_SIZE) {
+//     throw new Error("File too large");
+//   }
 
-async function handleFileUpload(file: File | null, oldPath?: string) {
-  if (!file) return undefined;
-  if (!ALLOWED_MINI_TYPES.includes(file.type)) {
-    throw new Error("Invalid file type");
-  }
-  if (file.size > MAX_FILE_SIZE) {
-    throw new Error("File too large");
-  }
-  
-  const uploaded=await uploadToCloudinary(file) as  { secure_url: string };
-  return uploaded.secure_url;
-}
-export async function GET(req: Request) {
+//   const uploaded=await uploadToCloudinary(file) as  { secure_url: string };
+//   return uploaded.secure_url;
+// }
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ messaage: "Unathorised" }, { status: 403 });
+      return NextResponse.json({ messaage: 'Unathorised' }, { status: 403 });
     }
     const user = await prisma.user.findUnique({
       where: {
         id: session.user.id,
       },
     });
-    return NextResponse.json(
-      { message: "Account Fetched", user },
-      { status: 200 },
-    );
+    return NextResponse.json({ message: 'Account Fetched', user }, { status: 200 });
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -61,13 +50,13 @@ export async function PATCH(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     const formData = await req.formData();
-    const file = formData.get("image") as File | null;
-    const password = formData.get("password") as string | null;
-    const username = formData.get("username") as string | null;
+    const file = formData.get('image') as File | null;
+    const password = formData.get('password') as string | null;
+    const username = formData.get('username') as string | null;
 
     const updateData: {
       username?: string;
@@ -89,11 +78,8 @@ export async function PATCH(req: Request) {
           updateData.image = result.secure_url;
         }
       } catch (error) {
-        console.error("Cloudinary upload error:", error);
-        return NextResponse.json(
-          { message: "Failed to upload image" },
-          { status: 500 }
-        );
+        console.error('Cloudinary upload error:', error);
+        return NextResponse.json({ message: 'Failed to upload image' }, { status: 500 });
       }
     }
 
@@ -109,23 +95,20 @@ export async function PATCH(req: Request) {
     });
 
     return NextResponse.json(
-      { message: "Profile updated successfully", user: updatedUser },
-      { status: 200 }
+      { message: 'Profile updated successfully', user: updatedUser },
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Profile update error:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error('Profile update error:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
-export async function DELETE(req: Request) {
+export async function DELETE() {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
@@ -138,7 +121,7 @@ export async function DELETE(req: Request) {
     });
 
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
     await prisma.$transaction(async (tx) => {
@@ -163,15 +146,11 @@ export async function DELETE(req: Request) {
       });
 
       if (user.portfolio?.profile) {
-        const imagePath = path.join(
-          process.cwd(),
-          "public",
-          user.portfolio.profile,
-        );
+        const imagePath = path.join(process.cwd(), 'public', user.portfolio.profile);
         try {
           await unlink(imagePath);
         } catch (err) {
-          console.error("Failed to delete portfolio image:", err);
+          console.error('Failed to delete portfolio image:', err);
         }
       }
       await tx.portfolio.deleteMany({
@@ -180,19 +159,13 @@ export async function DELETE(req: Request) {
 
       await tx.snippet.deleteMany({
         where: {
-          OR: [
-            { authorid: user.id },
-            { allowedUsers: { some: { id: user.id } } },
-          ],
+          OR: [{ authorid: user.id }, { allowedUsers: { some: { id: user.id } } }],
         },
       });
 
       await tx.blog.deleteMany({
         where: {
-          OR: [
-            { authorId: user.id },
-            { allowedUsers: { some: { id: user.id } } },
-          ],
+          OR: [{ authorId: user.id }, { allowedUsers: { some: { id: user.id } } }],
         },
       });
 
@@ -210,14 +183,11 @@ export async function DELETE(req: Request) {
     });
 
     return NextResponse.json(
-      { message: "Account and all associated data deleted successfully" },
+      { message: 'Account and all associated data deleted successfully' },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Account deletion error:", error);
-    return NextResponse.json(
-      { message: "Failed to delete account" },
-      { status: 500 },
-    );
+    console.error('Account deletion error:', error);
+    return NextResponse.json({ message: 'Failed to delete account' }, { status: 500 });
   }
 }

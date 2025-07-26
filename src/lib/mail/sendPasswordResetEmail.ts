@@ -1,10 +1,10 @@
-import { transporter } from "./transporter";
-import { PasswordResetToken } from "@prisma/client";
-import prisma from "../prisma";
-import crypto from "crypto";
+import { transporter } from './transporter';
+import { PasswordResetToken } from '@prisma/client';
+import prisma from '../prisma';
+import crypto from 'crypto';
 
 export async function sendPasswordResetEmail(email: string) {
-  const token = crypto.randomBytes(32).toString("hex");
+  const token = crypto.randomBytes(32).toString('hex');
 
   const expires = new Date(Date.now() + 1000 * 60 * 15);
   await prisma.passwordResetToken.create({
@@ -18,7 +18,7 @@ export async function sendPasswordResetEmail(email: string) {
   await transporter.sendMail({
     from: `"CodeVault Support" <${process.env.SMTP_USER}>`,
     to: email,
-    subject: "Reset your password",
+    subject: 'Reset your password',
     html: `
       <p>Click below to reset your password:</p>
       <a href="${resetLink}">${resetLink}</a>

@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Globe, Lock, Copy, Check, CircleUser, Search } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Globe, Lock, Copy, Check, CircleUser, Search } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import axios from "@/lib/axios";
-import toast from "react-hot-toast";
-import debounce from "lodash.debounce";
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/select';
+import axios from '@/lib/axios';
+import toast from 'react-hot-toast';
+import debounce from 'lodash.debounce';
+import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Snippet {
   id: string;
@@ -47,8 +47,8 @@ const Page = () => {
   const [requestedIds, setRequestedIds] = useState<string[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [userid, setUserid] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState("");
+  const [search, setSearch] = useState('');
+  const [select, setSelect] = useState('');
   const [page, setPage] = useState(1);
   const [totalSnippet, setTotalSnippet] = useState(0);
   const totalPage = Math.ceil(totalSnippet / LIMIT);
@@ -57,15 +57,13 @@ const Page = () => {
     navigator.clipboard.writeText(content);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
-    toast.success("Code copied to clipboard!");
+    toast.success('Code copied to clipboard!');
   };
 
   async function fetchData() {
     try {
       setIsLoading(true);
-      const res = await axios.get(
-        `/snippet/available?page=${page}&limit=${LIMIT}`,
-      );
+      const res = await axios.get(`/snippet/available?page=${page}&limit=${LIMIT}`);
       console.log(res.data.snippets);
       setData(res.data.snippets);
       setFilterData(res.data.snippets);
@@ -78,7 +76,7 @@ const Page = () => {
   }
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status === 'authenticated') {
       setUserid(session?.user?.id || null);
     }
   }, [session, status]);
@@ -89,27 +87,27 @@ const Page = () => {
 
   const handleRequest = async (e: React.FormEvent, id: string) => {
     e.preventDefault();
-    if (status === "unauthenticated") {
-      toast.error("Please login to access this feature.");
-      setTimeout(() => router.push("/login"), 2000);
+    if (status === 'unauthenticated') {
+      toast.error('Please login to access this feature.');
+      setTimeout(() => router.push('/login'), 2000);
       return;
     }
     try {
-      const res = await axios.post("/snippet/request", { snippetId: id });
+      const res = await axios.post('/snippet/request', { snippetId: id });
       if (res.status === 201) {
-        toast.success("Access request sent!");
+        toast.success('Access request sent!');
         setRequestedIds((prev) => [...prev, id]);
       } else {
-        toast.error("Something went wrong.");
+        toast.error('Something went wrong.');
       }
     } catch (error) {
-      console.error("Access request error:", error);
-      toast.error("Request failed.");
+      console.error('Access request error:', error);
+      toast.error('Request failed.');
     }
   };
 
   const handleSearch = debounce(async (term: string) => {
-    if (term.trim() === "") {
+    if (term.trim() === '') {
       setFilterData(data);
       return;
     }
@@ -124,7 +122,7 @@ const Page = () => {
         const res = await axios.get(`/snippet/search?query=${term}`);
         setFilterData(res.data.result);
       } catch (error) {
-        console.error("Server search failed:", error);
+        console.error('Server search failed:', error);
       }
     }
   }, 300);
@@ -137,7 +135,7 @@ const Page = () => {
 
   const handleSelect = (value: string) => {
     setSelect(value);
-    if (value === "All") {
+    if (value === 'All') {
       setFilterData(data);
     } else {
       const result = data.filter((d) => d.visibility === value);
@@ -218,11 +216,9 @@ const Page = () => {
                           {data.title}
                         </CardTitle>
 
-                        {data.visibility === "private" &&
+                        {data.visibility === 'private' &&
                         data.authorid !== userid &&
-                        !data.allowedUsers?.some(
-                          (user) => user.id === userid,
-                        ) ? null : (
+                        !data.allowedUsers?.some((user) => user.id === userid) ? null : (
                           <Button
                             variant="ghost"
                             size="sm"
@@ -240,13 +236,11 @@ const Page = () => {
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2">
                           <CircleUser className="w-4 h-4 text-muted-foreground" />
-                          <span className="font-medium text-primary">
-                            {data.author?.username}
-                          </span>
+                          <span className="font-medium text-primary">{data.author?.username}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="outline">{data.framework}</Badge>
-                          {data.visibility === "public" ? (
+                          {data.visibility === 'public' ? (
                             <Globe className="w-4 h-4 text-blue-500" />
                           ) : (
                             <Lock className="w-4 h-4 text-red-500" />
@@ -256,11 +250,9 @@ const Page = () => {
                     </CardHeader>
 
                     <CardContent className="relative">
-                      {data.visibility === "private" &&
+                      {data.visibility === 'private' &&
                         data.authorid !== userid &&
-                        !data.allowedUsers?.some(
-                          (user) => user.id === userid,
-                        ) && (
+                        !data.allowedUsers?.some((user) => user.id === userid) && (
                           <div className="absolute inset-0 backdrop-blur-sm bg-white/90 dark:bg-black/80 flex items-center justify-center rounded-lg">
                             <div className="text-center space-y-4">
                               <Lock className="w-8 h-8 mx-auto text-red-500" />
@@ -271,8 +263,8 @@ const Page = () => {
                                 className="shadow-md"
                               >
                                 {requestedIds.includes(data.id)
-                                  ? "Request Sent ✓"
-                                  : "Request Access"}
+                                  ? 'Request Sent ✓'
+                                  : 'Request Access'}
                               </Button>
                               <p className="text-sm text-muted-foreground px-4">
                                 Private snippet - request access to view
@@ -285,15 +277,15 @@ const Page = () => {
                         language="javascript"
                         style={vscDarkPlus}
                         customStyle={{
-                          borderRadius: "0.375rem",
-                          padding: "1rem",
+                          borderRadius: '0.375rem',
+                          padding: '1rem',
                           margin: 0,
                         }}
                         codeTagProps={{
                           style: {
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "0.875rem",
-                            lineHeight: "1.5",
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.875rem',
+                            lineHeight: '1.5',
                           },
                         }}
                       >
@@ -306,21 +298,13 @@ const Page = () => {
         </div>
 
         <div className="flex items-center justify-center gap-4 py-8">
-          <Button
-            variant="outline"
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1}
-          >
+          <Button variant="outline" onClick={() => setPage(page - 1)} disabled={page === 1}>
             Previous
           </Button>
           <span className="text-sm text-muted-foreground">
             Page {page} of {totalPage}
           </span>
-          <Button
-            variant="outline"
-            onClick={() => setPage(page + 1)}
-            disabled={page === totalPage}
-          >
+          <Button variant="outline" onClick={() => setPage(page + 1)} disabled={page === totalPage}>
             Next
           </Button>
         </div>

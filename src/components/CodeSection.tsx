@@ -1,12 +1,12 @@
-import React from "react";
-import { Card, CardContent } from "./ui/card";
+import React from 'react';
+import { Card, CardContent } from './ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 const CodeSection = () => {
   return (
@@ -20,12 +20,11 @@ const CodeSection = () => {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-3 sm:mb-4">
             <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
               Organize
-            </span>{" "}
+            </span>{' '}
             Your Code Like a Pro
           </h1>
           <p className="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto">
-            Save hours of searching - store and retrieve code snippets in
-            seconds
+            Save hours of searching - store and retrieve code snippets in seconds
           </p>
         </div>
 
@@ -38,9 +37,7 @@ const CodeSection = () => {
                 <div className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white font-medium mr-3 sm:mr-4">
                   1
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
-                  Claim Your Code
-                </h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Claim Your Code</h3>
               </div>
               <input
                 className="w-full p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-gray-400 text-gray-700 text-sm sm:text-base"
@@ -55,54 +52,37 @@ const CodeSection = () => {
             <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="p-4 sm:p-6">
                 <p className="text-sm sm:text-base text-gray-600">
-                  <span className="font-medium text-gray-800">
-                    Why this matters:
-                  </span>{" "}
-                  Proper naming creates mental ownership and makes your code 3x
-                  more reusable (according to 2023 developer surveys).
+                  <span className="font-medium text-gray-800">Why this matters:</span> Proper naming
+                  creates mental ownership and makes your code 3x more reusable (according to 2023
+                  developer surveys).
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
             <div className="space-y-3 sm:space-y-4 order-1 md:order-2">
               <div className="flex items-center">
                 <div className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white font-medium mr-3 sm:mr-4">
                   2
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
-                  Set the Context
-                </h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Set the Context</h3>
               </div>
               <Select>
                 <SelectTrigger className="w-full p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200 bg-white hover:border-gray-300 text-gray-700 text-sm sm:text-base">
                   <SelectValue placeholder="What technology is this for?" />
                 </SelectTrigger>
                 <SelectContent className="rounded-lg sm:rounded-xl border border-gray-200 shadow-lg">
-                  <SelectItem
-                    value="react"
-                    className="px-3 py-2 sm:px-4 sm:py-3"
-                  >
+                  <SelectItem value="react" className="px-3 py-2 sm:px-4 sm:py-3">
                     React
                   </SelectItem>
-                  <SelectItem
-                    value="nextjs"
-                    className="px-3 py-2 sm:px-4 sm:py-3"
-                  >
+                  <SelectItem value="nextjs" className="px-3 py-2 sm:px-4 sm:py-3">
                     Next.js
                   </SelectItem>
-                  <SelectItem
-                    value="node"
-                    className="px-3 py-2 sm:px-4 sm:py-3"
-                  >
+                  <SelectItem value="node" className="px-3 py-2 sm:px-4 sm:py-3">
                     Node.js
                   </SelectItem>
-                  <SelectItem
-                    value="python"
-                    className="px-3 py-2 sm:px-4 sm:py-3"
-                  >
+                  <SelectItem value="python" className="px-3 py-2 sm:px-4 sm:py-3">
                     Python
                   </SelectItem>
                 </SelectContent>
@@ -112,15 +92,14 @@ const CodeSection = () => {
             <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow order-2 md:order-1">
               <CardContent className="p-4 sm:p-6">
                 <p className="text-sm sm:text-base text-gray-600">
-                  <span className="font-medium text-gray-800">Pro Tip:</span>{" "}
-                  Selecting the right framework helps our system provide you
-                  with relevant suggestions and compatibility checks.
+                  <span className="font-medium text-gray-800">Pro Tip:</span> Selecting the right
+                  framework helps our system provide you with relevant suggestions and compatibility
+                  checks.
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center">
@@ -166,10 +145,8 @@ function useDebounce(value, delay) {
             <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="p-4 sm:p-6">
                 <p className="text-sm sm:text-base text-gray-600 mb-2 sm:mb-3">
-                  <span className="font-medium text-gray-800">
-                    Best Practice:
-                  </span>{" "}
-                  Well-formatted code with comments gets reused 68% more often.
+                  <span className="font-medium text-gray-800">Best Practice:</span> Well-formatted
+                  code with comments gets reused 68% more often.
                 </p>
                 <div className="space-y-1 sm:space-y-2">
                   <div className="flex items-center">
@@ -186,9 +163,7 @@ function useDebounce(value, delay) {
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
-                    <span className="text-xs sm:text-sm text-gray-600">
-                      Syntax highlighting
-                    </span>
+                    <span className="text-xs sm:text-sm text-gray-600">Syntax highlighting</span>
                   </div>
                   <div className="flex items-center">
                     <svg
@@ -204,9 +179,7 @@ function useDebounce(value, delay) {
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
-                    <span className="text-xs sm:text-sm text-gray-600">
-                      Basic formatting
-                    </span>
+                    <span className="text-xs sm:text-sm text-gray-600">Basic formatting</span>
                   </div>
                 </div>
               </CardContent>
@@ -220,9 +193,7 @@ function useDebounce(value, delay) {
                 <div className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white font-medium mr-3 sm:mr-4">
                   4
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
-                  Control Access
-                </h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Control Access</h3>
               </div>
               <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-5">
                 <label className="flex items-start space-x-2 sm:space-x-3 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200 bg-white hover:border-blue-400 cursor-pointer transition-colors">
@@ -282,11 +253,8 @@ function useDebounce(value, delay) {
             <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow order-2 md:order-1">
               <CardContent className="p-4 sm:p-6">
                 <p className="text-sm sm:text-base text-gray-600">
-                  <span className="font-medium text-gray-800">
-                    Did you know?
-                  </span>{" "}
-                  Developers who organize their code properly report 40% faster
-                  onboarding for new team members.
+                  <span className="font-medium text-gray-800">Did you know?</span> Developers who
+                  organize their code properly report 40% faster onboarding for new team members.
                 </p>
               </CardContent>
             </Card>

@@ -1,7 +1,7 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import DSAData from "@/data/450DSA";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import DSAData from '@/data/450DSA';
 
 interface Question {
   Topic: string;
@@ -25,17 +25,17 @@ const TopicPage = () => {
   const router = useRouter();
   const { category } = useParams();
   const [topic, setTopic] = useState<Topic | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const foundTopic = DSAData.find(
-      (t) => t.topicName.toLowerCase().replace(/\s+/g, "-") === category,
+      (t) => t.topicName.toLowerCase().replace(/\s+/g, '-') === category,
     );
 
     if (foundTopic) {
       setTopic(foundTopic);
     } else {
-      router.push("/dsa");
+      router.push('/dsa');
     }
   }, [category, router]);
 
@@ -43,8 +43,7 @@ const TopicPage = () => {
     if (!topic) return;
 
     const updatedQuestions = [...topic.questions];
-    updatedQuestions[questionIndex].Done =
-      !updatedQuestions[questionIndex].Done;
+    updatedQuestions[questionIndex].Done = !updatedQuestions[questionIndex].Done;
 
     const doneCount = updatedQuestions.filter((q) => q.Done).length;
 
@@ -56,9 +55,8 @@ const TopicPage = () => {
   };
 
   const filteredQuestions =
-    topic?.questions.filter((q) =>
-      q.Problem.toLowerCase().includes(searchTerm.toLowerCase()),
-    ) || [];
+    topic?.questions.filter((q) => q.Problem.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    [];
 
   if (!topic) {
     return (
@@ -74,7 +72,7 @@ const TopicPage = () => {
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <button
-          onClick={() => router.push("/dsa")}
+          onClick={() => router.push('/dsa')}
           className="flex items-center text-blue-600 mb-4"
         >
           <svg
@@ -97,15 +95,10 @@ const TopicPage = () => {
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">
-                {topic.topicName}
-              </h1>
+              <h1 className="text-2xl font-bold text-gray-800">{topic.topicName}</h1>
               <p className="text-gray-600">
-                {topic.questions.length} problems • {topic.doneQuestions} solved
-                (
-                {Math.round(
-                  (topic.doneQuestions / topic.questions.length) * 100,
-                )}
+                {topic.questions.length} problems • {topic.doneQuestions} solved (
+                {Math.round((topic.doneQuestions / topic.questions.length) * 100)}
                 %)
               </p>
             </div>
@@ -148,9 +141,7 @@ const TopicPage = () => {
               <div
                 key={index}
                 className={`p-4 border rounded-lg flex items-center justify-between ${
-                  question.Done
-                    ? "bg-green-50 border-green-200"
-                    : "bg-white border-gray-200"
+                  question.Done ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'
                 }`}
               >
                 <div className="flex items-center">
@@ -165,7 +156,7 @@ const TopicPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`font-medium ${
-                      question.Done ? "text-green-700" : "text-gray-700"
+                      question.Done ? 'text-green-700' : 'text-gray-700'
                     } hover:text-blue-600`}
                   >
                     {question.Problem}

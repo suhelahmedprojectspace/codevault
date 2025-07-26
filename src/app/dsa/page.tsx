@@ -1,9 +1,9 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import DSAData from "@/data/450DSA";
-import TopicCard from "@/components/TopicCard";
-import ProgressBar from "@/components/ProgressBar";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import DSAData from '@/data/450DSA';
+import TopicCard from '@/components/TopicCard';
+import ProgressBar from '@/components/ProgressBar';
 
 interface Question {
   Topic: string;
@@ -26,20 +26,17 @@ interface Topic {
 const DSA450Dashboard = () => {
   const router = useRouter();
   const [data, setData] = useState<Topic[]>(DSAData);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [totalProgress, setTotalProgress] = useState(0);
 
   useEffect(() => {
-    const totalQuestions = data.reduce(
-      (acc, topic) => acc + topic.questions.length,
-      0,
-    );
+    const totalQuestions = data.reduce((acc, topic) => acc + topic.questions.length, 0);
     const totalDone = data.reduce((acc, topic) => acc + topic.doneQuestions, 0);
     setTotalProgress(Math.round((totalDone / totalQuestions) * 100));
   }, [data]);
 
   const handleTopicClick = (topicName: string) => {
-    const category = topicName.toLowerCase().replace(/\s+/g, "-");
+    const category = topicName.toLowerCase().replace(/\s+/g, '-');
     router.push(`/dsa/${category}`);
   };
 
@@ -52,16 +49,12 @@ const DSA450Dashboard = () => {
       <header className="max-w-6xl mx-auto mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
-              450 DSA Questions Tracker
-            </h1>
-            <p className="text-gray-600">
-              Master DSA by solving these curated problems
-            </p>
+            <h1 className="text-3xl font-bold text-gray-800">450 DSA Questions Tracker</h1>
+            <p className="text-gray-600">Master DSA by solving these curated problems</p>
 
             <div className="max-w-6xl mx-auto pt-2">
               <button
-                onClick={() => router.push("/interview")}
+                onClick={() => router.push('/interview')}
                 className="flex items-center text-blue-600 mb-4"
               >
                 <svg
@@ -109,20 +102,14 @@ const DSA450Dashboard = () => {
 
         <div className="mt-6 bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="text-lg font-semibold text-gray-700">
-              Overall Progress
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-700">Overall Progress</h2>
             <span className="text-blue-600 font-medium">{totalProgress}%</span>
           </div>
           <ProgressBar progress={totalProgress} />
           <div className="flex justify-between text-sm text-gray-500 mt-1">
+            <span>{data.reduce((acc, topic) => acc + topic.doneQuestions, 0)} problems solved</span>
             <span>
-              {data.reduce((acc, topic) => acc + topic.doneQuestions, 0)}{" "}
-              problems solved
-            </span>
-            <span>
-              {data.reduce((acc, topic) => acc + topic.questions.length, 0)}{" "}
-              total problems
+              {data.reduce((acc, topic) => acc + topic.questions.length, 0)} total problems
             </span>
           </div>
         </div>

@@ -4,19 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import axios from '@/lib/axios';
 import MultiSelectTag from '@/components/MultiSelectTag';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardDescription,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Tabs,
-  TabsContent,
-  TabsTrigger,
-  TabsList,
-} from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardDescription, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsTrigger, TabsList } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -36,73 +25,81 @@ import { FiUpload, FiX, FiPlus, FiChevronRight, FiCheck } from 'react-icons/fi';
 import ProgressBar from '@/components/ProgressBar';
 import toast from 'react-hot-toast';
 import TechBadgeInput from '@/components/TechBadgeInput';
-import {z} from "zod"
+import { z } from 'zod';
 // import axiosInstance from '@/lib/axios';
-import { Skeleton } from "@/components/ui/skeleton";
-
-
+import { Skeleton } from '@/components/ui/skeleton';
 
 const portfolioSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  title: z.string().min(1, "Title is required"),
-  summary: z.string().min(1, "Summary is required"),
-  education: z.string().min(1, "Education is required"),
-  location: z.string().min(1, "Location is required"),
-  passionate: z.string().min(1, "Passion description is required"),
-  yearofexperience: z.string().min(1, "Years of experience is required"),
+  name: z.string().min(1, 'Name is required'),
+  title: z.string().min(1, 'Title is required'),
+  summary: z.string().min(1, 'Summary is required'),
+  education: z.string().min(1, 'Education is required'),
+  location: z.string().min(1, 'Location is required'),
+  passionate: z.string().min(1, 'Passion description is required'),
+  yearofexperience: z.string().min(1, 'Years of experience is required'),
   profile: z.string().optional(),
-  projects: z.array(
-    z.object({
-      title: z.string().min(1, "Project title is required"),
-      description: z.string().min(1, "Project description is required"),
-      link: z.string().url("Invalid URL").or(z.literal("")).optional(),
-      techTag: z.array(z.string()).optional()
-    })
-  ).min(1, "At least one project is required"),
-  experiences: z.array(
-    z.object({
-      company: z.string().min(1, "Company name is required"),
-      role: z.string().min(1, "Role is required"),
-      description: z.string().min(1, "Description is required"),
-      startDate: z.string().min(1, "Start date is required"),
-      endDate: z.string().optional(),
-      currentlyWorking: z.boolean(),
-      techTag: z.array(z.string()).optional()
-    })
-  ).min(1, "At least one experience is required"),
-  techstack: z.array(
-    z.object({
-      name: z.string(),
-      logo: z.string().optional()
-    })
-  ).min(1, "At least one technology is required"),
-  links: z.array(
-    z.object({
-      platform: z.string(),
-      url: z.string().url("Invalid URL")
-    })
-  ).min(1, "At least one social link is required"),
-  certifications: z.array(
-    z.object({
-      title: z.string().min(1, "Title is required"),
-      description: z.string().min(1, "Description is required"),
-      url: z.string().url("Invalid URL").or(z.literal("")).optional()
-    })
-  ).optional(),
+  projects: z
+    .array(
+      z.object({
+        title: z.string().min(1, 'Project title is required'),
+        description: z.string().min(1, 'Project description is required'),
+        link: z.string().url('Invalid URL').or(z.literal('')).optional(),
+        techTag: z.array(z.string()).optional(),
+      }),
+    )
+    .min(1, 'At least one project is required'),
+  experiences: z
+    .array(
+      z.object({
+        company: z.string().min(1, 'Company name is required'),
+        role: z.string().min(1, 'Role is required'),
+        description: z.string().min(1, 'Description is required'),
+        startDate: z.string().min(1, 'Start date is required'),
+        endDate: z.string().optional(),
+        currentlyWorking: z.boolean(),
+        techTag: z.array(z.string()).optional(),
+      }),
+    )
+    .min(1, 'At least one experience is required'),
+  techstack: z
+    .array(
+      z.object({
+        name: z.string(),
+        logo: z.string().optional(),
+      }),
+    )
+    .min(1, 'At least one technology is required'),
+  links: z
+    .array(
+      z.object({
+        platform: z.string(),
+        url: z.string().url('Invalid URL'),
+      }),
+    )
+    .min(1, 'At least one social link is required'),
+  certifications: z
+    .array(
+      z.object({
+        title: z.string().min(1, 'Title is required'),
+        description: z.string().min(1, 'Description is required'),
+        url: z.string().url('Invalid URL').or(z.literal('')).optional(),
+      }),
+    )
+    .optional(),
   achievements: z.string().optional(),
-  availability: z.string().optional()
+  availability: z.string().optional(),
 });
 
 interface Experience {
   id: string;
   company: string;
   role: string;
-  description:string;
+  description: string;
   startDate: string;
   endDate: string;
   currentlyWorking: boolean;
-  techTag?:string[];
-  error?:string;
+  techTag?: string[];
+  error?: string;
 }
 
 interface Project {
@@ -110,7 +107,7 @@ interface Project {
   title: string;
   description: string;
   link?: string;
-  techTag?:string[];
+  techTag?: string[];
 }
 
 interface Stack {
@@ -122,10 +119,10 @@ interface Stack {
 interface BasicInfo {
   title: string;
   summary: string;
-  education:string;
-  passionate:string;
-  yearofexperience:string;
-  location:string;
+  education: string;
+  passionate: string;
+  yearofexperience: string;
+  location: string;
   profile: string;
   name: string;
 }
@@ -134,15 +131,15 @@ interface SocialLink {
   platform: string;
   url: string;
 }
-interface Tag{
-  name:string;
-  logo?:string;
+interface Tag {
+  name: string;
+  logo?: string;
 }
-interface Certification{
+interface Certification {
   id: string;
-  title:string;
-  description:string;
-  url?:string;
+  title: string;
+  description: string;
+  url?: string;
 }
 
 const tabOrder = [
@@ -160,45 +157,45 @@ const Page = () => {
   const dispatch = useDispatch();
   const [currentTab, setCurrentTab] = useState('basic');
   const [preview, setPreview] = useState<string | null>(null);
-  const[completedTabs,setCompletedTabs]=useState<Record<string,boolean>>({
-  basic: false,
-  experience: false,
-  project: false,
-  stack: false,
-  social: false,
-  'certification/courses': false,
-  availability: false,
-  preview: false,
-
-  })
+  const [completedTabs, setCompletedTabs] = useState<Record<string, boolean>>({
+    basic: false,
+    experience: false,
+    project: false,
+    stack: false,
+    social: false,
+    'certification/courses': false,
+    availability: false,
+    preview: false,
+  });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  
+
   const [personalInfo, setPersonalInfo] = useState<BasicInfo>({
     title: '',
     summary: '',
     profile: '',
     name: '',
-    location:'',
-    passionate:'',
-    education:'',
-    yearofexperience:''
+    location: '',
+    passionate: '',
+    education: '',
+    yearofexperience: '',
   });
 
   const [experience, setExperiences] = useState<Experience[]>([
-    { id: crypto.randomUUID(), 
-      company: '', 
+    {
+      id: crypto.randomUUID(),
+      company: '',
       role: '',
-      description:'', 
-      startDate: '', 
-      endDate: '', 
+      description: '',
+      startDate: '',
+      endDate: '',
       currentlyWorking: false,
-      techTag:[],
-    }
+      techTag: [],
+    },
   ]);
 
   const [projects, setProjects] = useState<Project[]>([
-    { id: crypto.randomUUID(), title: '', description: '',techTag:[] }
+    { id: crypto.randomUUID(), title: '', description: '', techTag: [] },
   ]);
 
   const [techstack, setTechstack] = useState<Stack[]>([]);
@@ -206,206 +203,210 @@ const Page = () => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [techTags, setTechTags] = useState<string[]>([]);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
-  const [newLink, setNewLink] = useState<{platform: string, username: string}>({ platform: '', username: '' });
+  const [newLink, setNewLink] = useState<{
+    platform: string;
+    username: string;
+  }>({ platform: '', username: '' });
   const [achievements, setAchievements] = useState<string>('');
   const [availability, setAvailability] = useState<string>('');
-  const[certification,setCertification]=useState<Certification[]>([
-    {id:crypto.randomUUID(),title:'',description:'',url:''}
-  ])
+  const [certification, setCertification] = useState<Certification[]>([
+    { id: crypto.randomUUID(), title: '', description: '', url: '' },
+  ]);
 
-  
   const calculateCompletionPercentage = () => {
-  const sections = {
-    basic: [
-      personalInfo.name,
-      personalInfo.title,
-      personalInfo.summary,
-      personalInfo.education,
-      personalInfo.location,
-      personalInfo.passionate,
-      personalInfo.yearofexperience
-    ],
-    experience: experience.map(exp => (
-      exp.company && exp.role && exp.description && exp.startDate
-    )),
-    projects: projects.map(proj => (
-      proj.title && proj.description
-    )),
-    techstack: selectedTags.length > 0,
-    socialLinks: socialLinks.length > 0,
-    certifications: certification.length > 0 ? 
-      certification.every(cert => cert.title && cert.description) : true
+    const sections = {
+      basic: [
+        personalInfo.name,
+        personalInfo.title,
+        personalInfo.summary,
+        personalInfo.education,
+        personalInfo.location,
+        personalInfo.passionate,
+        personalInfo.yearofexperience,
+      ],
+      experience: experience.map(
+        (exp) => exp.company && exp.role && exp.description && exp.startDate,
+      ),
+      projects: projects.map((proj) => proj.title && proj.description),
+      techstack: selectedTags.length > 0,
+      socialLinks: socialLinks.length > 0,
+      certifications:
+        certification.length > 0
+          ? certification.every((cert) => cert.title && cert.description)
+          : true,
+    };
+
+    const totalFields =
+      sections.basic.length +
+      (sections.experience.length > 0 ? 1 : 0) +
+      (sections.projects.length > 0 ? 1 : 0) +
+      1 +
+      1 +
+      1;
+
+    const completedFields =
+      sections.basic.filter(Boolean).length +
+      (sections.experience.length > 0 && sections.experience.every(Boolean) ? 1 : 0) +
+      (sections.projects.length > 0 && sections.projects.every(Boolean) ? 1 : 0) +
+      (sections.techstack ? 1 : 0) +
+      (sections.socialLinks ? 1 : 0) +
+      (sections.certifications ? 1 : 0);
+
+    return Math.floor((completedFields / totalFields) * 100);
   };
 
-  const totalFields = 
-    sections.basic.length +
-    (sections.experience.length > 0 ? 1 : 0) +
-    (sections.projects.length > 0 ? 1 : 0) +
-    1 + 
-    1 + 
-    1;  
+  const validateExperience = (experiences: Experience[]): Experience[] => {
+    const updated = [...experiences];
+    for (let i = 0; i < updated.length; i++) {
+      const current = updated[i];
+      const prev = updated[i - 1];
+      const start = new Date(current.startDate);
+      const end = current.currentlyWorking ? null : new Date(current.endDate);
 
-  const completedFields = 
-    sections.basic.filter(Boolean).length +
-    (sections.experience.length > 0 && sections.experience.every(Boolean) ? 1 : 0) +
-    (sections.projects.length > 0 && sections.projects.every(Boolean) ? 1 : 0) +
-    (sections.techstack ? 1 : 0) +
-    (sections.socialLinks ? 1 : 0) +
-    (sections.certifications ? 1 : 0);
-
-  return Math.floor((completedFields / totalFields) * 100);
-};
-
-const validateExperience = (experiences: Experience[]): Experience[] =>{
-  const updated=[...experiences];
-  for(let i=0;i<updated.length;i++){
-    const current=updated[i];
-    const prev=updated[i-1];
-    const start=new Date(current.startDate);
-    const end=current.currentlyWorking?null:new Date(current.endDate);
-
-    let error='';
-    if(!current.startDate){
-      error='Start date is required';
-    }else if(!current.currentlyWorking && !current.endDate){
-            error = 'End date is required.';
+      let error = '';
+      if (!current.startDate) {
+        error = 'Start date is required';
+      } else if (!current.currentlyWorking && !current.endDate) {
+        error = 'End date is required.';
+      } else if (!current.currentlyWorking && start.getTime() === end?.getTime()) {
+        error = 'Start date and end date cannot be the same.';
+      } else if (!current.currentlyWorking && start > end!) {
+        error = 'Start date must be before end date.';
+      } else if (i > 0 && prev.endDate && new Date(prev.endDate) > start) {
+        error = 'This experience should start after the previous one ends.';
+      }
+      updated[i] = { ...current, error };
     }
-    else if(!current.currentlyWorking && start.getTime()===end?.getTime()){
-      error = 'Start date and end date cannot be the same.';
-    }else if(!current.currentlyWorking && start > end!){
-       error = 'Start date must be before end date.';
-    }else if(i>0 && prev.endDate && new Date(prev.endDate)>start){
-      error = 'This experience should start after the previous one ends.';
-    }
-    updated[i]={...current,error}
-  }
-  return updated;
+    return updated;
+  };
 
-}
-
-
-const completionPercentage = calculateCompletionPercentage();
+  const completionPercentage = calculateCompletionPercentage();
   const handleExperienceChange = (id: string, field: keyof Experience, value: any) => {
-    const updated=experience.map(exp=>exp.id===id ?{...exp,[field]:value}:exp);
+    const updated = experience.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp));
     setExperiences(validateExperience(updated));
   };
 
-  const handleCertificationChange=(id:string,field:keyof Certification,value:any)=>{
-    setCertification(prev=>prev.map(cer=>cer.id ===id ?{...cer,[field]:value}:cer))
-  }
-
-  const handleProjectChange = (id: string, field: keyof Project, value: any) => {
-    setProjects(prev => prev.map(proj => 
-      proj.id === id ? { ...proj, [field]: value } : proj
-    ));
+  const handleCertificationChange = (id: string, field: keyof Certification, value: any) => {
+    setCertification((prev) =>
+      prev.map((cer) => (cer.id === id ? { ...cer, [field]: value } : cer)),
+    );
   };
 
-  const addExperience = () => setExperiences(prev => [
-    ...prev, 
-    { id: crypto.randomUUID(), company: '', role: '',description:'' ,startDate: '', endDate: '', currentlyWorking: false }
-  ]);
+  const handleProjectChange = (id: string, field: keyof Project, value: any) => {
+    setProjects((prev) =>
+      prev.map((proj) => (proj.id === id ? { ...proj, [field]: value } : proj)),
+    );
+  };
 
-  
+  const addExperience = () =>
+    setExperiences((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        company: '',
+        role: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        currentlyWorking: false,
+      },
+    ]);
+
   const removeExperience = (id: string) => {
     if (experience.length > 1) {
-      setExperiences(prev => prev.filter(exp => exp.id !== id));
+      setExperiences((prev) => prev.filter((exp) => exp.id !== id));
     }
   };
 
-  const addProject = () => setProjects(prev => [
-    ...prev, 
-    { id: crypto.randomUUID(), title: '', description: '',techTag: [] }
-  ]);
+  const addProject = () =>
+    setProjects((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), title: '', description: '', techTag: [] },
+    ]);
 
   const removeProject = (id: string) => {
     if (projects.length > 1) {
-      setProjects(prev => prev.filter(proj => proj.id !== id));
+      setProjects((prev) => prev.filter((proj) => proj.id !== id));
     }
   };
 
-  const addCertificate=()=> setCertification(prev=>[
-    ...prev,
-    {id:crypto.randomUUID(),title:'',description:'',url:''}
-   ]);
+  const addCertificate = () =>
+    setCertification((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), title: '', description: '', url: '' },
+    ]);
 
-   const removeCertificat = (id: string) => {
+  const removeCertificat = (id: string) => {
     if (certification.length > 1) {
-      setCertification(prev => prev.filter(cert => cert.id !== id));
+      setCertification((prev) => prev.filter((cert) => cert.id !== id));
     }
   };
 
   const addSocialLink = () => {
     if (newLink.platform && newLink.username) {
-      const platform = SOCIAL_MEDIA_PLATFORMS.find(p => p.label === newLink.platform);
+      const platform = SOCIAL_MEDIA_PLATFORMS.find((p) => p.label === newLink.platform);
       if (platform) {
-        setSocialLinks(prev => [
+        setSocialLinks((prev) => [
           ...prev,
           {
             platform: newLink.platform,
-            url: `${platform.baseUrl}${newLink.username}`
-          }
+            url: `${platform.baseUrl}${newLink.username}`,
+          },
         ]);
         setNewLink({ platform: '', username: '' });
       }
     }
-  }
-  const removeSocialLink = (index: number) => {
-    setSocialLinks(prev => prev.filter((_, i) => i !== index));
   };
-  
-const validateCurrentTab = () => {
-  //isValid=false;
-  switch (currentTab) {
-    case 'basic':
-      return (
-        personalInfo.name &&
-        personalInfo.title &&
-        personalInfo.summary &&
-        personalInfo.education &&
-        personalInfo.location &&
-        personalInfo.passionate &&
-        personalInfo.yearofexperience
-      );
-    case 'experience':
-      return experience.every(exp => 
-        exp.company && 
-        exp.role && 
-        exp.description && 
-        exp.startDate
-      );
-    case 'project':
-      return projects.every(proj => 
-        proj.title && 
-        proj.description
-      );
-    case 'stack':
-      return selectedTags.length > 0;
-    case 'social':
-      return socialLinks.length > 0;
-    case 'certification/courses':
-      return certification.every(cert => 
-        cert.title && 
-        cert.description
-      );
-    default:
-      return true;
-  }
-};
-  const goToNextTab = () => {
-    if(!validateCurrentTab()){
-      toast.error('Please complete all required fields in this section');
-     return;
+  const removeSocialLink = (index: number) => {
+    setSocialLinks((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const validateCurrentTab = () => {
+    //isValid=false;
+    switch (currentTab) {
+      case 'basic':
+        return (
+          personalInfo.name &&
+          personalInfo.title &&
+          personalInfo.summary &&
+          personalInfo.education &&
+          personalInfo.location &&
+          personalInfo.passionate &&
+          personalInfo.yearofexperience
+        );
+      case 'experience':
+        return experience.every(
+          (exp) => exp.company && exp.role && exp.description && exp.startDate,
+        );
+      case 'project':
+        return projects.every((proj) => proj.title && proj.description);
+      case 'stack':
+        return selectedTags.length > 0;
+      case 'social':
+        return socialLinks.length > 0;
+      case 'certification/courses':
+        return certification.every((cert) => cert.title && cert.description);
+      default:
+        return true;
     }
-    dispatch(updateForm({
-      ...personalInfo,
-      profile: preview ?? undefined,
-      experiences: experience,
-      projects,
-      techstack: selectedTags,
-      links: socialLinks,
-      achievements,
-      availability
-    }));
+  };
+  const goToNextTab = () => {
+    if (!validateCurrentTab()) {
+      toast.error('Please complete all required fields in this section');
+      return;
+    }
+    dispatch(
+      updateForm({
+        ...personalInfo,
+        profile: preview ?? undefined,
+        experiences: experience,
+        projects,
+        techstack: selectedTags,
+        links: socialLinks,
+        achievements,
+        availability,
+      }),
+    );
 
     const currentIndex = tabOrder.indexOf(currentTab);
     if (currentIndex < tabOrder.length - 1) {
@@ -428,7 +429,7 @@ const validateCurrentTab = () => {
     setUploadProgress(0);
 
     const interval = setInterval(() => {
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         if (prev >= 90) {
           clearInterval(interval);
           return prev;
@@ -437,8 +438,8 @@ const validateCurrentTab = () => {
       });
     }, 200);
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const imageUrl = URL.createObjectURL(file);
     setPreview(imageUrl);
     setUploadProgress(100);
@@ -464,92 +465,109 @@ const validateCurrentTab = () => {
     };
   }, [preview]);
 
-  
-  const handleSubmit=async(e:React.MouseEvent)=>{
+  const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
-      const portfolioData={
+      const portfolioData = {
         ...personalInfo,
-        profile:preview||'',
-        experiences:experience,
+        profile: preview || '',
+        experiences: experience,
         projects,
-        techstack:selectedTags,
-        links:socialLinks,
+        techstack: selectedTags,
+        links: socialLinks,
         certification,
         achievements,
-        availability
-      }
-       const validationResult=portfolioSchema.safeParse(portfolioData);
-       if(!validationResult.success){
-        const errors=validationResult.error.flatten().fieldErrors;
-        Object.entries(errors).forEach(([field,message])=>{
-          if(message){
-            toast.error(`${field}: ${message.join(', ')}`,{duration:5000});
+        availability,
+      };
+      const validationResult = portfolioSchema.safeParse(portfolioData);
+      if (!validationResult.success) {
+        const errors = validationResult.error.flatten().fieldErrors;
+        Object.entries(errors).forEach(([field, message]) => {
+          if (message) {
+            toast.error(`${field}: ${message.join(', ')}`, { duration: 5000 });
           }
         });
         return;
-       }
-        const formData=new FormData();
-        try {
-          if(preview){
-            const response = await fetch(preview);
-            const blob = await response.blob();
-            const file = new File([blob], 'profile.jpg', { type: blob.type });
-            formData.append('profile',file);
-          }
-        } catch (error) {
-          console.error('Error processing image:', error);
-          toast.error('Failed to upload profile image')
+      }
+      const formData = new FormData();
+      try {
+        if (preview) {
+          const response = await fetch(preview);
+          const blob = await response.blob();
+          const file = new File([blob], 'profile.jpg', { type: blob.type });
+          formData.append('profile', file);
         }
-        formData.append('name', personalInfo.name);
-        formData.append('title', personalInfo.title);
-        formData.append('summary', personalInfo.summary);
-        formData.append('education',personalInfo.education);
-        formData.append('location',personalInfo.location);
-        formData.append('passionate',personalInfo.passionate);
-        formData.append('yearofexperience',personalInfo.yearofexperience);
-        formData.append('certifications',JSON.stringify(certification));
-        formData.append('experiences',JSON.stringify(experience));
-        formData.append('projects',JSON.stringify(projects));
-        formData.append('techstack',JSON.stringify(selectedTags));
-        formData.append('links', JSON.stringify(socialLinks));
-        console.log(formData);
-        const response=await axios.post('/porfolio',formData,{
-          headers:{
-            'Content-Type':'multipart/form-data'
-          },
-          onUploadProgress:ProgressEvent=>{
-            const percentageCompleted=Math.round(
-             ( ProgressEvent.loaded * 100 )/(ProgressEvent.total || 1))
-             setUploadProgress(percentageCompleted);
-          }
-          
-        })
-        if(response.status===200){
-          toast.success('Successfully publised');
-          console.log('Upload successful:', response.data);
-        
-          dispatch(resetForm())
-          setPersonalInfo({ title: '', summary: '', profile: '', name: '',location:'',education:'',passionate:'',yearofexperience:'' });
-          setExperiences([{ id: crypto.randomUUID(), company: '', role: '', description: '', startDate: '', endDate: '', currentlyWorking: false }]);
-          setProjects([{ id: crypto.randomUUID(), title: '', description: '' }]);
-          setSelectedTags([]);
-          setSocialLinks([]);
-          setAchievements('');
-          setAvailability('');
-          setPreview(null);
-          setUploadProgress(0);
-          setCurrentTab('basic');
-        }
+      } catch (error) {
+        console.error('Error processing image:', error);
+        toast.error('Failed to upload profile image');
+      }
+      formData.append('name', personalInfo.name);
+      formData.append('title', personalInfo.title);
+      formData.append('summary', personalInfo.summary);
+      formData.append('education', personalInfo.education);
+      formData.append('location', personalInfo.location);
+      formData.append('passionate', personalInfo.passionate);
+      formData.append('yearofexperience', personalInfo.yearofexperience);
+      formData.append('certifications', JSON.stringify(certification));
+      formData.append('experiences', JSON.stringify(experience));
+      formData.append('projects', JSON.stringify(projects));
+      formData.append('techstack', JSON.stringify(selectedTags));
+      formData.append('links', JSON.stringify(socialLinks));
+      console.log(formData);
+      const response = await axios.post('/porfolio', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (ProgressEvent) => {
+          const percentageCompleted = Math.round(
+            (ProgressEvent.loaded * 100) / (ProgressEvent.total || 1),
+          );
+          setUploadProgress(percentageCompleted);
+        },
+      });
+      if (response.status === 200) {
+        toast.success('Successfully publised');
+        console.log('Upload successful:', response.data);
 
+        dispatch(resetForm());
+        setPersonalInfo({
+          title: '',
+          summary: '',
+          profile: '',
+          name: '',
+          location: '',
+          education: '',
+          passionate: '',
+          yearofexperience: '',
+        });
+        setExperiences([
+          {
+            id: crypto.randomUUID(),
+            company: '',
+            role: '',
+            description: '',
+            startDate: '',
+            endDate: '',
+            currentlyWorking: false,
+          },
+        ]);
+        setProjects([{ id: crypto.randomUUID(), title: '', description: '' }]);
+        setSelectedTags([]);
+        setSocialLinks([]);
+        setAchievements('');
+        setAvailability('');
+        setPreview(null);
+        setUploadProgress(0);
+        setCurrentTab('basic');
+      }
     } catch (error) {
       console.error('Upload failed:', error);
     }
-  }
+  };
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -557,7 +575,9 @@ const validateCurrentTab = () => {
       >
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Build Your Portfolio</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Build Your Portfolio
+            </h1>
             <p className="text-muted-foreground">Showcase your professional journey</p>
           </div>
           <div className="w-64">
@@ -565,11 +585,11 @@ const validateCurrentTab = () => {
               <span className="text-sm font-medium">Progress</span>
               <span className="text-sm font-medium">{completionPercentage}%</span>
             </div>
-            <ProgressBar progress={completionPercentage}/>
+            <ProgressBar progress={completionPercentage} />
           </div>
         </div>
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -585,55 +605,62 @@ const validateCurrentTab = () => {
             <div className="overflow-x-auto px-6 pt-4">
               <TabsList className="w-full flex bg-transparent p-0">
                 {tabOrder.map((tab, index) => {
-                   const isActive = currentTab === tab;
-                   const isDisabled=index>0 && !tabOrder.slice(0,index).every(prevtab=>completedTabs[prevtab])
-                  return(
+                  const isActive = currentTab === tab;
+                  const isDisabled =
+                    index > 0 &&
+                    !tabOrder.slice(0, index).every((prevtab) => completedTabs[prevtab]);
+                  return (
                     <div key={tab} className="flex items-center">
-                    <TabsTrigger 
-                      value={tab} 
-                      disabled={isDisabled}
-                       className={cn(
-            "relative px-4 py-2 rounded-none border-b-2 transition-all duration-200",
-            isActive && "text-green-700 font-bold",
-            "data-[state=active]:bg-[#00B437] data-[state=active]:text-white",
-            isDisabled && "cursor-not-allowed opacity-50"
-          )}
-                    >
-                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                      {currentTab === tab && (
-                        <motion.div
-                          layoutId="activeTabIndicator"
-                          className="absolute bottom-[-2px] left-0 right-0 h-[2px]"
-                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        />
-                      )}
-                    </TabsTrigger>
-                    {index < tabOrder.length - 1 && (
-                      <div className="h-6 w-px bg-border mx-1" />
-                    )}
-                  </div>
-                  )
-                }
-                  
-                )}
+                      <TabsTrigger
+                        value={tab}
+                        disabled={isDisabled}
+                        className={cn(
+                          'relative px-4 py-2 rounded-none border-b-2 transition-all duration-200',
+                          isActive && 'text-green-700 font-bold',
+                          'data-[state=active]:bg-[#00B437] data-[state=active]:text-white',
+                          isDisabled && 'cursor-not-allowed opacity-50',
+                        )}
+                      >
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        {currentTab === tab && (
+                          <motion.div
+                            layoutId="activeTabIndicator"
+                            className="absolute bottom-[-2px] left-0 right-0 h-[2px]"
+                            transition={{
+                              type: 'spring',
+                              stiffness: 500,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+                      </TabsTrigger>
+                      {index < tabOrder.length - 1 && <div className="h-6 w-px bg-border mx-1" />}
+                    </div>
+                  );
+                })}
               </TabsList>
             </div>
 
             <LayoutGroup>
-              <TabsContent value={currentTab} className="mt-0">     
+              <TabsContent value={currentTab} className="mt-0">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentTab}
-                    initial={{ opacity: 0, x: currentTab === 'preview' ? -50 : 50 }}
+                    initial={{
+                      opacity: 0,
+                      x: currentTab === 'preview' ? -50 : 50,
+                    }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: currentTab === 'preview' ? 50 : -50 }}
+                    exit={{
+                      opacity: 0,
+                      x: currentTab === 'preview' ? 50 : -50,
+                    }}
                     transition={{ duration: 0.3 }}
                     className="p-6"
                   >
-                 
                     {currentTab === 'basic' && (
                       <CardContent className="p-0">
-                        <motion.div 
+                        <motion.div
                           className="grid md:grid-cols-3 gap-6"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -645,9 +672,9 @@ const validateCurrentTab = () => {
                               <div className="relative group">
                                 <div className="w-32 h-32 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center">
                                   {preview ? (
-                                    <img 
-                                      src={preview} 
-                                      alt="Profile" 
+                                    <img
+                                      src={preview}
+                                      alt="Profile"
                                       className="w-full h-full object-cover"
                                     />
                                   ) : (
@@ -662,99 +689,146 @@ const validateCurrentTab = () => {
                                     {/* <Progress value={uploadProgress} className="w-3/4 h-2" /> */}
                                   </div>
                                 )}
-                                <input 
-                                  type="file" 
-                                  accept="image/*" 
+                                <input
+                                  type="file"
+                                  accept="image/*"
                                   onChange={handleUpload}
                                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                                 />
                               </div>
                             </div>
                           </div>
-                          
+
                           <div className="md:col-span-2 space-y-4">
                             <div className="space-y-2">
                               <label className="block text-sm font-medium">Full Name</label>
-                              <Input 
-                                placeholder="John Doe" 
+                              <Input
+                                placeholder="John Doe"
                                 value={personalInfo.name}
-                                onChange={(e) => setPersonalInfo({...personalInfo, name: e.target.value})}
-                                className="focus:ring-2 focus:ring-primary focus:border-transparent"
-                              />
-                            </div>
-                            
-                            <div className="space-y-2">
-                              <label className="block text-sm font-medium">Professional Title</label>
-                              <Input 
-                                placeholder="Software Engineer" 
-                                value={personalInfo.title}
-                                onChange={(e) => setPersonalInfo({...personalInfo, title: e.target.value})}
-                              />
-                            </div>
-                            <div className="space-y-2">
-                            <label className="block text-sm font-medium mb-1">Graduation / Degree Program</label>
-                              <Input 
-                               placeholder="e.g., B.Sc in Computer Science, B.Tech in ECE"
-                                value={personalInfo.education}
-                                onChange={(e) => setPersonalInfo({...personalInfo, education: e.target.value})}
-                                className="focus:ring-2 focus:ring-primary focus:border-transparent"
-                              />
-                            </div>
-                            <div className="space-y-2">
-                            <label className="block text-sm font-medium mb-1">  How long have you been working with this technology?</label>
-                              <Input 
-                                placeholder="e.g., 2 years with React.js"
-                                value={personalInfo.yearofexperience}
-                                onChange={(e) => setPersonalInfo({...personalInfo, yearofexperience: e.target.value})}
+                                onChange={(e) =>
+                                  setPersonalInfo({
+                                    ...personalInfo,
+                                    name: e.target.value,
+                                  })
+                                }
                                 className="focus:ring-2 focus:ring-primary focus:border-transparent"
                               />
                             </div>
 
                             <div className="space-y-2">
-                            <label className="block text-sm font-medium mb-1">  What drives your passion in tech or development?
-                                
-                            </label>
-                            <Textarea 
-                            placeholder="e.g., I love solving real-world problems and building user-friendly apps..." 
-                            value={personalInfo.passionate}
-                            onChange={(e) => setPersonalInfo({...personalInfo, passionate: e.target.value})}    
-                            rows={4}
-                             className={`${
-  personalInfo.passionate.trim().split(/\s+/).filter(Boolean).length > 20
-    ? 'border-red-500 border-2'
-    : ''
-}`}
-                            />
-                            {personalInfo.passionate.trim().split(/\s+/).filter(Boolean).length>20 && (
-    <p className="text-sm text-red-500">Maximum 20 allowed</p>
-  )}
-                            </div>
-                            <div className="space-y-2">
-                            <label className="block text-sm font-medium mb-1">  Where are you from? (City, Country)</label>
-                            <Input placeholder="e.g., Guwahati, India" 
-                             value={personalInfo.location}
-                             onChange={(e) => setPersonalInfo({...personalInfo, location: e.target.value})}
-                            />
-                            </div>
-                            
-                            <div className="space-y-2">
-                              <label className="block text-sm font-medium">Short Summary
+                              <label className="block text-sm font-medium">
+                                Professional Title
                               </label>
-                              <Textarea 
-                                placeholder="I'm a passionate full-stack developer with 2+ years of experience building scalable web apps using React, Node.js" 
+                              <Input
+                                placeholder="Software Engineer"
+                                value={personalInfo.title}
+                                onChange={(e) =>
+                                  setPersonalInfo({
+                                    ...personalInfo,
+                                    title: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium mb-1">
+                                Graduation / Degree Program
+                              </label>
+                              <Input
+                                placeholder="e.g., B.Sc in Computer Science, B.Tech in ECE"
+                                value={personalInfo.education}
+                                onChange={(e) =>
+                                  setPersonalInfo({
+                                    ...personalInfo,
+                                    education: e.target.value,
+                                  })
+                                }
+                                className="focus:ring-2 focus:ring-primary focus:border-transparent"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium mb-1">
+                                {' '}
+                                How long have you been working with this technology?
+                              </label>
+                              <Input
+                                placeholder="e.g., 2 years with React.js"
+                                value={personalInfo.yearofexperience}
+                                onChange={(e) =>
+                                  setPersonalInfo({
+                                    ...personalInfo,
+                                    yearofexperience: e.target.value,
+                                  })
+                                }
+                                className="focus:ring-2 focus:ring-primary focus:border-transparent"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium mb-1">
+                                {' '}
+                                What drives your passion in tech or development?
+                              </label>
+                              <Textarea
+                                placeholder="e.g., I love solving real-world problems and building user-friendly apps..."
+                                value={personalInfo.passionate}
+                                onChange={(e) =>
+                                  setPersonalInfo({
+                                    ...personalInfo,
+                                    passionate: e.target.value,
+                                  })
+                                }
+                                rows={4}
+                                className={`${
+                                  personalInfo.passionate.trim().split(/\s+/).filter(Boolean)
+                                    .length > 20
+                                    ? 'border-red-500 border-2'
+                                    : ''
+                                }`}
+                              />
+                              {personalInfo.passionate.trim().split(/\s+/).filter(Boolean).length >
+                                20 && <p className="text-sm text-red-500">Maximum 20 allowed</p>}
+                            </div>
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium mb-1">
+                                {' '}
+                                Where are you from? (City, Country)
+                              </label>
+                              <Input
+                                placeholder="e.g., Guwahati, India"
+                                value={personalInfo.location}
+                                onChange={(e) =>
+                                  setPersonalInfo({
+                                    ...personalInfo,
+                                    location: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium">Short Summary</label>
+                              <Textarea
+                                placeholder="I'm a passionate full-stack developer with 2+ years of experience building scalable web apps using React, Node.js"
                                 rows={4}
                                 value={personalInfo.summary}
-                                onChange={(e) => setPersonalInfo({...personalInfo, summary: e.target.value})}
-                              className={`${
-  personalInfo.summary.trim().split(/\s+/).filter(Boolean).length > 60
-    ? 'border-red-500'
-    : ''
-}`}
-                          
+                                onChange={(e) =>
+                                  setPersonalInfo({
+                                    ...personalInfo,
+                                    summary: e.target.value,
+                                  })
+                                }
+                                className={`${
+                                  personalInfo.summary.trim().split(/\s+/).filter(Boolean).length >
+                                  60
+                                    ? 'border-red-500'
+                                    : ''
+                                }`}
                               />
-                                {personalInfo.summary.trim().split(/\s+/).filter(Boolean).length>60 && (
-    <p className="text-sm text-red-500">Maximum 60 words allowed</p>
-  )}
+                              {personalInfo.summary.trim().split(/\s+/).filter(Boolean).length >
+                                60 && (
+                                <p className="text-sm text-red-500">Maximum 60 words allowed</p>
+                              )}
                             </div>
                           </div>
                         </motion.div>
@@ -765,7 +839,7 @@ const validateCurrentTab = () => {
                       <CardContent className="p-0 space-y-4">
                         <LayoutGroup>
                           {experience.map((exp) => (
-                            <motion.div 
+                            <motion.div
                               key={exp.id}
                               layout
                               initial={{ opacity: 0, y: 20 }}
@@ -780,14 +854,16 @@ const validateCurrentTab = () => {
                               >
                                 <FiX className="h-4 w-4 text-gray-500" />
                               </button>
-                              
+
                               <div className="grid md:grid-cols-2 gap-3">
                                 <div>
                                   <label className="block text-sm font-medium mb-1">Company</label>
                                   <Input
                                     placeholder="Google"
                                     value={exp.company}
-                                    onChange={(e) => handleExperienceChange(exp.id, 'company', e.target.value)}
+                                    onChange={(e) =>
+                                      handleExperienceChange(exp.id, 'company', e.target.value)
+                                    }
                                   />
                                 </div>
                                 <div>
@@ -795,11 +871,13 @@ const validateCurrentTab = () => {
                                   <Input
                                     placeholder="Senior Developer"
                                     value={exp.role}
-                                    onChange={(e) => handleExperienceChange(exp.id, 'role', e.target.value)}
+                                    onChange={(e) =>
+                                      handleExperienceChange(exp.id, 'role', e.target.value)
+                                    }
                                   />
                                 </div>
                               </div>
-                              
+
                               <div className="flex flex-wrap gap-4 w-full">
                                 <div>
                                   <label className="text-sm font-medium mb-1">Start Date</label>
@@ -807,64 +885,79 @@ const validateCurrentTab = () => {
                                     type="date"
                                     value={exp.startDate}
                                     className="w-full"
-   
-                                    onChange={(e) => handleExperienceChange(exp.id, 'startDate', e.target.value)}
+                                    onChange={(e) =>
+                                      handleExperienceChange(exp.id, 'startDate', e.target.value)
+                                    }
                                   />
-                                  {exp.error && (
-  <p className="text-red-500 text-sm">{exp.error}</p>
-)}
+                                  {exp.error && <p className="text-red-500 text-sm">{exp.error}</p>}
                                 </div>
-                                <div className='flex items-center flex-row flex-wrap gap-4 '>
-                                  <div className='flex flex-col'>  
-                                  <label className="text-sm font-medium mb-1">End Date</label>
-                                  <Input
+                                <div className="flex items-center flex-row flex-wrap gap-4 ">
+                                  <div className="flex flex-col">
+                                    <label className="text-sm font-medium mb-1">End Date</label>
+                                    <Input
                                       type="date"
                                       value={exp.currentlyWorking ? '' : exp.endDate}
-                                      onChange={(e) => handleExperienceChange(exp.id, 'endDate', e.target.value)}
+                                      onChange={(e) =>
+                                        handleExperienceChange(exp.id, 'endDate', e.target.value)
+                                      }
                                       disabled={exp.currentlyWorking}
-                                      className={cn('w-full',exp.currentlyWorking ? 'opacity-50' : '')}
+                                      className={cn(
+                                        'w-full',
+                                        exp.currentlyWorking ? 'opacity-50' : '',
+                                      )}
                                     />
                                     {exp.error && (
-  <p className="text-red-500 text-sm">{exp.error}</p>
-)}
+                                      <p className="text-red-500 text-sm">{exp.error}</p>
+                                    )}
                                   </div>
                                   <label>
-                                      <input
-                                        type="checkbox"
-                                        checked={exp.currentlyWorking}
-                                        onChange={(e) => handleExperienceChange(exp.id, 'currentlyWorking', e.target.checked)}
-                                        className="h-4 w-4 text-primary rounded"
-                                      />
-                                      <span className="text-sm ms-3">Currently working</span>
-                                    </label>
+                                    <input
+                                      type="checkbox"
+                                      checked={exp.currentlyWorking}
+                                      onChange={(e) =>
+                                        handleExperienceChange(
+                                          exp.id,
+                                          'currentlyWorking',
+                                          e.target.checked,
+                                        )
+                                      }
+                                      className="h-4 w-4 text-primary rounded"
+                                    />
+                                    <span className="text-sm ms-3">Currently working</span>
+                                  </label>
                                 </div>
-                               
                               </div>
-                               <label className="block text-sm font-medium mb-1">Description</label>
-                                  <Textarea
-                                    placeholder="Built a full-stack e-commerce platform with React and Node.js..."
-                                    value={exp.description}
-                                    onChange={(e) => handleExperienceChange(exp.id, 'description', e.target.value)}
-                                    rows={3}
-                                   className={
-    exp.description.trim().split(/\s+/).filter(Boolean).length > 80
-      ? 'border-red-500'
-      : ''
-  }
-                               />
-                                {exp.description.trim().split(/\s+/).filter(Boolean).length>80 &&(
-                                   <p className="text-sm text-red-500">Maximum 80 words allowed</p>
-                                )}
-                                <TechBadgeInput tags={exp.techTag || []} 
-                                setTags={(newTags)=>handleExperienceChange(exp.id,'techTag',newTags)} />
+                              <label className="block text-sm font-medium mb-1">Description</label>
+                              <Textarea
+                                placeholder="Built a full-stack e-commerce platform with React and Node.js..."
+                                value={exp.description}
+                                onChange={(e) =>
+                                  handleExperienceChange(exp.id, 'description', e.target.value)
+                                }
+                                rows={3}
+                                className={
+                                  exp.description.trim().split(/\s+/).filter(Boolean).length > 80
+                                    ? 'border-red-500'
+                                    : ''
+                                }
+                              />
+                              {exp.description.trim().split(/\s+/).filter(Boolean).length > 80 && (
+                                <p className="text-sm text-red-500">Maximum 80 words allowed</p>
+                              )}
+                              <TechBadgeInput
+                                tags={exp.techTag || []}
+                                setTags={(newTags) =>
+                                  handleExperienceChange(exp.id, 'techTag', newTags)
+                                }
+                              />
                             </motion.div>
                           ))}
                         </LayoutGroup>
-                        
+
                         <motion.div whileTap={{ scale: 0.95 }}>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
+                          <Button
+                            type="button"
+                            variant="outline"
                             onClick={addExperience}
                             className="w-full mt-2"
                           >
@@ -894,44 +987,60 @@ const validateCurrentTab = () => {
                               >
                                 <FiX className="h-4 w-4 text-gray-500" />
                               </button>
-                              
+
                               <div>
-                                <label className="block text-sm font-medium mb-1">Project Title</label>
+                                <label className="block text-sm font-medium mb-1">
+                                  Project Title
+                                </label>
                                 <Input
                                   placeholder="E-commerce Website"
                                   value={proj.title}
-                                  onChange={(e) => handleProjectChange(proj.id, 'title', e.target.value)}
+                                  onChange={(e) =>
+                                    handleProjectChange(proj.id, 'title', e.target.value)
+                                  }
                                 />
                               </div>
-                              
+
                               <div>
-                                <label className="block text-sm font-medium mb-1">Description</label>
+                                <label className="block text-sm font-medium mb-1">
+                                  Description
+                                </label>
                                 <Textarea
                                   placeholder="Built a full-stack e-commerce platform with React and Node.js..."
                                   value={proj.description}
-                                  onChange={(e) => handleProjectChange(proj.id, 'description', e.target.value)}
+                                  onChange={(e) =>
+                                    handleProjectChange(proj.id, 'description', e.target.value)
+                                  }
                                   rows={3}
                                 />
                               </div>
 
                               <div>
-                                <label className="block text-sm font-medium mb-1">Project Link (Optional)</label>
+                                <label className="block text-sm font-medium mb-1">
+                                  Project Link (Optional)
+                                </label>
                                 <Input
                                   placeholder="https://example.com"
                                   value={proj.link || ''}
-                                  onChange={(e) => handleProjectChange(proj.id, 'link', e.target.value)}
+                                  onChange={(e) =>
+                                    handleProjectChange(proj.id, 'link', e.target.value)
+                                  }
                                 />
                               </div>
-                              <TechBadgeInput tags={proj.techTag || []} 
-                                setTags={(newTags)=>handleProjectChange(proj.id,'techTag',newTags)} />
+                              <TechBadgeInput
+                                tags={proj.techTag || []}
+                                setTags={(newTags) =>
+                                  handleProjectChange(proj.id, 'techTag', newTags)
+                                }
+                              />
                             </motion.div>
                           ))}
                         </LayoutGroup>
-                        
+
                         <motion.div whileTap={{ scale: 0.95 }}>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
+                          <Button
+                            type="button"
+                            variant="outline"
                             onClick={addProject}
                             className="w-full mt-2"
                           >
@@ -942,7 +1051,6 @@ const validateCurrentTab = () => {
                       </CardContent>
                     )}
 
-                    
                     {currentTab === 'stack' && (
                       <CardContent className="p-0">
                         <motion.div
@@ -957,7 +1065,7 @@ const validateCurrentTab = () => {
                             </p>
                           </div>
                           <MultiSelectTag
-                            availableTags={techstack.map(t => ({
+                            availableTags={techstack.map((t) => ({
                               name: t.name,
                               logo: t.logo,
                             }))}
@@ -968,7 +1076,6 @@ const validateCurrentTab = () => {
                       </CardContent>
                     )}
 
-              
                     {currentTab === 'social' && (
                       <CardContent className="p-0 space-y-4">
                         <motion.div
@@ -982,7 +1089,7 @@ const validateCurrentTab = () => {
                               Help people connect with you
                             </p>
                           </div>
-                          
+
                           <div className="space-y-4">
                             {socialLinks.map((link, index) => (
                               <motion.div
@@ -994,7 +1101,9 @@ const validateCurrentTab = () => {
                               >
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-medium truncate">{link.platform}</p>
-                                  <p className="text-xs text-muted-foreground truncate">{link.url}</p>
+                                  <p className="text-xs text-muted-foreground truncate">
+                                    {link.url}
+                                  </p>
                                 </div>
                                 <button
                                   onClick={() => removeSocialLink(index)}
@@ -1004,20 +1113,25 @@ const validateCurrentTab = () => {
                                 </button>
                               </motion.div>
                             ))}
-                            
+
                             <div className="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg p-4">
                               <div className="grid md:grid-cols-3 gap-3">
                                 <div>
                                   <label className="block text-sm font-medium mb-1">Platform</label>
                                   <Select
                                     value={newLink.platform}
-                                    onValueChange={(value) => setNewLink({...newLink, platform: value})}
+                                    onValueChange={(value) =>
+                                      setNewLink({
+                                        ...newLink,
+                                        platform: value,
+                                      })
+                                    }
                                   >
                                     <SelectTrigger>
                                       <SelectValue placeholder="Select platform" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                      {SOCIAL_MEDIA_PLATFORMS.map(link => (
+                                      {SOCIAL_MEDIA_PLATFORMS.map((link) => (
                                         <SelectItem key={link.id} value={link.label}>
                                           <div className="flex items-center gap-2">
                                             <link.icon className="h-4 w-4" />
@@ -1028,16 +1142,21 @@ const validateCurrentTab = () => {
                                     </SelectContent>
                                   </Select>
                                 </div>
-                                
+
                                 <div>
                                   <label className="block text-sm font-medium mb-1">Username</label>
                                   <Input
                                     placeholder="yourusername"
                                     value={newLink.username}
-                                    onChange={(e) => setNewLink({...newLink, username: e.target.value})}
+                                    onChange={(e) =>
+                                      setNewLink({
+                                        ...newLink,
+                                        username: e.target.value,
+                                      })
+                                    }
                                   />
                                 </div>
-                                
+
                                 <div className="flex items-end">
                                   <motion.div whileTap={{ scale: 0.95 }}>
                                     <Button
@@ -1057,70 +1176,86 @@ const validateCurrentTab = () => {
                       </CardContent>
                     )}
 
-{currentTab === 'certification/courses' && (
-  <CardContent className="p-0 space-y-4">
-    <LayoutGroup>
-      {certification.map((cert, index) => (
-        <motion.div
-          key={cert.id}
-          layout
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, x: -50 }}
-          transition={{ duration: 0.2 }}
-          className="border rounded-lg p-4 space-y-3 relative group"
-        >
-          <button
-            onClick={() => removeCertificat(cert.id)}
-            className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <FiX className="h-4 w-4 text-gray-500" />
-          </button>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Certification/Course Title</label>
-            <Input
-              placeholder="AWS Certified Developer"
-              value={cert.title}
-              onChange={(e) => handleCertificationChange(cert.id, 'title', e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
-            <Textarea
-              placeholder="Earned by demonstrating proficiency in developing and maintaining applications on AWS"
-              value={cert.description}
-              onChange={(e) => handleCertificationChange(cert.id, 'description', e.target.value)}
-              rows={3}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Certificate URL (Optional)</label>
-            <Input
-              placeholder="https://example.com/certificate"
-              value={cert.url || ''}
-              onChange={(e) => handleCertificationChange(cert.id, 'url', e.target.value)}
-            />
-          </div>
-        </motion.div>
-      ))}
-    </LayoutGroup>
-    
-    <motion.div whileTap={{ scale: 0.95 }}>
-      <Button 
-        type="button" 
-        variant="outline" 
-        onClick={addCertificate}
-        className="w-full mt-2"
-      >
-        <FiPlus className="mr-2" />
-        Add Certification/Course
-      </Button>
-    </motion.div>
-  </CardContent>
-)}
+                    {currentTab === 'certification/courses' && (
+                      <CardContent className="p-0 space-y-4">
+                        <LayoutGroup>
+                          {certification.map((cert, index) => (
+                            <motion.div
+                              key={cert.id}
+                              layout
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, x: -50 }}
+                              transition={{ duration: 0.2 }}
+                              className="border rounded-lg p-4 space-y-3 relative group"
+                            >
+                              <button
+                                onClick={() => removeCertificat(cert.id)}
+                                className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <FiX className="h-4 w-4 text-gray-500" />
+                              </button>
+
+                              <div>
+                                <label className="block text-sm font-medium mb-1">
+                                  Certification/Course Title
+                                </label>
+                                <Input
+                                  placeholder="AWS Certified Developer"
+                                  value={cert.title}
+                                  onChange={(e) =>
+                                    handleCertificationChange(cert.id, 'title', e.target.value)
+                                  }
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-sm font-medium mb-1">
+                                  Description
+                                </label>
+                                <Textarea
+                                  placeholder="Earned by demonstrating proficiency in developing and maintaining applications on AWS"
+                                  value={cert.description}
+                                  onChange={(e) =>
+                                    handleCertificationChange(
+                                      cert.id,
+                                      'description',
+                                      e.target.value,
+                                    )
+                                  }
+                                  rows={3}
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-sm font-medium mb-1">
+                                  Certificate URL (Optional)
+                                </label>
+                                <Input
+                                  placeholder="https://example.com/certificate"
+                                  value={cert.url || ''}
+                                  onChange={(e) =>
+                                    handleCertificationChange(cert.id, 'url', e.target.value)
+                                  }
+                                />
+                              </div>
+                            </motion.div>
+                          ))}
+                        </LayoutGroup>
+
+                        <motion.div whileTap={{ scale: 0.95 }}>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={addCertificate}
+                            className="w-full mt-2"
+                          >
+                            <FiPlus className="mr-2" />
+                            Add Certification/Course
+                          </Button>
+                        </motion.div>
+                      </CardContent>
+                    )}
 
                     {currentTab === 'availability' && (
                       <CardContent className="p-0">
@@ -1131,11 +1266,10 @@ const validateCurrentTab = () => {
                           className="space-y-4"
                         >
                           <div>
-                            <label className="block text-sm font-medium mb-1">Availability Status</label>
-                            <Select
-                              value={availability}
-                              onValueChange={setAvailability}
-                            >
+                            <label className="block text-sm font-medium mb-1">
+                              Availability Status
+                            </label>
+                            <Select value={availability} onValueChange={setAvailability}>
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select your availability" />
                               </SelectTrigger>
@@ -1147,13 +1281,12 @@ const validateCurrentTab = () => {
                               </SelectContent>
                             </Select>
                           </div>
-                          
+
                           <div>
-                            <label className="block text-sm font-medium mb-1">Additional Notes</label>
-                            <Textarea
-                              placeholder="Any specific availability details..."
-                              rows={3}
-                            />
+                            <label className="block text-sm font-medium mb-1">
+                              Additional Notes
+                            </label>
+                            <Textarea placeholder="Any specific availability details..." rows={3} />
                           </div>
                         </motion.div>
                       </CardContent>
@@ -1176,12 +1309,12 @@ const validateCurrentTab = () => {
                               Your professional portfolio is ready to share with the world.
                             </p>
                           </div>
-                          
+
                           <div className="grid md:grid-cols-2 gap-4">
                             <Button variant="outline" onClick={() => setCurrentTab(tabOrder[0])}>
                               Edit Portfolio
                             </Button>
-                            <Button onClick={handleSubmit} disabled={completionPercentage < 100} >
+                            <Button onClick={handleSubmit} disabled={completionPercentage < 100}>
                               Publish Portfolio
                             </Button>
                           </div>
@@ -1197,22 +1330,18 @@ const validateCurrentTab = () => {
           <div className="border-t p-4 flex justify-between">
             {currentTab !== 'basic' ? (
               <motion.div whileTap={{ scale: 0.95 }}>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={goToPrevTab}
-                >
+                <Button type="button" variant="outline" onClick={goToPrevTab}>
                   Back
                 </Button>
               </motion.div>
             ) : (
-              <div></div> 
+              <div></div>
             )}
-            
+
             {currentTab !== 'preview' && (
               <motion.div whileTap={{ scale: 0.95 }}>
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={goToNextTab}
                   className="ml-auto"
                   disabled={!validateCurrentTab()}

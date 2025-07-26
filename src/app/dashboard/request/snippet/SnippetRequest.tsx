@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import axios from "@/lib/axios";
-import React, { useEffect, useState } from "react";
+import axios from '@/lib/axios';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -9,20 +9,20 @@ import {
   CardTitle,
   CardHeader,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneDark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
-import UserHoverCard from "@/components/UserHoverCard";
-import toast from "react-hot-toast";
-import { Check, X, Clock, Copy, Share2 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { format } from "date-fns";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { atomOneDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
+import UserHoverCard from '@/components/UserHoverCard';
+import toast from 'react-hot-toast';
+import { Check, X, Clock, Copy, Share2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { format } from 'date-fns';
 
 interface Snippet {
   id: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
   createdAt: string;
   requester: {
     username: string;
@@ -34,7 +34,7 @@ interface Snippet {
     framework: string;
     description: string;
     content: string;
-    visibility: "public" | "private";
+    visibility: 'public' | 'private';
     language: string;
   };
 }
@@ -47,11 +47,11 @@ const SnippetRequest = () => {
   async function fetchData() {
     try {
       setLoading(true);
-      const res = await axios.get("/snippet/request");
+      const res = await axios.get('/snippet/request');
       setRequests(res.data.request);
     } catch (error) {
-      toast.error("Failed to load snippet requests");
-      console.error("Fetch error:", error);
+      toast.error('Failed to load snippet requests');
+      console.error('Fetch error:', error);
     } finally {
       setLoading(false);
     }
@@ -61,35 +61,27 @@ const SnippetRequest = () => {
     fetchData();
   }, []);
 
-  const handleAction = async (id: string, action: "APPROVED" | "REJECTED") => {
+  const handleAction = async (id: string, action: 'APPROVED' | 'REJECTED') => {
     try {
-      await axios.put("/snippet/request", { requestId: id, status: action });
-      setRequests((prev) =>
-        prev.map((req) => (req.id === id ? { ...req, status: action } : req)),
-      );
-      toast.success(
-        action === "APPROVED"
-          ? "Access granted successfully"
-          : "Request rejected",
-      );
+      await axios.put('/snippet/request', { requestId: id, status: action });
+      setRequests((prev) => prev.map((req) => (req.id === id ? { ...req, status: action } : req)));
+      toast.success(action === 'APPROVED' ? 'Access granted successfully' : 'Request rejected');
     } catch (error) {
-      toast.error("Action failed");
-      console.error("Action error:", error);
+      toast.error('Action failed');
+      console.error('Action error:', error);
     }
   };
 
   const copyToClipboard = (content: string, id: string) => {
     navigator.clipboard.writeText(content);
     setCopiedId(id);
-    toast.success("Copied to clipboard");
+    toast.success('Copied to clipboard');
     setTimeout(() => setCopiedId(null), 2000);
   };
 
   const shareRequest = (id: string) => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/dashboard/snippet/request/${id}`,
-    );
-    toast.success("Request link copied");
+    navigator.clipboard.writeText(`${window.location.origin}/dashboard/snippet/request/${id}`);
+    toast.success('Request link copied');
   };
 
   if (loading) {
@@ -120,12 +112,8 @@ const SnippetRequest = () => {
     <div className="w-full max-w-4xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Snippet Requests
-          </h1>
-          <p className="text-muted-foreground">
-            Manage access requests for your code snippets
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight">Snippet Requests</h1>
+          <p className="text-muted-foreground">Manage access requests for your code snippets</p>
         </div>
         <Button variant="outline" onClick={fetchData}>
           Refresh
@@ -151,9 +139,7 @@ const SnippetRequest = () => {
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       {request.snippet.title}
-                      <Badge variant="outline">
-                        {request.snippet.framework}
-                      </Badge>
+                      <Badge variant="outline">{request.snippet.framework}</Badge>
                     </CardTitle>
                     <CardDescription className="mt-1">
                       {request.snippet.description}
@@ -161,21 +147,17 @@ const SnippetRequest = () => {
                   </div>
                   <Badge
                     variant={
-                      request.status === "APPROVED"
-                        ? "default"
-                        : request.status === "REJECTED"
-                          ? "destructive"
-                          : "secondary"
+                      request.status === 'APPROVED'
+                        ? 'default'
+                        : request.status === 'REJECTED'
+                          ? 'destructive'
+                          : 'secondary'
                     }
                     className="flex items-center gap-1"
                   >
-                    {request.status === "PENDING" && (
-                      <Clock className="h-3 w-3" />
-                    )}
-                    {request.status === "APPROVED" && (
-                      <Check className="h-3 w-3" />
-                    )}
-                    {request.status === "REJECTED" && <X className="h-3 w-3" />}
+                    {request.status === 'PENDING' && <Clock className="h-3 w-3" />}
+                    {request.status === 'APPROVED' && <Check className="h-3 w-3" />}
+                    {request.status === 'REJECTED' && <X className="h-3 w-3" />}
                     {request.status}
                   </Badge>
                 </div>
@@ -192,21 +174,18 @@ const SnippetRequest = () => {
                     />
                   </div>
                   <span className="text-muted-foreground">
-                    {format(
-                      new Date(request.createdAt),
-                      "MMM d, yyyy - h:mm a",
-                    )}
+                    {format(new Date(request.createdAt), 'MMM d, yyyy - h:mm a')}
                   </span>
                 </div>
 
                 <div className="relative">
                   <SyntaxHighlighter
-                    language={request.snippet.language || "javascript"}
+                    language={request.snippet.language || 'javascript'}
                     style={atomOneDark}
                     customStyle={{
-                      borderRadius: "0.5rem",
-                      padding: "1rem",
-                      fontSize: "0.875rem",
+                      borderRadius: '0.5rem',
+                      padding: '1rem',
+                      fontSize: '0.875rem',
                     }}
                     showLineNumbers
                   >
@@ -217,12 +196,10 @@ const SnippetRequest = () => {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8"
-                      onClick={() =>
-                        copyToClipboard(request.snippet.content, request.id)
-                      }
+                      onClick={() => copyToClipboard(request.snippet.content, request.id)}
                     >
                       <Copy
-                        className={`h-4 w-4 ${copiedId === request.id ? "text-green-500" : ""}`}
+                        className={`h-4 w-4 ${copiedId === request.id ? 'text-green-500' : ''}`}
                       />
                     </Button>
                     <Button
@@ -237,20 +214,17 @@ const SnippetRequest = () => {
                 </div>
               </CardContent>
 
-              {request.status === "PENDING" && (
+              {request.status === 'PENDING' && (
                 <CardFooter className="flex justify-end gap-2 bg-muted/50 p-4">
                   <Button
                     variant="outline"
-                    onClick={() => handleAction(request.id, "REJECTED")}
+                    onClick={() => handleAction(request.id, 'REJECTED')}
                     className="gap-2"
                   >
                     <X className="h-4 w-4" />
                     Reject
                   </Button>
-                  <Button
-                    onClick={() => handleAction(request.id, "APPROVED")}
-                    className="gap-2"
-                  >
+                  <Button onClick={() => handleAction(request.id, 'APPROVED')} className="gap-2">
                     <Check className="h-4 w-4" />
                     Approve
                   </Button>

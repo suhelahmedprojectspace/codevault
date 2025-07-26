@@ -1,9 +1,9 @@
-"use client";
-import React, { useState } from "react";
-import { Input } from "./ui/input";
-import { Badge } from "./ui/badge";
-import { X, Plus } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+'use client';
+import React, { useState } from 'react';
+import { Input } from './ui/input';
+import { Badge } from './ui/badge';
+import { X, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TechBadgeInput = ({
   tags,
@@ -12,19 +12,19 @@ const TechBadgeInput = ({
   tags: string[];
   setTags: (val: string[]) => void;
 }) => {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if ((e.key === " " || e.key === "Enter") && input.trim()) {
+    if ((e.key === ' ' || e.key === 'Enter') && input.trim()) {
       e.preventDefault();
-      const newTag = input.trim().replace("#", "");
+      const newTag = input.trim().replace('#', '');
       if (newTag && !tags.includes(newTag)) {
         setTags([...tags, newTag]);
       }
-      setInput("");
+      setInput('');
     }
-    if (e.key === "Backspace" && input === "" && tags.length > 0) {
+    if (e.key === 'Backspace' && input === '' && tags.length > 0) {
       setTags(tags.slice(0, -1));
     }
   };
@@ -35,13 +35,11 @@ const TechBadgeInput = ({
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pasteData = e.clipboardData.getData("text");
+    const pasteData = e.clipboardData.getData('text');
     const newTags = pasteData
       .split(/[,\s]+/)
-      .filter(
-        (tag) => tag.trim() && !tags.includes(tag.replace("#", "").trim()),
-      )
-      .map((tag) => tag.replace("#", "").trim());
+      .filter((tag) => tag.trim() && !tags.includes(tag.replace('#', '').trim()))
+      .map((tag) => tag.replace('#', '').trim());
 
     if (newTags.length > 0) {
       setTags([...tags, ...newTags]);
@@ -60,8 +58,8 @@ const TechBadgeInput = ({
       <div
         className={`flex flex-wrap items-center gap-2 p-3 rounded-md border transition-colors ${
           isFocused
-            ? "border-blue-500 ring-2 ring-blue-500/20 dark:border-blue-400 dark:ring-blue-400/20"
-            : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+            ? 'border-blue-500 ring-2 ring-blue-500/20 dark:border-blue-400 dark:ring-blue-400/20'
+            : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
         } bg-background`}
       >
         <AnimatePresence>
@@ -73,10 +71,7 @@ const TechBadgeInput = ({
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.2 }}
             >
-              <Badge
-                variant="secondary"
-                className="py-1.5 px-3 flex items-center gap-1.5 group"
-              >
+              <Badge variant="secondary" className="py-1.5 px-3 flex items-center gap-1.5 group">
                 <span className="text-sm font-medium">{tag}</span>
                 <button
                   onClick={() => handleRemove(tag)}

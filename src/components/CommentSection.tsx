@@ -1,41 +1,40 @@
-"use client";
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { CommentItem } from "./CommentItem";
-import toast from "react-hot-toast";
-import axios from "@/lib/axios";
-import { CommentSectionProps } from "@/types/blog";
+'use client';
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { CommentItem } from './CommentItem';
+import toast from 'react-hot-toast';
+import axios from '@/lib/axios';
+import { CommentSectionProps } from '@/types/blog';
 
-
-export const CommentSection = ({ 
-  comments, 
-  blogId, 
-  blogAuthorId, 
+export const CommentSection = ({
+  comments,
+  blogId,
+  blogAuthorId,
   isBlogAuthor,
   showComment,
-  setShowComment
+  setShowComment,
 }: CommentSectionProps) => {
   const [content, setContent] = useState('');
 
   const handlePostComment = async () => {
     if (!content.trim()) {
-      toast.error("Comment cannot be empty");
+      toast.error('Comment cannot be empty');
       return;
     }
     try {
       const res = await axios.post('/comment', {
         content,
-        blogId
+        blogId,
       });
       if (res.status === 201) {
-        toast.success("Comment posted!");
+        toast.success('Comment posted!');
         setContent('');
         setShowComment(false);
       }
     } catch (error) {
-      toast.error("Failed to post comment");
+      toast.error('Failed to post comment');
       console.error(error);
     }
   };
@@ -58,10 +57,7 @@ export const CommentSection = ({
             <Button variant="outline" onClick={() => setShowComment(false)}>
               Cancel
             </Button>
-            <Button
-              onClick={handlePostComment}
-              disabled={isBlogAuthor || !content.trim()}
-            >
+            <Button onClick={handlePostComment} disabled={isBlogAuthor || !content.trim()}>
               Post Comment
             </Button>
           </div>

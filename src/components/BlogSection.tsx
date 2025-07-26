@@ -1,8 +1,8 @@
-"use client";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import axios from "@/lib/axios";
-import { Skeleton } from "@/components/ui/skeleton"; // Assuming you're using shadcn/ui
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import axios from '@/lib/axios';
+import { Skeleton } from '@/components/ui/skeleton'; // Assuming you're using shadcn/ui
 
 interface Blog {
   id: string;
@@ -23,10 +23,10 @@ export default function BlogSection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("/blog/hero");
+        const res = await axios.get('/blog/hero');
         setBlogs(res.data.blog);
       } catch (err) {
-        setError("Failed to load blog posts");
+        setError('Failed to load blog posts');
         console.error(err);
       } finally {
         setLoading(false);
@@ -76,9 +76,7 @@ export default function BlogSection() {
           <span className="text-blue-600 font-medium text-sm uppercase tracking-wider">
             Insights & Tutorials
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4">
-            Developer Blog
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4">Developer Blog</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Explore our latest technical articles and industry insights
           </p>
@@ -97,9 +95,7 @@ export default function BlogSection() {
                     {blog.readTime && (
                       <>
                         <span className="mx-2 text-gray-300">•</span>
-                        <span className="text-sm text-gray-500">
-                          {blog.readTime}
-                        </span>
+                        <span className="text-sm text-gray-500">{blog.readTime}</span>
                       </>
                     )}
                   </div>
@@ -107,7 +103,7 @@ export default function BlogSection() {
                     {blog.title}
                   </h3>
                   <p className="text-gray-600 mb-4 line-clamp-3">
-                    {blog.excerpt || blog.content.substring(0, 150) + "..."}
+                    {blog.excerpt || blog.content.substring(0, 150) + '...'}
                   </p>
                   <Link
                     href={`/blogs/${blog.id}`}
@@ -154,9 +150,7 @@ export default function BlogSection() {
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500">
-              No blog posts available at this time
-            </p>
+            <p className="text-gray-500">No blog posts available at this time</p>
           </div>
         )}
       </div>

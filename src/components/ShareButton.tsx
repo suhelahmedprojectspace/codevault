@@ -1,14 +1,9 @@
-"use client";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
-import { CheckIcon, Share2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipProvider,
-  TooltipTrigger,
-  TooltipContent,
-} from "./ui/tooltip";
+'use client';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { CheckIcon, Share2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from './ui/tooltip';
 
 const ShareButton = ({ portfolioId }: { portfolioId: string }) => {
   const [copied, setCopied] = useState(false);
@@ -18,7 +13,7 @@ const ShareButton = ({ portfolioId }: { portfolioId: string }) => {
     try {
       await navigator.clipboard.writeText(portfolioUrl);
       setCopied(true);
-      toast.success("Portfolio link copied to clipboard!");
+      toast.success('Portfolio link copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
 
       if (navigator.share) {
@@ -29,7 +24,7 @@ const ShareButton = ({ portfolioId }: { portfolioId: string }) => {
         });
       }
     } catch (error) {
-      toast.error("Failed to copy link");
+      toast.error('Failed to copy link');
     }
   };
 
@@ -40,9 +35,9 @@ const ShareButton = ({ portfolioId }: { portfolioId: string }) => {
           <button
             onClick={handleShare}
             className={cn(
-              "flex items-center gap-2 p-3 rounded-lg group",
-              "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700",
-              "transition-colors duration-200 relative",
+              'flex items-center gap-2 p-3 rounded-lg group',
+              'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+              'transition-colors duration-200 relative',
             )}
           >
             {copied ? (

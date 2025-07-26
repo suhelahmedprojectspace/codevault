@@ -1,10 +1,10 @@
-import React from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import React from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 const snippets = [
   {
-    title: "Simple Counter with React",
+    title: 'Simple Counter with React',
     content: `'use client';
   import React, { useState } from 'react';
   
@@ -27,7 +27,7 @@ const snippets = [
       "A basic counter component using React's useState hook. Useful for testing state changes in UI elements.",
   },
   {
-    title: "Fetch API with Axios",
+    title: 'Fetch API with Axios',
     content: `import axios from 'axios';
   import { useEffect, useState } from 'react';
   
@@ -47,10 +47,10 @@ const snippets = [
     );
   }`,
     description:
-      "This React component fetches user data from an API using Axios and displays a simple user list.",
+      'This React component fetches user data from an API using Axios and displays a simple user list.',
   },
   {
-    title: "Debounce Hook in React",
+    title: 'Debounce Hook in React',
     content: `import { useState, useEffect } from 'react';
   
   function useDebounce(value, delay) {
@@ -69,7 +69,7 @@ const snippets = [
   
   export default useDebounce;`,
     description:
-      "A custom hook for debouncing any rapidly changing value, like user input or search terms.",
+      'A custom hook for debouncing any rapidly changing value, like user input or search terms.',
   },
 ];
 
@@ -86,10 +86,10 @@ const ViewSnippets = () => {
                 language="javascript"
                 style={vscDarkPlus}
                 customStyle={{
-                  width: "100%",
-                  borderRadius: "0.5rem",
-                  fontSize: "0.875rem",
-                  boxSizing: "border-box",
+                  width: '100%',
+                  borderRadius: '0.5rem',
+                  fontSize: '0.875rem',
+                  boxSizing: 'border-box',
                 }}
               >
                 {data.content}

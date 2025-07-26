@@ -1,8 +1,8 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import axios from "@/lib/axios";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import axios from '@/lib/axios';
 import {
   Card,
   CardContent,
@@ -10,11 +10,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { motion } from "framer-motion";
-import { SOCIAL_MEDIA_PLATFORMS } from "@/constants/socailLinks";
-import Logo from "@/components/Logo";
-import { useParams } from "next/navigation";
+} from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import { SOCIAL_MEDIA_PLATFORMS } from '@/constants/socailLinks';
+import Logo from '@/components/Logo';
+import { useParams } from 'next/navigation';
 interface Portfolio {
   profile: string;
   name: string;
@@ -99,9 +99,7 @@ export default function PortfolioPage() {
             style={{ width: `${progress}%` }}
           />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-sm text-white font-semibold">
-              {progress}%
-            </span>
+            <span className="text-sm text-white font-semibold">{progress}%</span>
           </div>
         </div>
 
@@ -127,7 +125,7 @@ export default function PortfolioPage() {
                 height: `${Math.random() * 300 + 100}px`,
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
-                filter: "blur(40px)",
+                filter: 'blur(40px)',
               }}
             />
           ))}
@@ -153,9 +151,7 @@ export default function PortfolioPage() {
             </h1>
 
             <div className="relative inline-block mb-8">
-              <h2 className="text-2xl sm:text-3xl text-gray-300 font-medium">
-                {portfolio.title}
-              </h2>
+              <h2 className="text-2xl sm:text-3xl text-gray-300 font-medium">{portfolio.title}</h2>
               <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500/50 to-purple-500/50 rounded-full animate-underline-expand"></div>
             </div>
 
@@ -220,7 +216,7 @@ export default function PortfolioPage() {
                   height: `${Math.random() * 300 + 100}px`,
                   top: `${Math.random() * 100}%`,
                   left: `${Math.random() * 100}%`,
-                  filter: "blur(40px)",
+                  filter: 'blur(40px)',
                 }}
               />
             ))}
@@ -239,28 +235,28 @@ export default function PortfolioPage() {
             <ul className="space-y-4 text-gray-300 text-lg">
               {[
                 {
-                  icon: "🎓",
+                  icon: '🎓',
                   text: `${portfolio.education}`,
-                  color: "text-blue-400",
-                  animation: "animate-bounce",
+                  color: 'text-blue-400',
+                  animation: 'animate-bounce',
                 },
                 {
-                  icon: "💼",
+                  icon: '💼',
                   text: `${portfolio.yearofexperience}`,
-                  color: "text-purple-400",
-                  animation: "animate-pulse",
+                  color: 'text-purple-400',
+                  animation: 'animate-pulse',
                 },
                 {
-                  icon: "🌍",
+                  icon: '🌍',
                   text: `Based in ${portfolio.location}`,
-                  color: "text-emerald-400",
-                  animation: "animate-spin-slow",
+                  color: 'text-emerald-400',
+                  animation: 'animate-spin-slow',
                 },
                 {
-                  icon: "💬",
+                  icon: '💬',
                   text: `${portfolio.passionate}`,
-                  color: "text-amber-400",
-                  animation: "animate-float",
+                  color: 'text-amber-400',
+                  animation: 'animate-float',
                 },
               ].map((item, index) => (
                 <motion.li
@@ -271,9 +267,7 @@ export default function PortfolioPage() {
                   transition={{ delay: index * 0.1, duration: 0.5 }}
                   whileHover={{ scale: 1.02 }}
                 >
-                  <span className={`text-2xl ${item.color} ${item.animation}`}>
-                    {item.icon}
-                  </span>
+                  <span className={`text-2xl ${item.color} ${item.animation}`}>{item.icon}</span>
                   <span className="flex-1">
                     {item.text}
                     <div className="w-full h-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 mt-1"></div>
@@ -308,9 +302,7 @@ export default function PortfolioPage() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="font-medium text-white">
-                    Download Resume
-                  </span>
+                  <span className="font-medium text-white">Download Resume</span>
                 </span>
 
                 <span className="absolute -inset-1 rounded-full bg-blue-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -339,8 +331,7 @@ export default function PortfolioPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Tools & technologies I wield to craft exceptional digital
-            experiences
+            Tools & technologies I wield to craft exceptional digital experiences
           </motion.p>
         </div>
 
@@ -349,30 +340,32 @@ export default function PortfolioPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
         >
           {portfolio.techstack.map((tech) => (
             <motion.div
               key={tech.id}
               className="group relative"
               whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 400 }}
+              transition={{ type: 'spring', stiffness: 400 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
 
               <div className="flex flex-col items-center p-6 bg-zinc-800/60 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all duration-300 h-full">
                 <div className="w-16 h-16 flex items-center justify-center mb-4">
-                   {tech.logo ? (
-                                           <img
-                                       width={64}
-                                       height={64}
-                                       src={tech.logo}
-                                       alt={tech.name}
-                                       className="object-contain h-full w-full"
-                                     />
-                                     ):(
-                                      <span className="text-4xl text-center font-extrabold text-blue-600">{tech.name.charAt(0).toLocaleUpperCase()}</span>
-                                     )}
+                  {tech.logo ? (
+                    <img
+                      width={64}
+                      height={64}
+                      src={tech.logo}
+                      alt={tech.name}
+                      className="object-contain h-full w-full"
+                    />
+                  ) : (
+                    <span className="text-4xl text-center font-extrabold text-blue-600">
+                      {tech.name.charAt(0).toLocaleUpperCase()}
+                    </span>
+                  )}
                 </div>
                 <h3 className="text-lg font-medium text-center text-gray-300 group-hover:text-white transition-colors">
                   {tech.name}
@@ -391,8 +384,7 @@ export default function PortfolioPage() {
           viewport={{ once: true }}
         >
           <p className="text-lg text-gray-400 mb-6 max-w-3xl mx-auto">
-            I constantly refine my toolkit — adopting what's next, mastering
-            what matters.
+            I constantly refine my toolkit — adopting what's next, mastering what matters.
           </p>
           <Link
             href="#contact"
@@ -441,22 +433,20 @@ export default function PortfolioPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
         >
           {portfolio.projects.map((project) => (
             <motion.div
               key={project.id}
               className="group relative"
               whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 400 }}
+              transition={{ type: 'spring', stiffness: 400 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
 
               <Card className="h-full bg-zinc-800/60 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all duration-300 overflow-hidden">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-white">
-                    {project.title}
-                  </CardTitle>
+                  <CardTitle className="text-2xl font-bold text-white">{project.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 mb-4">{project.description}</p>
@@ -535,18 +525,16 @@ export default function PortfolioPage() {
             {portfolio.experiences.map((exp, index) => (
               <motion.div
                 key={exp.id}
-                className={`relative mb-12 ${index % 2 === 0 ? "md:pr-8 md:pl-0 md:text-right" : "md:pl-8 md:text-left"}`}
+                className={`relative mb-12 ${index % 2 === 0 ? 'md:pr-8 md:pl-0 md:text-right' : 'md:pl-8 md:text-left'}`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
                 <div
-                  className={`flex flex-col md:flex-row ${index % 2 === 0 ? "md:justify-end" : "md:justify-start"}`}
+                  className={`flex flex-col md:flex-row ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'}`}
                 >
-                  <div
-                    className={`md:w-1/2 ${index % 2 === 0 ? "md:pl-8" : "md:pr-8"}`}
-                  >
+                  <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:pl-8' : 'md:pr-8'}`}>
                     <div className="bg-zinc-800/60 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg relative">
                       {/* Timeline dot */}
                       {/* <div className="absolute top-6 -left-10 md:left-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-4 border-zinc-900 -translate-x-1/2"></div> */}
@@ -561,21 +549,17 @@ export default function PortfolioPage() {
                         // On mobile screens, it stacks vertically (default flex-col), so this condition mainly impacts layout and text alignment on desktops.
                       }
                       <div
-                        className={`flex flex-col ${index % 2 !== 0 ? "items-start text-left" : "items-start text-right"}`}
+                        className={`flex flex-col ${index % 2 !== 0 ? 'items-start text-left' : 'items-start text-right'}`}
                       >
-                        <h3 className="text-xl font-bold text-white mb-1">
-                          {exp.role}
-                        </h3>
-                        <div className="text-blue-400 font-medium mb-2">
-                          {exp.company}
-                        </div>
+                        <h3 className="text-xl font-bold text-white mb-1">{exp.role}</h3>
+                        <div className="text-blue-400 font-medium mb-2">{exp.company}</div>
                       </div>
 
                       <div className="flex items-center text-sm text-gray-400 mb-3">
                         <span>
-                          {new Date(exp.startDate).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
+                          {new Date(exp.startDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
                           })}
                         </span>
                         <span className="mx-2">—</span>
@@ -587,9 +571,9 @@ export default function PortfolioPage() {
                               </span>
                             </span>
                           ) : (
-                            new Date(exp.endDate).toLocaleDateString("en-US", {
-                              year: "numeric",
-                              month: "short",
+                            new Date(exp.endDate).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
                             })
                           )}
                         </span>
@@ -598,9 +582,7 @@ export default function PortfolioPage() {
                   )} */}
                       </div>
 
-                      <p className="text-gray-300 mb-4 text-justify">
-                        {exp.description}
-                      </p>
+                      <p className="text-gray-300 mb-4 text-justify">{exp.description}</p>
 
                       {exp.techTag && exp.techTag.length > 0 && (
                         <div className="flex flex-wrap gap-2">
@@ -649,7 +631,7 @@ export default function PortfolioPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
         >
           {portfolio.certifications &&
             portfolio.certifications.map((cert) => (
@@ -657,7 +639,7 @@ export default function PortfolioPage() {
                 key={cert.id}
                 className="group relative"
                 whileHover={{ y: -5 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                transition={{ type: 'spring', stiffness: 400 }}
               >
                 {/* Glow effect on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
@@ -667,9 +649,7 @@ export default function PortfolioPage() {
                   {/* Ribbon effect */}
                   <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-8 bg-blue-600 transform rotate-45 translate-y-4 translate-x-8 flex items-center justify-center">
-                      <span className="text-xs font-bold text-white">
-                        Certified
-                      </span>
+                      <span className="text-xs font-bold text-white">Certified</span>
                     </div>
                   </div>
 
@@ -690,12 +670,8 @@ export default function PortfolioPage() {
                         </svg>
                       </div>
                       <div>
-                        <CardTitle className="text-xl font-bold text-white">
-                          {cert.title}
-                        </CardTitle>
-                        <div className="text-sm text-blue-400 mt-1">
-                          Professional Certification
-                        </div>
+                        <CardTitle className="text-xl font-bold text-white">{cert.title}</CardTitle>
+                        <div className="text-sm text-blue-400 mt-1">Professional Certification</div>
                       </div>
                     </div>
                   </CardHeader>
@@ -728,7 +704,7 @@ export default function PortfolioPage() {
                       </Link>
                     )}
                     <div className="text-xs text-gray-400">
-                      {cert.url?.replace(/^https?:\/\//, "").split("/")[0]}
+                      {cert.url?.replace(/^https?:\/\//, '').split('/')[0]}
                     </div>
                   </CardFooter>
                 </Card>
@@ -789,23 +765,18 @@ export default function PortfolioPage() {
           viewport={{ once: true }}
         >
           {SOCIAL_MEDIA_PLATFORMS.map((platform) => {
-            const match = portfolio.links?.find((link) =>
-              link.url?.includes(platform.baseUrl),
-            );
+            const match = portfolio.links?.find((link) => link.url?.includes(platform.baseUrl));
             if (!match) return null;
 
             const Icon = platform.icon;
-            const platformName = platform.label.replace(
-              "X (Twitter)",
-              "Twitter",
-            ); // Clean up name
+            const platformName = platform.label.replace('X (Twitter)', 'Twitter'); // Clean up name
 
             return (
               <motion.div
                 key={platform.id}
                 whileHover={{ y: -5 }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                transition={{ type: 'spring', stiffness: 400 }}
                 className="group relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
@@ -874,11 +845,11 @@ export default function PortfolioPage() {
 
             <nav className="flex flex-wrap justify-center gap-6">
               {[
-                { name: "Home", href: "#" },
-                { name: "Projects", href: "#projects" },
-                { name: "Experience", href: "#experience" },
-                { name: "Skills", href: "#tech-stack" },
-                { name: "Contact", href: "#connect" },
+                { name: 'Home', href: '#' },
+                { name: 'Projects', href: '#projects' },
+                { name: 'Experience', href: '#experience' },
+                { name: 'Skills', href: '#tech-stack' },
+                { name: 'Contact', href: '#connect' },
               ].map((link, index) => (
                 <motion.div
                   key={link.name}
@@ -900,9 +871,7 @@ export default function PortfolioPage() {
 
             <div className="flex gap-4">
               {SOCIAL_MEDIA_PLATFORMS.map((platform) => {
-                const match = portfolio.links?.find((link) =>
-                  link.url?.includes(platform.baseUrl),
-                );
+                const match = portfolio.links?.find((link) => link.url?.includes(platform.baseUrl));
                 if (!match) return null;
 
                 const Icon = platform.icon;
@@ -932,12 +901,11 @@ export default function PortfolioPage() {
             viewport={{ once: true }}
           >
             <p>
-              © {new Date().getFullYear()} {portfolio.name}. All rights
-              reserved.
+              © {new Date().getFullYear()} {portfolio.name}. All rights reserved.
             </p>
             <p className="mt-2">
-              Built with ❤️ using <span className="text-blue-400">Next.js</span>
-              , <span className="text-purple-400">Tailwind CSS</span>, and{" "}
+              Built with ❤️ using <span className="text-blue-400">Next.js</span>,{' '}
+              <span className="text-purple-400">Tailwind CSS</span>, and{' '}
               <span className="text-pink-400">Framer Motion</span>
             </p>
           </motion.div>

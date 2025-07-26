@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
-import { FiArrowRight, FiCode, FiLayers, FiShare2 } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import { useSession, signIn } from "next-auth/react";
+import React from 'react';
+import { FiArrowRight, FiCode, FiLayers, FiShare2 } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
+import { useSession, signIn } from 'next-auth/react';
 
 const PortfolioPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
 
   const handleStartBuilding = () => {
-    const targetRoute = "/dashboard/portfolio";
-    if (status === "loading") return;
+    const targetRoute = '/dashboard/portfolio';
+    if (status === 'loading') return;
     if (!session) {
       signIn(undefined, { callbackUrl: targetRoute });
     } else {
@@ -31,9 +31,9 @@ const PortfolioPage = () => {
         </h1>
 
         <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-          In today's competitive market, your portfolio is your strongest
-          advocate. We help you showcase your technical prowess in a way that
-          resonates with hiring managers and clients alike.
+          In today's competitive market, your portfolio is your strongest advocate. We help you
+          showcase your technical prowess in a way that resonates with hiring managers and clients
+          alike.
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -54,21 +54,20 @@ const PortfolioPage = () => {
         {[
           {
             icon: <FiCode className="h-8 w-8 text-blue-600" />,
-            title: "Technical Showcase",
+            title: 'Technical Showcase',
             description:
-              "Highlight your stack with interactive code snippets that demonstrate real skills",
+              'Highlight your stack with interactive code snippets that demonstrate real skills',
           },
           {
             icon: <FiLayers className="h-8 w-8 text-indigo-600" />,
-            title: "Project Storytelling",
+            title: 'Project Storytelling',
             description:
-              "Frame your work with compelling narratives about challenges and solutions",
+              'Frame your work with compelling narratives about challenges and solutions',
           },
           {
             icon: <FiShare2 className="h-8 w-8 text-purple-600" />,
-            title: "Effortless Sharing",
-            description:
-              "One-click sharing optimized for recruiters and technical reviewers",
+            title: 'Effortless Sharing',
+            description: 'One-click sharing optimized for recruiters and technical reviewers',
           },
         ].map((item, index) => (
           <div
@@ -78,9 +77,7 @@ const PortfolioPage = () => {
             <div className="flex justify-center mb-4">
               <div className="bg-blue-50 p-3 rounded-full">{item.icon}</div>
             </div>
-            <h3 className="text-xl font-semibold text-center mb-3 text-gray-900">
-              {item.title}
-            </h3>
+            <h3 className="text-xl font-semibold text-center mb-3 text-gray-900">{item.title}</h3>
             <p className="text-gray-600 text-center">{item.description}</p>
           </div>
         ))}
@@ -88,13 +85,10 @@ const PortfolioPage = () => {
 
       <div className="bg-gray-50 rounded-2xl p-8 text-center">
         <p className="text-gray-500 italic mb-4">
-          "After using this portfolio builder, I received 3x more interview
-          requests. The structured format helped me present my skills more
-          effectively."
+          "After using this portfolio builder, I received 3x more interview requests. The structured
+          format helped me present my skills more effectively."
         </p>
-        <p className="font-medium text-gray-900">
-          — Sarah K., Frontend Developer at 100xdevs
-        </p>
+        <p className="font-medium text-gray-900">— Sarah K., Frontend Developer at 100xdevs</p>
       </div>
     </div>
   );

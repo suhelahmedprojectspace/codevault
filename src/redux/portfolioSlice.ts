@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Certificate } from "crypto";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type Certification = {
   title: string;
@@ -27,25 +26,25 @@ type PortfolioState = {
 };
 
 const initialState: PortfolioState = {
-  title: "",
-  summary: "",
-  profile: "",
-  projects: "",
-  name: "",
+  title: '',
+  summary: '',
+  profile: '',
+  projects: '',
+  name: '',
   experiences: [],
   skills: [],
-  interests: "",
-  availability: "",
-  achievements: "",
+  interests: '',
+  availability: '',
+  achievements: '',
   certifications: [],
   techstack: [],
   links: [],
-  location: "",
-  yearofexperience: "",
-  passionate: "",
+  location: '',
+  yearofexperience: '',
+  passionate: '',
 };
 const formSlice = createSlice({
-  name: "form",
+  name: 'form',
   initialState,
   reducers: {
     updateForm: (state, action: PayloadAction<Partial<PortfolioState>>) => {

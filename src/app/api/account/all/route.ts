@@ -1,5 +1,5 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
     const { accountIDs } = await req.json();
@@ -13,12 +13,12 @@ export async function POST(req: Request) {
         userid: { in: accountIDs },
       },
       select: {
-        id:true,
+        id: true,
         links: true,
-        title:true,
-        name:true,
-        profile:true,
-        userid:true,
+        title: true,
+        name: true,
+        profile: true,
+        userid: true,
       },
     });
 

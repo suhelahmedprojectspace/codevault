@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Cookie&family=Playball&family=Poiret+One&family=Special+Gothic+Expanded+One&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Cookie&family=Playball&family=Poiret+One&family=Special+Gothic+Expanded+One&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
 /* Your other styles... */
 
 @tailwind base;
@@ -12,31 +12,31 @@
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #8884; 
+  background: #8884;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #8886; 
+  background: #8886;
 }
 html {
   scrollbar-color: #8884 transparent; /* Firefox */
   scrollbar-width: thin;
-}/* For Firefox */
+} /* For Firefox */
 
 /* For dark mode support */
 @media (prefers-color-scheme: dark) {
   ::-webkit-scrollbar-track {
     background: #2d2d2d;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: #555;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background: #777;
   }
-  
+
   html {
     scrollbar-color: #555 #2d2d2d;
   }
@@ -312,7 +312,6 @@ body {
   animation: spin-slow 10s linear infinite;
 }
 
- 
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
 }

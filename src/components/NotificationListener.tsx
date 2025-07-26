@@ -25,17 +25,17 @@
 //     });
 
 //   // In NotificationListener.tsx
-// channel.bind('new-codebuddy-request', (data: { 
-//   message: string; 
+// channel.bind('new-codebuddy-request', (data: {
+//   message: string;
 //   senderName?: string;
 // }) => {
 //   console.log('📩 Notification received:', data);
-  
+
 //   // Use a formatted message
 //   toast.success(
 //     `${data.senderName || 'Someone'} sent a request: ${data.message}`
 //   );
-  
+
 //   // // Optional: Add notification sound
 //   // new Audio('/notification.mp3').play().catch(console.error);
 // });

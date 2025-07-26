@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import SharedBlog from "./sharedblog/page";
-import PublicBlog from "./blogbyme/page";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Share2 } from "lucide-react";
+'use client';
+import React from 'react';
+import SharedBlog from './sharedblog/page';
+import PublicBlog from './blogbyme/page';
+import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
+import { FileText, Share2 } from 'lucide-react';
 
 const BlogDashboard = () => {
   return (
@@ -11,12 +11,8 @@ const BlogDashboard = () => {
       <Tabs defaultValue="my-articles" className="w-full">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Article Management
-            </h1>
-            <p className="text-muted-foreground">
-              View and manage your articles
-            </p>
+            <h1 className="text-2xl font-bold tracking-tight">Article Management</h1>
+            <p className="text-muted-foreground">View and manage your articles</p>
           </div>
 
           <TabsList className="grid w-full sm:w-auto grid-cols-2 h-12 bg-muted p-1 rounded-lg">
