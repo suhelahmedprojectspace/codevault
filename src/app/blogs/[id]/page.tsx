@@ -236,19 +236,19 @@ const Page = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main Article Content */}
-          <article className="lg:col-span-8 xl:col-span-9 min-w-0 overflow-hidden">
+          <article className="lg:col-span-8 xl:col-span-9 min-w-0">
             <header className="mb-10">
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-6">
                 <Avatar className="h-12 w-12 flex-shrink-0">
                   <AvatarImage src={blog.author.image || undefined} />
                   <AvatarFallback>{blog.author.username.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
                   <p className="font-medium truncate">{blog.author.username}</p>
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <time dateTime={blog.createdAt} className="truncate">{publishDate}</time>
-                    <span>•</span>
-                    <div className="flex items-center gap-1 flex-shrink-0">
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                    <time dateTime={blog.createdAt} className="whitespace-nowrap">{publishDate}</time>
+                    <span className="text-gray-300">•</span>
+                    <div className="flex items-center gap-1 whitespace-nowrap">
                       <Clock className="h-4 w-4" />
                       <span>{readingTime} min read</span>
                     </div>
@@ -256,12 +256,15 @@ const Page = () => {
                 </div>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6 break-words leading-tight">
-                {blog.title}
-              </h1>
+              {/* Professional Title with Overflow Handling */}
+              <div className="w-full overflow-hidden">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 break-words hyphens-auto leading-tight overflow-wrap-anywhere word-break-break-word">
+                  {blog.title}
+                </h1>
+              </div>
             </header>
 
-            {/* Article Content with proper overflow handling */}
+            {/* Article Content */}
             <div className="prose dark:prose-invert max-w-none prose-lg overflow-hidden">
               <div className="break-words overflow-wrap-anywhere">
                 {renderContent()}
@@ -297,7 +300,6 @@ const Page = () => {
                 </Button>
               </div>
 
-              {/* Comment Section */}
               <CommentSection
                 comments={comment}
                 blogId={blog.id}
@@ -312,7 +314,6 @@ const Page = () => {
           {/* Sidebar */}
           <aside className="lg:col-span-4 xl:col-span-3 min-w-0">
             <div className="sticky top-24 space-y-8">
-              {/* Author Info Card */}
               <div className="bg-muted/50 p-6 rounded-lg overflow-hidden">
                 <div className="flex items-center gap-4 mb-4">
                   <Avatar className="h-14 w-14 flex-shrink-0">
@@ -334,7 +335,6 @@ const Page = () => {
                 </Button>
               </div>
 
-              {/* More Articles Card */}
               {hasAuthorBlogs && (
                 <div className="bg-muted/50 p-6 rounded-lg overflow-hidden">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
@@ -348,7 +348,7 @@ const Page = () => {
                           href={`${authorBlog.id}`}
                           className="text-sm hover:text-primary transition-colors block overflow-hidden"
                         >
-                          <span className="line-clamp-2 break-words">
+                          <span className="line-clamp-2 break-words leading-5">
                             {authorBlog.title}
                           </span>
                         </Link>
