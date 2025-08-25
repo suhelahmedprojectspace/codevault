@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from '@/lib/axios';
-import { Skeleton } from '@/components/ui/skeleton'; // Assuming you're using shadcn/ui
+import { Skeleton } from '@/components/ui/skeleton'; 
 
 interface Blog {
   id: string;
@@ -88,9 +88,9 @@ export default function BlogSection() {
               {blogs.map((blog) => (
                 <article
                   key={blog.id}
-                  className="group border border-gray-100 rounded-lg p-6 hover:shadow-md transition-all duration-200"
+                  className="group border border-gray-100 rounded-lg p-6 hover:shadow-md transition-all duration-200 flex flex-col h-full"
                 >
-                  <div className="mb-4">
+                  <div className="mb-4 flex-shrink-0">
                     <span className="text-sm text-gray-500">{blog.date}</span>
                     {blog.readTime && (
                       <>
@@ -99,15 +99,20 @@ export default function BlogSection() {
                       </>
                     )}
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-600 transition-colors">
+                  
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-600 transition-colors flex-shrink-0 line-clamp-2">
                     {blog.title}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {blog.excerpt || blog.content.substring(0, 150) + '...'}
-                  </p>
+                  
+                  <div className="flex-1 mb-4">
+                    <p className="text-gray-600 overflow-hidden display-webkit-box webkit-line-clamp-3 webkit-box-orient-vertical">
+                      {blog.excerpt || blog.content.substring(0, 120) + '...'}
+                    </p>
+                  </div>
+                  
                   <Link
                     href={`/blogs/${blog.id}`}
-                    className="inline-flex items-center text-blue-600 font-medium text-sm hover:underline"
+                    className="inline-flex items-center text-blue-600 font-medium text-sm hover:underline mt-auto flex-shrink-0"
                   >
                     Read article
                     <svg
