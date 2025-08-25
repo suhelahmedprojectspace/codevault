@@ -9,58 +9,33 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-//import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { CommentSection } from '@/components/CommentSection';
 import { Blog, Comment } from '@/types/blog';
-// interface Author {
-//   id: string;
-//   username: string;
-//   image: string | null;
-//   blog: Array<{
-//     id: string;
-//     title: string;
-//   }>;
-// }
-
-// interface Blog {
-//   id: string;
-//   title: string;
-//   content: string;
-//   createdAt: string;
-//   updatedAt: string;
-//   visibility: string;
-//   author: Author;
-//   likes: number;
-//   tags?: string[];
-// }
-// interface Comment{
-//   author:{
-//     image:string;
-//     username:string;
-//   }
-//   id:string;
-//   content:string;
-//   parentId?:string
-// }
 
 const CodeBlock = ({ language, value }: { language: string; value: string }) => {
   return (
-    <SyntaxHighlighter
-      language={language}
-      style={vscDarkPlus}
-      customStyle={{
-        borderRadius: '0.5rem',
-        padding: '1rem',
-        margin: '1rem 0',
-        backgroundColor: '#1e1e1e',
-      }}
-      PreTag="div"
-    >
-      {value}
-    </SyntaxHighlighter>
+    <div className="overflow-hidden rounded-lg my-4">
+      <SyntaxHighlighter
+        language={language}
+        style={vscDarkPlus}
+        customStyle={{
+          borderRadius: '0.5rem',
+          padding: '1rem',
+          margin: '0',
+          backgroundColor: '#1e1e1e',
+          overflow: 'auto',
+          maxWidth: '100%',
+        }}
+        PreTag="div"
+        wrapLines={true}
+        wrapLongLines={true}
+      >
+        {value}
+      </SyntaxHighlighter>
+    </div>
   );
 };
 
@@ -89,6 +64,7 @@ const getReadingTime = (text: string) => {
   const words = text.trim().split(/\s+/).length;
   return Math.ceil(words / wordsPerMinute);
 };
+
 const Page = () => {
   const session = useSession();
   const [blog, setBlog] = useState<Blog | null>(null);
@@ -136,6 +112,7 @@ const Page = () => {
 
     fetchData();
   }, [id]);
+
   useEffect(() => {
     if (blog?.content) {
       const parsedContent = parseContent(blog.content);
@@ -159,6 +136,7 @@ const Page = () => {
       console.error('Error updating like:', err);
     }
   };
+
   useEffect(() => {
     const getLikes = async () => {
       const res = await axios.get(`/like/${id}`);
@@ -208,6 +186,7 @@ const Page = () => {
       </div>
     );
   }
+
   const renderContent = () => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(processedContent, 'text/html');
@@ -223,6 +202,7 @@ const Page = () => {
       return (
         <div
           key={index}
+          className="overflow-hidden break-words"
           dangerouslySetInnerHTML={{
             __html: el.outerHTML || node.textContent || '',
           }}
@@ -255,19 +235,20 @@ const Page = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <article className="lg:col-span-8 xl:col-span-9">
+          {/* Main Article Content */}
+          <article className="lg:col-span-8 xl:col-span-9 min-w-0 overflow-hidden">
             <header className="mb-10">
               <div className="flex items-center gap-4 mb-6">
-                <Avatar className="h-12 w-12">
+                <Avatar className="h-12 w-12 flex-shrink-0">
                   <AvatarImage src={blog.author.image || undefined} />
                   <AvatarFallback>{blog.author.username.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
-                <div>
-                  <p className="font-medium">{blog.author.username}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium truncate">{blog.author.username}</p>
                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <time dateTime={blog.createdAt}>{publishDate}</time>
+                    <time dateTime={blog.createdAt} className="truncate">{publishDate}</time>
                     <span>•</span>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 flex-shrink-0">
                       <Clock className="h-4 w-4" />
                       <span>{readingTime} min read</span>
                     </div>
@@ -275,12 +256,21 @@ const Page = () => {
                 </div>
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{blog.title}</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6 break-words leading-tight">
+                {blog.title}
+              </h1>
             </header>
 
-            <div className="prose dark:prose-invert max-w-none">{renderContent()}</div>
+            {/* Article Content with proper overflow handling */}
+            <div className="prose dark:prose-invert max-w-none prose-lg overflow-hidden">
+              <div className="break-words overflow-wrap-anywhere">
+                {renderContent()}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
             <div className="mt-12 pt-6 border-t">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center gap-4">
                   <Button
                     variant="ghost"
@@ -293,11 +283,12 @@ const Page = () => {
                   </Button>
                   <Button
                     variant="ghost"
-                    size="icon"
-                    className="flex items-center"
+                    size="sm"
+                    className="flex items-center gap-1"
                     onClick={() => setShowComment((prev) => !prev)}
                   >
-                    <MessageSquareText /> {comment.length}
+                    <MessageSquareText className="h-5 w-5" />
+                    <span>{comment.length}</span>
                   </Button>
                 </div>
                 <Button variant="ghost" size="sm" className="flex items-center gap-1">
@@ -305,6 +296,8 @@ const Page = () => {
                   <span>Share</span>
                 </Button>
               </div>
+
+              {/* Comment Section */}
               <CommentSection
                 comments={comment}
                 blogId={blog.id}
@@ -316,22 +309,24 @@ const Page = () => {
             </div>
           </article>
 
-          <aside className="lg:col-span-4 xl:col-span-3">
+          {/* Sidebar */}
+          <aside className="lg:col-span-4 xl:col-span-3 min-w-0">
             <div className="sticky top-24 space-y-8">
-              <div className="bg-muted/50 p-6 rounded-lg">
+              {/* Author Info Card */}
+              <div className="bg-muted/50 p-6 rounded-lg overflow-hidden">
                 <div className="flex items-center gap-4 mb-4">
-                  <Avatar className="h-14 w-14">
+                  <Avatar className="h-14 w-14 flex-shrink-0">
                     <AvatarImage src={blog.author.image || undefined} />
                     <AvatarFallback>{blog.author.username.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
-                  <div>
-                    <h3 className="font-semibold">{blog.author.username}</h3>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold truncate">{blog.author.username}</h3>
                     <p className="text-sm text-muted-foreground">
                       {blog.author.blog?.length + 1 || 0} articles
                     </p>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
                   Writer passionate about technology and development
                 </p>
                 <Button variant="outline" size="sm" className="w-full">
@@ -339,20 +334,23 @@ const Page = () => {
                 </Button>
               </div>
 
+              {/* More Articles Card */}
               {hasAuthorBlogs && (
-                <div className="bg-muted/50 p-6 rounded-lg">
+                <div className="bg-muted/50 p-6 rounded-lg overflow-hidden">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
-                    <BookOpen className="h-5 w-5" />
-                    More from {blog.author.username}
+                    <BookOpen className="h-5 w-5 flex-shrink-0" />
+                    <span className="truncate">More from {blog.author.username}</span>
                   </h3>
                   <ul className="space-y-3">
-                    {blog.author.blog.map((blog) => (
-                      <li key={blog.id}>
+                    {blog.author.blog.map((authorBlog) => (
+                      <li key={authorBlog.id}>
                         <Link
-                          href={`${blog.id}`}
-                          className="text-sm hover:text-primary transition-colors line-clamp-2"
+                          href={`${authorBlog.id}`}
+                          className="text-sm hover:text-primary transition-colors block overflow-hidden"
                         >
-                          {blog.title}
+                          <span className="line-clamp-2 break-words">
+                            {authorBlog.title}
+                          </span>
                         </Link>
                       </li>
                     ))}
